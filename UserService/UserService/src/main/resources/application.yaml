@@ -1,0 +1,22 @@
+server:
+    port: 8080
+spring:
+    application:
+      name: UserService
+    datasource:
+      url: jdbc:mysql://localhost:3306/userservice?useSSL=false&serverTimezone=UTC
+      username: root
+      password: Pass@123
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      open-in-view: false
+
+      properties:
+        hibernate:
+          format_sql: true
+          dialect: org.hibernate.dialect.MySQLDialect
+
