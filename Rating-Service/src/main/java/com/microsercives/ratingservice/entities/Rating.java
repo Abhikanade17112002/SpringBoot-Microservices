@@ -1,6 +1,12 @@
-package com.microsercives.userservice.entities;
+package com.microsercives.ratingservice.entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "ratings")
 public class Rating {
+    @Id
+    @GeneratedValue( strategy = GenerationType.UUID)
     private String ratingId ;
     private String userId ;
     private String hotelId ;

@@ -1,17 +1,22 @@
-package com.microsercives.userservice.entities;
+package com.microsercives.ratingservice.dtos;
 
-public class Rating {
-    private String ratingId ;
-    private String userId ;
-    private String hotelId ;
-    private int rating ;
-    private String feedBack ;
+public class CreateRatingRequestDTO {
 
-    public Rating() {
+    private String userId;
+
+    private String hotelId;
+
+    private int rating;
+
+    private String feedBack;
+
+    public CreateRatingRequestDTO() {
     }
 
-    public Rating(String ratingId, String userId, String hotelId, int rating, String feedBack) {
-        this.ratingId = ratingId;
+    public CreateRatingRequestDTO(String userId,
+                                  String hotelId,
+                                  int rating,
+                                  String feedBack) {
         this.userId = userId;
         this.hotelId = hotelId;
         this.rating = rating;
@@ -50,19 +55,10 @@ public class Rating {
         this.feedBack = feedBack;
     }
 
-    public String getRatingId() {
-        return ratingId;
-    }
-
-    public void setRatingId(String ratingId) {
-        this.ratingId = ratingId;
-    }
-
     @Override
     public String toString() {
-        return "Rating{" +
-                "ratingId='" + ratingId + '\'' +
-                ", userId='" + userId + '\'' +
+        return "CreateRatingRequestDTO{" +
+                "userId='" + userId + '\'' +
                 ", hotelId='" + hotelId + '\'' +
                 ", rating=" + rating +
                 ", feedBack='" + feedBack + '\'' +
