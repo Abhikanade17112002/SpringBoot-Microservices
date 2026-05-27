@@ -1,13 +1,6 @@
-package com.microsercives.hotelservice.entities;
+package com.microsercives.userservice.entities;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table( name = "hotels")
 public class Hotel {
-
-    @Id
-    @GeneratedValue( strategy = GenerationType.UUID)
     private String id ;
 
     private String hotelName ;
@@ -17,14 +10,14 @@ public class Hotel {
     private String description ;
 
 
+    public Hotel() {
+    }
+
     public Hotel(String id, String hotelName, String location, String description) {
         this.id = id;
         this.hotelName = hotelName;
         this.location = location;
         this.description = description;
-    }
-
-    public Hotel() {
     }
 
     public String getId() {

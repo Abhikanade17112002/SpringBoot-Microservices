@@ -55,7 +55,7 @@ public class RatingServiceImpl implements RatingService {
                                 "Rating not found with id : " + ratingId
                         ));
 
-        return modelMapper.map(rating, RatingResponseDTO.class);
+        return new RatingResponseDTO();
     }
 
     @Override
