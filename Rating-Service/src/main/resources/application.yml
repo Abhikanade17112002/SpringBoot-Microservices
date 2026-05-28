@@ -1,70 +1,82 @@
-server:
-  port: 8085
-
 spring:
   application:
     name: RATING-SERVICE
+  profiles:
+    active: dev
+  config:
+    import: optional:configserver:http://localhost:8091
+##server:
+##  port: 8085
+#
+#spring:
+#  application:
+#    name: RATING-SERVICE
+#  profiles:
+#    active: dev
+#  config:
+#    import: optional:configserver:http://192.168.1.106:8091
+#
+##  datasource:
+##    url: jdbc:mysql://localhost:3306/ratingservice?useSSL=false&serverTimezone=UTC
+##    username: root
+##    password: Pass@123
+##    driver-class-name: com.mysql.cj.jdbc.Driver
+##
+##  jpa:
+##    hibernate:
+##      ddl-auto: update
+##
+##    show-sql: true
+##    open-in-view: false
+##
+##    properties:
+##      hibernate:
+##        format_sql: true
+##        dialect: org.hibernate.dialect.MySQLDialect
+##
+##eureka:
+##  client:
+##    service-url:
+##      defaultZone: http://localhost:8761/eureka/
+##      # Register service in Eureka using IP address instead of hostname
+##      #
+##      # Without this:
+##      # Eureka may register:
+##      # DESKTOP-ABC123:8081
+##      #
+##      # With this:
+##      # Eureka registers:
+##      # 192.168.1.106:8081
+##      #
+##      # Useful when:
+##      # - Multiple microservices communicate
+##      # - Running on different systems
+##      # - Using Docker/Kubernetes/Cloud
+##      # - Hostname is not resolvable
+##      #
+##      # Prevents:
+##      # - UnknownHostException
+##      # - Service communication failures
+##      #
+##      # Service calls still happen using:
+##      # http://USER-SERVICE/...
+##      #
+##      # Eureka internally maps service name → actual IP
+##  instance:
+##    prefer-ip-address: true
+##
+##management:
+##  endpoints:
+##    web:
+##      exposure:
+##        include: health,info
+##  info:
+##    env:
+##      enabled: true
+##
+##info:
+##  app:
+##    name: RATING-SERVICE
+##    description: Rating Service API
+##    version: 1.0
 
-  datasource:
-    url: jdbc:mysql://localhost:3306/ratingservice?useSSL=false&serverTimezone=UTC
-    username: root
-    password: Pass@123
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-
-    show-sql: true
-    open-in-view: false
-
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-      # Register service in Eureka using IP address instead of hostname
-      #
-      # Without this:
-      # Eureka may register:
-      # DESKTOP-ABC123:8081
-      #
-      # With this:
-      # Eureka registers:
-      # 192.168.1.106:8081
-      #
-      # Useful when:
-      # - Multiple microservices communicate
-      # - Running on different systems
-      # - Using Docker/Kubernetes/Cloud
-      # - Hostname is not resolvable
-      #
-      # Prevents:
-      # - UnknownHostException
-      # - Service communication failures
-      #
-      # Service calls still happen using:
-      # http://USER-SERVICE/...
-      #
-      # Eureka internally maps service name → actual IP
-  instance:
-    prefer-ip-address: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-  info:
-    env:
-      enabled: true
-
-info:
-  app:
-    name: RATING-SERVICE
-    description: Rating Service API
-    version: 1.0

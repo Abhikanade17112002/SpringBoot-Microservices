@@ -1,0 +1,71 @@
+
+server:
+  port: 8090
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+#            The predicate path must match the SERVICE controller base path.
+          - id: USER-SERVICE
+            uri: lb://USER-SERVICE
+            predicates:
+              - Path=/api/v1/users/**
+
+          - id: HOTEL-SERVICE
+            uri: lb://HOTEL-SERVICE
+            predicates:
+              - Path=/api/v1/hotels/**
+
+          - id: RATING-SERVICE
+            uri: lb://RATING-SERVICE
+            predicates:
+              - Path=/api/v1/ratings/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+      # Register service in Eureka using IP address instead of hostname
+      #
+      # Without this:
+      # Eureka may register:
+      # DESKTOP-ABC123:8081
+      #
+      # With this:
+      # Eureka registers:
+      # 192.168.1.106:8081
+      #
+      # Useful when:
+      # - Multiple microservices communicate
+      # - Running on different systems
+      # - Using Docker/Kubernetes/Cloud
+      # - Hostname is not resolvable
+      #
+      # Prevents:
+      # - UnknownHostException
+      # - Service communication failures
+      #
+      # Service calls still happen using:
+      # http://USER-SERVICE/...
+      #
+      # Eureka internally maps service name → actual IP
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: API-GATEWAY
+    description: Api Gateway Service API
+    version: 1.0
