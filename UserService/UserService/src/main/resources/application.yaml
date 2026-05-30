@@ -1,6 +1,9 @@
 #server:
 #  port: 8080
-
+logging:
+  level:
+    io.github.resilience4j: DEBUG
+    org.springframework.cloud.circuitbreaker: DEBUG
 spring:
   application:
     name: USER-SERVICE
@@ -148,7 +151,51 @@ spring:
 #  v
 #  OPEN
 
+resilience4j:
+  ratelimiter:
+    instances:
+      getSingleUserRateLimiter:
 
+          # Number of requests allowed per refresh period , Defines how many requests are allowed during one refresh cycle.
+        limitForPeriod: 5
+
+            # Refresh period , Defines when the request counter resets. eg after every 10sec
+        limitRefreshPeriod: 10s
+
+            # Time to wait for permission , Defines how long a request should wait if no permission is available.
+  #      ase 2:
+  #        timeoutDuration: 5s
+  #      timeoutDuration: 5s
+  #      All permissions consumed
+  #
+  #      Request 6
+  #      |
+  #      Wait up to 5 seconds
+  #      |
+  #      Permission available?
+  #      |
+  #      YES -> Execute
+  #      NO  -> Reject
+        timeoutDuration: 0s
+  retry:
+    aspect:
+      order: 1                     # Retry runs first
+    instances:
+      getSingleUserRetry:
+        maxAttempts: 3
+        waitDuration: 2s
+#  circuitbreaker:
+#    aspect:
+#      order: 2                     # CircuitBreaker runs inside Retry
+#    instances:
+#      getSingleUserBreaker:
+#        registerHealthIndicator: true
+#        failureRateThreshold: 50
+#        minimumNumberOfCalls: 5
+#        waitDurationInOpenState: 10s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        slidingWindowSize: 10
+#        slidingWindowType: COUNT_BASED
 #
 #  slidingWindowSize           -> How many requests to watch
 #  minimumNumberOfCalls        -> When to start watching
@@ -156,7 +203,31 @@ spring:
 #  waitDurationInOpenState     -> How long to stay open
 #  permittedCallsInHalfOpen    -> How many test requests
 #  registerHealthIndicator     -> Show status in Actuator
-resilience4j:
+#resilience4j:
+#  retry:
+#    instances:
+#      getSingleUserRetry:
+#
+#        # Maximum number of attempts including the initial call.
+#        # Example:
+#        # Attempt 1 + Retry 1 + Retry 2 = 3 total attempts
+#        maxAttempts: 3
+#
+#        # Wait time between retry attempts.
+#        waitDuration: 2s
+#
+#  #        # Exceptions for which retry should happen.
+#  #        retryExceptions:
+#  #          - java.io.IOException
+#  #          - java.util.concurrent.TimeoutException
+#  #          - org.springframework.web.client.ResourceAccessException
+#  #          - feign.FeignException
+#  #          - feign.RetryableException
+#
+#  #        # Exceptions for which retry should NOT happen.
+#  #        ignoreExceptions:
+#  #          - java.lang.IllegalArgumentException
+#
   circuitbreaker:
     instances:
       getSingleUserBreaker:
