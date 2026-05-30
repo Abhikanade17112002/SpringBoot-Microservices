@@ -6,6 +6,7 @@ import com.microsercives.userservice.entities.User;
 import com.microsercives.userservice.external.services.hotelservice.HotelService;
 import com.microsercives.userservice.external.services.ratingservice.RatingService;
 import com.microsercives.userservice.services.UserService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +48,7 @@ public class UserController {
 
     // GET USER BY ID
     @GetMapping("/{userId}")
+    @CircuitBreaker(name = "getSingleUserBreaker" , fallbackMethod = "getUserByIdFallback")
     public ResponseEntity<User> getUserById(
             @PathVariable String userId) {
 
@@ -61,6 +64,13 @@ public class UserController {
         user.setRatings(userRatingsList);
 
         return ResponseEntity.ok(user);
+    }
+
+    public ResponseEntity<User> getUserByIdFallback(String userId , Exception e){
+        System.out.println("GetUserByIdFallback Fallback Methode Executed ==> " + e.getMessage());
+        List<Rating> userRatingsList = List.of();
+        return ResponseEntity.ok(new User("Id","First Name","Last Name","first.last@email.com", LocalDate.now(),userRatingsList));
+
     }
 
     // GET ALL USERS

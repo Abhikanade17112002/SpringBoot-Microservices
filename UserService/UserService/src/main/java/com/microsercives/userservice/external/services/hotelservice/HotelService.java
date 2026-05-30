@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient( name = "HOTEL-SERVICE" , path = "/api/v1")
+@FeignClient( name = "HOTEL-SERVICE-DEV" , path = "/api/v1")
 public interface HotelService {
     @GetMapping("/hotels/{hotelId}")
     ResponseEntity<Hotel> getHotelById(@PathVariable(name = "hotelId") String hotelId) ;

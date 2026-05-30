@@ -49,3 +49,135 @@ spring:
 #    name: USER-SERVICE
 #    description: User Service API
 #    version: 1.0
+
+
+# Resilience4j Circuit Breaker Configuration
+# ------------------------------------------
+# Circuit Breaker protects our service from repeatedly calling
+# a failing external service (e.g., Rating Service, Hotel Service).
+#
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      ratingHotelBreaker:
+#
+#        # Exposes Circuit Breaker status through Actuator endpoints.
+#        # Example: /actuator/health
+#        registerHealthIndicator: true
+#
+#        # Number of Circuit Breaker events stored in memory.
+#        # Useful for monitoring and debugging.
+#        eventConsumerBufferSize: 10
+#
+#        # Failure percentage required to OPEN the circuit.
+#        # Example:
+#        # 10 requests -> 5 fail -> 50% failure rate
+#        # Circuit becomes OPEN.
+#        failureRateThreshold: 50
+#
+#        # Minimum requests required before calculating failure rate.
+#        # Prevents opening the circuit based on too few requests.
+#        minimumNumberOfCalls: 5
+#
+#        # Automatically move from OPEN -> HALF_OPEN
+#        # after waitDurationInOpenState expires.
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#
+#        # Time circuit remains OPEN.
+#        # During this period all requests are blocked
+#        # and fallback method is executed.
+#        waitDurationInOpenState: 10s
+#
+#        # Number of test requests allowed in HALF_OPEN state.
+#        # If these succeed, circuit becomes CLOSED.
+#        # If they fail, circuit returns to OPEN.
+#        permittedNumberOfCallsInHalfOpenState: 3
+#
+#        # Number of requests considered for failure calculation.
+#        # Circuit analyzes the last 10 requests.
+##        slidingWindowSize: 10
+#
+#        # COUNT_BASED = evaluate last N requests.
+#        # TIME_BASED  = evaluate requests within a time duration.
+##        slidingWindowType: COUNT_BASED
+#
+## Actuator Configuration
+## ----------------------
+## Used for monitoring application health and circuit breaker status.
+#
+##management:
+##  health:
+##    circuitbreakers:
+#
+#      # Enables circuit breaker information in health endpoint.
+#      enabled: true
+#
+#  endpoints:
+#    web:
+#      exposure:
+#
+#        # Expose actuator endpoints over HTTP.
+#        # health  -> application health
+#        # info    -> application information
+#        # metrics -> application metrics
+#        include: health,info,metrics
+#
+#  endpoint:
+#    health:
+#
+#      # Show complete health details instead of only UP/DOWN.
+#      show-details: always
+
+#  CLOSED
+#  |
+#  | (Failure Rate > 50%)
+#  v
+#  OPEN
+#  |
+#  | (Wait 10 seconds)
+#  v
+#  HALF_OPEN
+#  |
+#  | (3 test requests succeed)
+#  v
+#  CLOSED
+#
+#  HALF_OPEN
+#  |
+#  | (Any test request fails)
+#  v
+#  OPEN
+
+
+#
+#  slidingWindowSize           -> How many requests to watch
+#  minimumNumberOfCalls        -> When to start watching
+#  failureRateThreshold        -> When to open circuit
+#  waitDurationInOpenState     -> How long to stay open
+#  permittedCallsInHalfOpen    -> How many test requests
+#  registerHealthIndicator     -> Show status in Actuator
+resilience4j:
+  circuitbreaker:
+    instances:
+      getSingleUserBreaker:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
