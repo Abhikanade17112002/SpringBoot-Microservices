@@ -1,23 +1,29 @@
 package com.microsercives.userservice.services;
 import com.microsercives.userservice.dtos.CreateUserRequestDTO;
+import com.microsercives.userservice.dtos.UserResponseDTO;
+import com.microsercives.userservice.dtos.request.DeleteUserAccountRequestDTO;
+import com.microsercives.userservice.dtos.request.UpdateUserPasswordRequestDTO;
+import com.microsercives.userservice.dtos.request.UpdateUserProfileRequestDTO;
 import com.microsercives.userservice.entities.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
-    // CREATE
-    User addNewUser(CreateUserRequestDTO createUserRequestDTO);
 
-    // READ
-    User getUserById(String userId);
+    UserResponseDTO getLoggedInUserProfile();
 
-    List<User> getAllUsers();
+    UserResponseDTO updatedLoggedInUserProfile(UpdateUserProfileRequestDTO updateUserProfileRequestDTO);
 
-    // UPDATE
-    User updateUser(String userId, CreateUserRequestDTO updateUserRequestDTO);
+    Boolean updatedLoggedInUserPassword(UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO);
 
-    // DELETE
-    void deleteUser(String userId);
+    Object deleteUserAccount(DeleteUserAccountRequestDTO deleteUserAccountRequestDTO);
+
+    List<UserResponseDTO> getAllRegisteredUsers();
+
+    UserResponseDTO getRegisteredUserById(String userId);
+
+    Boolean deleteRegisteredUserById(String userId);
 }

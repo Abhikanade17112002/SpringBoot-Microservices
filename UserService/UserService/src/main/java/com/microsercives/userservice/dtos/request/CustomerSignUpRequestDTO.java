@@ -1,37 +1,36 @@
-package com.microsercives.userservice.dtos;
+package com.microsercives.userservice.dtos.request;
 
+import com.microsercives.userservice.entities.User;
 import com.microsercives.userservice.enums.Role;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+
 import java.time.LocalDate;
 
-public class UserResponseDTO {
-
-    private String userId;
+public class CustomerSignUpRequestDTO {
+    @NotBlank(message = "First Name Cannot Be Blank")
     private String firstName;
+    @NotBlank(message = "Last Name Cannot Be Blank")
     private String lastName;
-    private LocalDate dateOfBirth ;
-    private String userName;
+    @Past
+    private LocalDate dateOfBirth;
+    @Email(message = "Email Id Should Have Standard Format")
+    @NotBlank
     private String emailId;
-    private Role role;
+    @NotBlank(message = "Password Cannot Be Blank")
+    private String password;
 
-    public UserResponseDTO(String userId, String firstName, String lastName, LocalDate dateOfBirth, String userName, String emailId, Role role) {
-        this.userId = userId;
+    public CustomerSignUpRequestDTO() {
+    }
+
+    public CustomerSignUpRequestDTO(String firstName, String lastName, LocalDate dateOfBirth, String emailId, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-        this.userName = userName;
         this.emailId = emailId;
-        this.role = role;
-    }
-
-    public UserResponseDTO() {
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -58,14 +57,6 @@ public class UserResponseDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public String getEmailId() {
         return emailId;
     }
@@ -74,24 +65,22 @@ public class UserResponseDTO {
         this.emailId = emailId;
     }
 
-    public Role getRole() {
-        return role;
+    public String getPassword() {
+        return password;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return "UserResponseDTO{" +
-                "userId='" + userId + '\'' +
-                ", firstName='" + firstName + '\'' +
+        return "CustomerSignUpRequestDTO{" +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
-                ", userName='" + userName + '\'' +
                 ", emailId='" + emailId + '\'' +
-                ", role=" + role +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

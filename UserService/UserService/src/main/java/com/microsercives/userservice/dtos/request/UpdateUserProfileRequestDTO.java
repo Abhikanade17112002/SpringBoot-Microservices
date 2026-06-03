@@ -1,29 +1,26 @@
-package com.microsercives.userservice.dtos;
+package com.microsercives.userservice.dtos.request;
 
 import com.microsercives.userservice.enums.Role;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
-public class UserResponseDTO {
-
+public class UpdateUserProfileRequestDTO {
     private String userId;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth ;
-    private String userName;
     private String emailId;
-    private Role role;
 
-    public UserResponseDTO(String userId, String firstName, String lastName, LocalDate dateOfBirth, String userName, String emailId, Role role) {
+    public UpdateUserProfileRequestDTO(String userId, String firstName, String lastName, LocalDate dateOfBirth, String emailId) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-        this.userName = userName;
         this.emailId = emailId;
-        this.role = role;
     }
 
-    public UserResponseDTO() {
+    public UpdateUserProfileRequestDTO() {
     }
 
     public String getUserId() {
@@ -58,14 +55,6 @@ public class UserResponseDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public String getEmailId() {
         return emailId;
     }
@@ -74,24 +63,14 @@ public class UserResponseDTO {
         this.emailId = emailId;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     @Override
     public String toString() {
-        return "UserResponseDTO{" +
+        return "UpdateUserProfileRequestDTO{" +
                 "userId='" + userId + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
-                ", userName='" + userName + '\'' +
                 ", emailId='" + emailId + '\'' +
-                ", role=" + role +
                 '}';
     }
 }

@@ -1,5 +1,13 @@
 #server:
 #  port: 8080
+jwt:
+  secret-key: "ThisIsMySuperSecretKeyForJWTAuthentication123456789"
+  expiration: 300000
+
+server:
+  servlet:
+    context-path: "/api/v1"
+
 logging:
   level:
     io.github.resilience4j: DEBUG
