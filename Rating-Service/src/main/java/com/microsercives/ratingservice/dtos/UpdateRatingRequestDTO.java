@@ -2,39 +2,25 @@ package com.microsercives.ratingservice.dtos;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 
-public class CreateRatingRequestDTO {
-
-    @NotBlank
-    private String hotelId;
+public class UpdateRatingRequestDTO {
     @Min(1)
     @Max(5)
     private Integer rating;
     private String feedback;
 
-    public CreateRatingRequestDTO(String hotelId, Integer rating, String feedback) {
-        this.hotelId = hotelId;
+    public UpdateRatingRequestDTO(Integer rating, String feedback) {
         this.rating = rating;
         this.feedback = feedback;
     }
-
-    public CreateRatingRequestDTO() {
-    }
-
-    public String getHotelId() {
-        return hotelId;
-    }
-
-    public void setHotelId( String hotelId) {
-        this.hotelId = hotelId;
+    public UpdateRatingRequestDTO() {
     }
 
     public Integer getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating( Integer rating) {
         this.rating = rating;
     }
 
@@ -48,9 +34,8 @@ public class CreateRatingRequestDTO {
 
     @Override
     public String toString() {
-        return "CreateRatingRequestDTO{" +
-                "hotelId='" + hotelId + '\'' +
-                ", rating=" + rating +
+        return "UpdateRatingRequestDTO{" +
+                "rating=" + rating +
                 ", feedback='" + feedback + '\'' +
                 '}';
     }

@@ -5,27 +5,23 @@ public class RatingResponseDTO {
 
     private String ratingId;
 
-    private String userId;
+    private String customerId;
 
     private String hotelId;
 
-    private int rating;
+    private Integer rating;
 
-    private String feedBack;
+    private String feedback;
 
-    public RatingResponseDTO() {
-    }
-
-    public RatingResponseDTO(String ratingId,
-                             String userId,
-                             String hotelId,
-                             int rating,
-                             String feedBack) {
+    public RatingResponseDTO(String ratingId, String customerId, String hotelId, Integer rating, String feedback) {
         this.ratingId = ratingId;
-        this.userId = userId;
+        this.customerId = customerId;
         this.hotelId = hotelId;
         this.rating = rating;
-        this.feedBack = feedBack;
+        this.feedback = feedback;
+    }
+
+    public RatingResponseDTO() {
     }
 
     public String getRatingId() {
@@ -36,12 +32,12 @@ public class RatingResponseDTO {
         this.ratingId = ratingId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getHotelId() {
@@ -52,30 +48,30 @@ public class RatingResponseDTO {
         this.hotelId = hotelId;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
-    public String getFeedBack() {
-        return feedBack;
+    public String getFeedback() {
+        return feedback;
     }
 
-    public void setFeedBack(String feedBack) {
-        this.feedBack = feedBack;
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
     @Override
     public String toString() {
         return "RatingResponseDTO{" +
                 "ratingId='" + ratingId + '\'' +
-                ", userId='" + userId + '\'' +
+                ", customerId='" + customerId + '\'' +
                 ", hotelId='" + hotelId + '\'' +
                 ", rating=" + rating +
-                ", feedBack='" + feedBack + '\'' +
+                ", feedback='" + feedback + '\'' +
                 '}';
     }
 }

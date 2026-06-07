@@ -1,3 +1,13 @@
+
+
+server:
+  servlet:
+    context-path: "/api/v1"
+jwt:
+  secret-key: "ThisIsMySuperSecretKeyForJWTAuthentication123456789"
+  expiration: 300000
+
+
 spring:
   application:
     name: RATING-SERVICE

@@ -1,8 +1,8 @@
-package com.microsercives.hotelservice.dtos;
+package com.microsercives.hotelservice.dtos.response;
 
 public class HotelResponseDTO {
 
-    private String id;
+    private String hotelId;
 
     private String hotelName;
 
@@ -10,25 +10,28 @@ public class HotelResponseDTO {
 
     private String description;
 
+    private String ownerId;
+
+    private boolean active;
+
     public HotelResponseDTO() {
     }
 
-    public HotelResponseDTO(String id,
-                            String hotelName,
-                            String location,
-                            String description) {
-        this.id = id;
+    public HotelResponseDTO(String hotelId, String hotelName, String location, String description, String ownerId, boolean active) {
+        this.hotelId = hotelId;
         this.hotelName = hotelName;
         this.location = location;
         this.description = description;
+        this.ownerId = ownerId;
+        this.active = active;
     }
 
-    public String getId() {
-        return id;
+    public String getHotelId() {
+        return hotelId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setHotelId(String hotelId) {
+        this.hotelId = hotelId;
     }
 
     public String getHotelName() {
@@ -55,14 +58,31 @@ public class HotelResponseDTO {
         this.description = description;
     }
 
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public String toString() {
         return "HotelResponseDTO{" +
-                "id='" + id + '\'' +
+                "hotelId='" + hotelId + '\'' +
                 ", hotelName='" + hotelName + '\'' +
                 ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", active=" + active +
                 '}';
     }
 }

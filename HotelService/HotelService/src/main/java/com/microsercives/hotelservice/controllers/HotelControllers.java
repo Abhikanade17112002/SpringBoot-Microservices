@@ -1,19 +1,18 @@
 package com.microsercives.hotelservice.controllers;
 
-import com.microsercives.hotelservice.dtos.CreateHotelRequestDTO;
-import com.microsercives.hotelservice.dtos.HotelResponseDTO;
-import com.microsercives.hotelservice.dtos.UpdateHotelRequestDTO;
+import com.microsercives.hotelservice.dtos.request.CreateHotelRequestDTO;
+import com.microsercives.hotelservice.dtos.response.HotelResponseDTO;
+import com.microsercives.hotelservice.dtos.request.UpdateHotelRequestDTO;
 import com.microsercives.hotelservice.entities.Hotel;
 import com.microsercives.hotelservice.services.HotelService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/hotels")
+@RequestMapping("/hotels")
 public class HotelControllers {
 
     private final HotelService hotelService;
@@ -28,77 +27,58 @@ public class HotelControllers {
 
     // CREATE HOTEL
     @PostMapping
-    public ResponseEntity<HotelResponseDTO> createHotel(
-            @RequestBody CreateHotelRequestDTO createHotelRequestDTO
-    ) {
-
-        Hotel hotelRequest =
-                modelMapper.map(createHotelRequestDTO, Hotel.class);
-
-        Hotel savedHotel = hotelService.createHotel(hotelRequest);
-
-        HotelResponseDTO hotelResponseDTO =
-                modelMapper.map(savedHotel, HotelResponseDTO.class);
-
-        return new ResponseEntity<>(hotelResponseDTO, HttpStatus.CREATED);
+    public ResponseEntity<HotelResponseDTO> createHotel(@RequestBody CreateHotelRequestDTO createHotelRequestDTO) {
+        return  ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(hotelService.createHotel(createHotelRequestDTO));
     }
-
-    // GET ALL HOTELS
     @GetMapping
-    public ResponseEntity<List<HotelResponseDTO>> getAllHotels() {
-
-        List<Hotel> hotels = hotelService.getAllHotels();
-
-        List<HotelResponseDTO> hotelResponseDTOS =
-                hotels.stream()
-                        .map(hotel ->
-                                modelMapper.map(hotel, HotelResponseDTO.class))
-                        .toList();
-
-        return ResponseEntity.ok(hotelResponseDTOS);
+    public ResponseEntity<Page<HotelResponseDTO>> getAllHotels(@RequestParam(name = "page" ,defaultValue = "0") int page , @RequestParam(name = "size", defaultValue = "5") int size , @RequestParam(name = "sortby" , defaultValue = "hotelName")  String sortby, @RequestParam(name = "ascending" , defaultValue = "true") Boolean ascending ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.getAllHotels(page,size,sortby,ascending));
     }
 
     // GET HOTEL BY ID
     @GetMapping("/{hotelId}")
-    public ResponseEntity<HotelResponseDTO> getHotelById(
-            @PathVariable String hotelId
-    ) {
-
-        Hotel hotel = hotelService.getHotelById(hotelId);
-
-        HotelResponseDTO hotelResponseDTO =
-                modelMapper.map(hotel, HotelResponseDTO.class);
-
-        return ResponseEntity.ok(hotelResponseDTO);
+    public ResponseEntity<HotelResponseDTO> getHotelById(@PathVariable(name = "hotelId") String hotelId) {
+     return ResponseEntity
+             .status(HttpStatus.OK)
+             .body(hotelService.getHotelById(hotelId));
     }
 
     // UPDATE HOTEL
     @PutMapping("/{hotelId}")
-    public ResponseEntity<HotelResponseDTO> updateHotel(
-            @PathVariable String hotelId,
-            @RequestBody UpdateHotelRequestDTO updateHotelRequestDTO
-    ) {
-
-        Hotel updatedHotelRequest =
-                modelMapper.map(updateHotelRequestDTO, Hotel.class);
-
-        Hotel updatedHotel =
-                hotelService.updateHotel(hotelId, updatedHotelRequest);
-
-        HotelResponseDTO hotelResponseDTO =
-                modelMapper.map(updatedHotel, HotelResponseDTO.class);
-
-        return ResponseEntity.ok(hotelResponseDTO);
+    public ResponseEntity<HotelResponseDTO> updateHotelById(@PathVariable String hotelId,@RequestBody UpdateHotelRequestDTO updateHotelRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.updateHotelById(hotelId,updateHotelRequestDTO));
     }
 
     // DELETE HOTEL
     @DeleteMapping("/{hotelId}")
-    public ResponseEntity<String> deleteHotel(
-            @PathVariable String hotelId
-    ) {
-
-        hotelService.deleteHotel(hotelId);
-
-        return ResponseEntity.ok("Hotel Deleted Successfully");
+    public ResponseEntity<Void> deleteHotelById(@PathVariable String hotelId) {
+        hotelService.deleteHotelById(hotelId);
+        return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search/by-name")
+    public ResponseEntity<Page<HotelResponseDTO>> findByHotelNameContainingIgnoreCase(@RequestParam( name ="hotelname" , defaultValue = "") String hotelName , @RequestParam(name = "page" ,defaultValue = "0") int page , @RequestParam(name = "size", defaultValue = "5") int size , @RequestParam(name = "sortby" , defaultValue = "hotelName")  String sortby, @RequestParam(name = "ascending" , defaultValue = "true") Boolean ascending ){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.findByHotelNameContainingIgnoreCase(hotelName,page,size,sortby,ascending));
+    }
+    @GetMapping("/search/by-location")
+    public ResponseEntity<Page<HotelResponseDTO>> findByLocationContainingIgnoreCase(@RequestParam( name ="location" , defaultValue = "") String location , @RequestParam(name = "page" ,defaultValue = "0") int page , @RequestParam(name = "size", defaultValue = "5") int size , @RequestParam(name = "sortby" , defaultValue = "location")  String sortby, @RequestParam(name = "ascending" , defaultValue = "true") Boolean ascending ){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.findByLocationContainingIgnoreCase(location,page,size,sortby,ascending));
+    }
+    @GetMapping("/search/by-owner/{ownerId}")
+    public ResponseEntity<Page<HotelResponseDTO>> findHotelsByOwnerId(@PathVariable( name ="ownerId" ) String ownerId , @RequestParam(name = "page" ,defaultValue = "0") int page , @RequestParam(name = "size", defaultValue = "5") int size , @RequestParam(name = "sortby" , defaultValue = "hotelName")  String sortby, @RequestParam(name = "ascending" , defaultValue = "true") Boolean ascending ){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.findHotelsByOwnerId(ownerId,page,size,sortby,ascending));
+    }
+
 }

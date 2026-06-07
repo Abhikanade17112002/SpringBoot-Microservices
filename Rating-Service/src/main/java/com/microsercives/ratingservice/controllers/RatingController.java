@@ -1,89 +1,133 @@
-// RatingController
-
 package com.microsercives.ratingservice.controllers;
 
 import com.microsercives.ratingservice.dtos.CreateRatingRequestDTO;
 import com.microsercives.ratingservice.dtos.RatingResponseDTO;
+import com.microsercives.ratingservice.dtos.UpdateRatingRequestDTO;
 import com.microsercives.ratingservice.services.RatingService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/ratings")
+@RequestMapping("/ratings")
 public class RatingController {
+    @Autowired
+    private  RatingService ratingService;
 
-    private final RatingService ratingService;
-
-    public RatingController(RatingService ratingService) {
-        this.ratingService = ratingService;
+    public RatingController() {
     }
 
-    // Create Rating
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @PostMapping
     public ResponseEntity<RatingResponseDTO> createRating(
-            @RequestBody CreateRatingRequestDTO requestDTO
-    ) {
+            @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO) {
 
-        RatingResponseDTO response =
-                ratingService.createRating(requestDTO);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ratingService.createRating(createRatingRequestDTO));
     }
-
-    // Get All Ratings
-    @GetMapping
-    public ResponseEntity<List<RatingResponseDTO>> getAllRatings() {
-
-        return ResponseEntity.ok(
-                ratingService.getAllRatings()
-        );
-    }
-
-    // Get Rating By Id
+    @PreAuthorize(
+            "hasAnyAuthority('ROLE_ADMIN','ROLE_OWNER','ROLE_CUSTOMER')"
+    )
     @GetMapping("/{ratingId}")
     public ResponseEntity<RatingResponseDTO> getRatingById(
-            @PathVariable String ratingId
-    ) {
+            @PathVariable(name = "ratingId") String ratingId) {
 
-        return ResponseEntity.ok(
-                ratingService.getRatingById(ratingId)
-        );
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ratingService.getRatingById(ratingId));
+    }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping
+    public ResponseEntity<Page<RatingResponseDTO>> getAllRatings(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "sortby", defaultValue = "rating") String sortby,
+            @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ratingService.getAllRatings(
+                        page,
+                        size,
+                        sortby,
+                        ascending));
+    }
+    @PreAuthorize(
+            "hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')"
+    )
+    @PutMapping("/{ratingId}")
+    public ResponseEntity<RatingResponseDTO> updateRatingById(
+            @PathVariable String ratingId,
+            @Valid @RequestBody UpdateRatingRequestDTO updateRatingRequestDTO) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ratingService.updateRatingById(
+                        ratingId,
+                        updateRatingRequestDTO));
     }
 
-    // Get Ratings By User Id
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<List<RatingResponseDTO>> getRatingsByUserId(
-            @PathVariable String userId
-    ) {
-
-        return ResponseEntity.ok(
-                ratingService.getRatingsByUserId(userId)
-        );
-    }
-
-    // Get Ratings By Hotel Id
-    @GetMapping("/hotels/{hotelId}")
-    public ResponseEntity<List<RatingResponseDTO>> getRatingsByHotelId(
-            @PathVariable String hotelId
-    ) {
-
-        return ResponseEntity.ok(
-                ratingService.getRatingsByHotelId(hotelId)
-        );
-    }
-
-    // Delete Rating
+    @PreAuthorize(
+            "hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')"
+    )
     @DeleteMapping("/{ratingId}")
-    public ResponseEntity<String> deleteRating(
-            @PathVariable String ratingId
-    ) {
+    public ResponseEntity<Boolean> deleteRatingById(
+            @PathVariable String ratingId) {
 
-        ratingService.deleteRating(ratingId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ratingService.deleteRatingById(ratingId));
+    }
+    @PreAuthorize(
+            "hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')"
+    )
+    @GetMapping("/customers/{customerId}")
+    public ResponseEntity<Page<RatingResponseDTO>> getRatingsByCustomerId(
+            @PathVariable String customerId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "sortby", defaultValue = "rating") String sortby,
+            @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
 
-        return ResponseEntity.ok(
-                "Rating deleted successfully !!"
-        );
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ratingService.getRatingsByCustomerId(
+                        customerId,
+                        page,
+                        size,
+                        sortby,
+                        ascending));
+    }
+
+    @GetMapping("/hotels/{hotelId}")
+    public ResponseEntity<Page<RatingResponseDTO>> getRatingsByHotelId(
+            @PathVariable String hotelId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "sortby", defaultValue = "rating") String sortby,
+            @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ratingService.getRatingsByHotelId(
+                        hotelId,
+                        page,
+                        size,
+                        sortby,
+                        ascending));
+    }
+
+    @GetMapping("/hotels/{hotelId}/average")
+    public ResponseEntity<Double> getAverageRatingForHotel(
+            @PathVariable String hotelId) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ratingService.getAverageRatingForHotel(hotelId));
     }
 }

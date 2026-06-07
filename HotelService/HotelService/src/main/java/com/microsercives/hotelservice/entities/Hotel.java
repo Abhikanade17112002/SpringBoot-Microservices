@@ -1,38 +1,63 @@
 package com.microsercives.hotelservice.entities;
 
 import jakarta.persistence.*;
-
 @Entity
-@Table( name = "hotels")
+@Table(
+        name = "hotels",
+        indexes = {
+                @Index(
+                        name = "idx_hotel_name",
+                        columnList = "hotelName"
+                ),
+                @Index(
+                        name = "idx_hotel_location",
+                        columnList = "location"
+                ),
+                @Index(
+                        name = "idx_owner_id",
+                        columnList = "ownerId"
+                )
+        }
+)
 public class Hotel {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.UUID)
-    private String id ;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String hotelId;
 
-    private String hotelName ;
+    @Column(nullable = false)
+    private String hotelName;
 
-    private String location ;
+    @Column(nullable = false)
+    private String location;
 
-    private String description ;
+    @Column(nullable = false, length = 2000)
+    private String description;
 
+    @Column(nullable = false)
+    private String ownerId;
 
-    public Hotel(String id, String hotelName, String location, String description) {
-        this.id = id;
-        this.hotelName = hotelName;
-        this.location = location;
-        this.description = description;
-    }
+    @Column(nullable = false)
+    private boolean active = true;
 
     public Hotel() {
     }
 
-    public String getId() {
-        return id;
+    public Hotel(String hotelId, String hotelName, String location, String description, String ownerId, boolean active) {
+        this.hotelId = hotelId;
+        this.hotelName = hotelName;
+        this.location = location;
+        this.description = description;
+        this.ownerId = ownerId;
+        this.active = active;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getHotelId() {
+        return hotelId;
+    }
+
+    public void setHotelId(String hotelId) {
+        this.hotelId = hotelId;
     }
 
     public String getHotelName() {
@@ -59,13 +84,33 @@ public class Hotel {
         this.description = description;
     }
 
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "Hotel{" +
-                "id='" + id + '\'' +
+                "hotelId='" + hotelId + '\'' +
                 ", hotelName='" + hotelName + '\'' +
                 ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", active=" + active +
                 '}';
     }
+    // Getters Setters
+
 }

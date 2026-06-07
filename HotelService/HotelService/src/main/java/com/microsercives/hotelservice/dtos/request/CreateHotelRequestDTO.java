@@ -1,22 +1,34 @@
-package com.microsercives.hotelservice.dtos;
+package com.microsercives.hotelservice.dtos.request;
+
+import jakarta.validation.constraints.NotBlank;
 
 public class CreateHotelRequestDTO {
 
+    @NotBlank(message = "Hotel Name Cannot Be Empty")
     private String hotelName;
 
+    @NotBlank(message = "Location Cannot Be Empty")
     private String location;
 
+    @NotBlank(message = "Description Cannot Be Empty")
     private String description;
+
+    /*
+        Required only when
+        ROLE_ADMIN creates hotel.
+
+        Ignored for ROLE_OWNER.
+     */
+    private String ownerId;
 
     public CreateHotelRequestDTO() {
     }
 
-    public CreateHotelRequestDTO(String hotelName,
-                                 String location,
-                                 String description) {
+    public CreateHotelRequestDTO(String hotelName, String location, String description, String ownerId) {
         this.hotelName = hotelName;
         this.location = location;
         this.description = description;
+        this.ownerId = ownerId;
     }
 
     public String getHotelName() {
@@ -43,6 +55,13 @@ public class CreateHotelRequestDTO {
         this.description = description;
     }
 
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 
     @Override
     public String toString() {
@@ -50,6 +69,7 @@ public class CreateHotelRequestDTO {
                 "hotelName='" + hotelName + '\'' +
                 ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
+                ", ownerId='" + ownerId + '\'' +
                 '}';
     }
 }

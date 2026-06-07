@@ -35,7 +35,7 @@ public class SecurityConfigurations {
                         ))
                 .authorizeHttpRequests(request->
                         request.requestMatchers("/auth/**","/swagger-ui/**" , "/actuator/**",
-                 "/v3/api-docs/**").permitAll()
+                 "/v3/api-docs/**","/internal/**").permitAll()
                                 .requestMatchers("/owners/**","/customers/**").authenticated()
                                 .anyRequest().authenticated()
                 )

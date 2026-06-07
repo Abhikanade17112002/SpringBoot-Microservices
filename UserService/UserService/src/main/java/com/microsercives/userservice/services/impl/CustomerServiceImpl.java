@@ -1,12 +1,15 @@
 package com.microsercives.userservice.services.impl;
 
 import com.microsercives.userservice.dtos.response.CustomerResponseDTO;
+import com.microsercives.userservice.dtos.response.CustomerValidationResponseDTO;
 import com.microsercives.userservice.entities.Customer;
 import com.microsercives.userservice.repositories.CustomerRepository;
 import com.microsercives.userservice.services.CustomerService;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private CustomerRepository customerRepository ;
     @Autowired
@@ -212,5 +216,18 @@ public class CustomerServiceImpl implements CustomerService {
         }
         customerRepository.deleteById(customerId);
         return true;
+    }
+
+    @Override
+    public CustomerValidationResponseDTO validateCustomer(String customerId) {
+        if( !customerRepository.existsById(customerId) ){
+            logger.error("Customer with customerId ==> " + customerId + " Not Found");
+            return new CustomerValidationResponseDTO(customerId,false);
+        }
+        Customer customer = customerRepository.findById(customerId).orElse(new Customer());
+        if( customer.isActive() ){
+            return new CustomerValidationResponseDTO(customerId,true);
+        }
+        return new CustomerValidationResponseDTO(customerId,false);
     }
 }

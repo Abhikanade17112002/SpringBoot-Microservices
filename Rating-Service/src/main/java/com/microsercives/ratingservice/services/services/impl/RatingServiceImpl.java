@@ -1,94 +1,225 @@
-// RatingServiceImpl
-
 package com.microsercives.ratingservice.services.services.impl;
 
 import com.microsercives.ratingservice.dtos.CreateRatingRequestDTO;
 import com.microsercives.ratingservice.dtos.RatingResponseDTO;
+import com.microsercives.ratingservice.dtos.UpdateRatingRequestDTO;
+import com.microsercives.ratingservice.entities.AuthenticatedUser;
 import com.microsercives.ratingservice.entities.Rating;
+import com.microsercives.ratingservice.external.services.userservice.UserService;
 import com.microsercives.ratingservice.repositories.RatingRepository;
 import com.microsercives.ratingservice.services.RatingService;
+import com.microsercives.ratingservice.utility.ValidationUtility;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class RatingServiceImpl implements RatingService {
 
-    private final ModelMapper modelMapper;
-    private final RatingRepository ratingRepository;
+    private Logger logger = LoggerFactory.getLogger(RatingServiceImpl.class);
+    @Autowired
+    private RatingRepository ratingRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private ValidationUtility validationUtility;
+    @Autowired
+    private UserService userService;
 
-    public RatingServiceImpl(ModelMapper modelMapper,
-                             RatingRepository ratingRepository) {
-        this.modelMapper = modelMapper;
-        this.ratingRepository = ratingRepository;
+    public RatingServiceImpl() {
     }
 
     @Override
-    public RatingResponseDTO createRating(CreateRatingRequestDTO requestDTO) {
-
-        Rating rating = modelMapper.map(requestDTO, Rating.class);
-
-        Rating savedRating = ratingRepository.save(rating);
-
-        return modelMapper.map(savedRating, RatingResponseDTO.class);
+    public RatingResponseDTO createRating(
+            CreateRatingRequestDTO createRatingRequestDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
+        if( !validationUtility.validateCustomer(authenticatedUser.getUserId())){
+            logger.info("Customer With Provided Id Not Active");
+            throw new RuntimeException("Customer With Provided Id Id Not Active");
+        }
+        if( !validationUtility.validateHotel(createRatingRequestDTO.getHotelId())){
+            logger.info("Hotel With Provided Id  Not Active");
+            throw new RuntimeException("Hotel With Provided  Id Not Active");
+        }
+        Rating rating = modelMapper.map(createRatingRequestDTO, Rating.class);
+        rating.setCustomerId(authenticatedUser.getUserId());
+        Rating savedRating =
+                ratingRepository.save(rating);
+        return modelMapper.map(
+                savedRating,
+                RatingResponseDTO.class
+        );
     }
 
     @Override
-    public List<RatingResponseDTO> getAllRatings() {
+    public RatingResponseDTO getRatingById(
+            String ratingId) {
 
-        List<Rating> ratings = ratingRepository.findAll();
+        Rating retrievedRating =
+                ratingRepository.findById(ratingId)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "Rating With Id ==> "
+                                                + ratingId
+                                                + " Not Found"));
 
-        return ratings.stream()
-                .map(rating ->
-                        modelMapper.map(rating, RatingResponseDTO.class))
-                .toList();
+        return modelMapper.map(
+                retrievedRating,
+                RatingResponseDTO.class
+        );
     }
 
     @Override
-    public RatingResponseDTO getRatingById(String ratingId) {
+    public Page<RatingResponseDTO> getAllRatings(
+            int page,
+            int size,
+            String sortby,
+            Boolean ascending) {
 
-        Rating rating = ratingRepository.findById(ratingId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "Rating not found with id : " + ratingId
-                        ));
+        Sort sort = ascending
+                ? Sort.by(sortby).ascending()
+                : Sort.by(sortby).descending();
 
-        return new RatingResponseDTO();
+        Pageable pageable =
+                PageRequest.of(page, size, sort);
+
+        Page<Rating> retrievedRatings =
+                ratingRepository.findAll(pageable);
+
+        return retrievedRatings.map(
+                rating -> modelMapper.map(
+                        rating,
+                        RatingResponseDTO.class
+                )
+        );
     }
 
     @Override
-    public List<RatingResponseDTO> getRatingsByUserId(String userId) {
+    public RatingResponseDTO updateRatingById(
+            String ratingId,
+            UpdateRatingRequestDTO updateRatingRequestDTO) {
 
-        List<Rating> ratings = ratingRepository.findByUserId(userId);
+        Rating retrievedRating =
+                ratingRepository.findById(ratingId)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "Rating With Id ==> "
+                                                + ratingId
+                                                + " Not Found"));
 
-        return ratings.stream()
-                .map(rating ->
-                        modelMapper.map(rating, RatingResponseDTO.class))
-                .toList();
+        retrievedRating.setRating(
+                updateRatingRequestDTO.getRating()
+        );
+
+        retrievedRating.setFeedback(
+                updateRatingRequestDTO.getFeedback()
+        );
+
+        Rating updatedRating =
+                ratingRepository.save(
+                        retrievedRating
+                );
+
+        return modelMapper.map(
+                updatedRating,
+                RatingResponseDTO.class
+        );
     }
 
     @Override
-    public List<RatingResponseDTO> getRatingsByHotelId(String hotelId) {
+    public Boolean deleteRatingById(
+            String ratingId) {
 
-        List<Rating> ratings = ratingRepository.findByHotelId(hotelId);
+        Rating retrievedRating =
+                ratingRepository.findById(ratingId)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "Rating With Id ==> "
+                                                + ratingId
+                                                + " Not Found"));
 
-        return ratings.stream()
-                .map(rating ->
-                        modelMapper.map(rating, RatingResponseDTO.class))
-                .toList();
+        ratingRepository.delete(retrievedRating);
+
+        return true;
     }
 
     @Override
-    public void deleteRating(String ratingId) {
+    public Page<RatingResponseDTO> getRatingsByCustomerId(
+            String customerId,
+            int page,
+            int size,
+            String sortby,
+            Boolean ascending) {
 
-        Rating rating = ratingRepository.findById(ratingId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "Rating not found with id : " + ratingId
-                        ));
+        Sort sort = ascending
+                ? Sort.by(sortby).ascending()
+                : Sort.by(sortby).descending();
 
-        ratingRepository.delete(rating);
+        Pageable pageable =
+                PageRequest.of(page, size, sort);
+
+        Page<Rating> retrievedRatings =
+                ratingRepository.findByCustomerId(
+                        customerId,
+                        pageable
+                );
+
+        return retrievedRatings.map(
+                rating -> modelMapper.map(
+                        rating,
+                        RatingResponseDTO.class
+                )
+        );
+    }
+
+    @Override
+    public Page<RatingResponseDTO> getRatingsByHotelId(
+            String hotelId,
+            int page,
+            int size,
+            String sortby,
+            Boolean ascending) {
+
+        Sort sort = ascending
+                ? Sort.by(sortby).ascending()
+                : Sort.by(sortby).descending();
+
+        Pageable pageable =
+                PageRequest.of(page, size, sort);
+
+        Page<Rating> retrievedRatings =
+                ratingRepository.findByHotelId(
+                        hotelId,
+                        pageable
+                );
+
+        return retrievedRatings.map(
+                rating -> modelMapper.map(
+                        rating,
+                        RatingResponseDTO.class
+                )
+        );
+    }
+
+    @Override
+    public Double getAverageRatingForHotel(
+            String hotelId) {
+
+        Double averageRating =
+                ratingRepository
+                        .findAverageRatingByHotelId(
+                                hotelId
+                        );
+
+        return averageRating == null
+                ? 0.0
+                : averageRating;
     }
 }

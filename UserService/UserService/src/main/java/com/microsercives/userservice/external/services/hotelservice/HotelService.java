@@ -1,6 +1,5 @@
 package com.microsercives.userservice.external.services.hotelservice;
 
-
 import com.microsercives.userservice.entities.Hotel;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

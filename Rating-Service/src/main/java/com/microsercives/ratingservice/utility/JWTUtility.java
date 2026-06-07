@@ -1,19 +1,14 @@
-package com.microsercives.userservice.utility;
-
-import com.microsercives.userservice.entities.User;
+package com.microsercives.ratingservice.utility;
+import com.microsercives.ratingservice.entities.AuthenticatedUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class JWTUtility {
@@ -26,21 +21,6 @@ public class JWTUtility {
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
-    }
-
-    public String generateToken(User userDetails) {
-        List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>) userDetails.getAuthorities();
-        String roles = authorities.stream()
-                .map(SimpleGrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-        return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .claim("userRoles", roles)
-                .claim("userId",userDetails.getUserId())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey())
-                .compact();
     }
 
     public String extractUsername(String token) {
@@ -56,7 +36,7 @@ public class JWTUtility {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
@@ -68,10 +48,9 @@ public class JWTUtility {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, AuthenticatedUser authenticatedUser) {
         String username = extractUsername(token);
-
-        return username.equals(userDetails.getUsername())
+        return username.equals(authenticatedUser.getEmailId())
                 && !isTokenExpired(token);
     }
 }

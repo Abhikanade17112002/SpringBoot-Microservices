@@ -3,20 +3,26 @@ package com.microsercives.ratingservice.services;
 
 import com.microsercives.ratingservice.dtos.CreateRatingRequestDTO;
 import com.microsercives.ratingservice.dtos.RatingResponseDTO;
+import com.microsercives.ratingservice.dtos.UpdateRatingRequestDTO;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface RatingService {
-
-    RatingResponseDTO createRating(CreateRatingRequestDTO requestDTO);
-
-    List<RatingResponseDTO> getAllRatings();
+    RatingResponseDTO createRating(@Valid CreateRatingRequestDTO createRatingRequestDTO);
 
     RatingResponseDTO getRatingById(String ratingId);
 
-    List<RatingResponseDTO> getRatingsByUserId(String userId);
+    Page<RatingResponseDTO> getAllRatings(int page, int size, String sortby, Boolean ascending);
 
-    List<RatingResponseDTO> getRatingsByHotelId(String hotelId);
+    RatingResponseDTO updateRatingById(String ratingId, @Valid UpdateRatingRequestDTO updateRatingRequestDTO);
 
-    void deleteRating(String ratingId);
+    Boolean deleteRatingById(String ratingId);
+
+    Page<RatingResponseDTO> getRatingsByCustomerId(String customerId, int page, int size, String sortby, Boolean ascending);
+
+    Page<RatingResponseDTO> getRatingsByHotelId(String hotelId, int page, int size, String sortby, Boolean ascending);
+
+    Double getAverageRatingForHotel(String hotelId);
 }

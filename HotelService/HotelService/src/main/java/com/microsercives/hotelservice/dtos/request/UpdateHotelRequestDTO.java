@@ -1,19 +1,22 @@
-package com.microsercives.hotelservice.dtos;
+package com.microsercives.hotelservice.dtos.request;
+
+import jakarta.validation.constraints.NotBlank;
 
 public class UpdateHotelRequestDTO {
 
+    @NotBlank(message = "Hotel Name Cannot Be Empty")
     private String hotelName;
 
+    @NotBlank(message = "Location Cannot Be Empty")
     private String location;
 
+    @NotBlank(message = "Description Cannot Be Empty")
     private String description;
 
     public UpdateHotelRequestDTO() {
     }
 
-    public UpdateHotelRequestDTO(String hotelName,
-                                 String location,
-                                 String description) {
+    public UpdateHotelRequestDTO(String hotelName, String location, String description) {
         this.hotelName = hotelName;
         this.location = location;
         this.description = description;
@@ -42,7 +45,6 @@ public class UpdateHotelRequestDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     @Override
     public String toString() {

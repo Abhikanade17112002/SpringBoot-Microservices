@@ -1,6 +1,7 @@
 package com.microsercives.userservice.services;
 
 import com.microsercives.userservice.dtos.response.CustomerResponseDTO;
+import com.microsercives.userservice.dtos.response.CustomerValidationResponseDTO;
 import org.springframework.data.domain.Page;
 
 public interface CustomerService {
@@ -8,6 +9,6 @@ public interface CustomerService {
     CustomerResponseDTO getRegisteredCustomerById(String customerId);
     CustomerResponseDTO activateCustomerById(String customerId);
     CustomerResponseDTO deActivateCustomerById(String customerId);
-
     Boolean deleteCustomerById(String customerId);
+    CustomerValidationResponseDTO validateCustomer(String customerId);
 }
