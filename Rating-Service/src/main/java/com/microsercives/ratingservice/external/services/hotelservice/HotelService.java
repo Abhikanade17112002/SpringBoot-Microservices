@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "HOTEL-SERVICE-DEV" , path = "/api/v1/internal")
-public interface HotelService {
+public interface HotelServiceFeingClient {
     @GetMapping("/hotels/{hotelId}")
     public abstract HotelValidationResponseDTO hotelValidation(@PathVariable(name = "hotelId") String hotelId);
 }

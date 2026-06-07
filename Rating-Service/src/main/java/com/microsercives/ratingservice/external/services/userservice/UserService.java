@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "USER-SERVICE-DEV",path = "/api/v1/internal")
-public interface UserService {
+public interface UserServiceFeingClient {
     @GetMapping("/customers/{customerId}")
     public abstract CustomerValidationResponseDTO customerValidation(@PathVariable(name = "customerId") String customerId);
 }

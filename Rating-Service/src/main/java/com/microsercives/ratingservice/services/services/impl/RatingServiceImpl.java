@@ -5,7 +5,6 @@ import com.microsercives.ratingservice.dtos.RatingResponseDTO;
 import com.microsercives.ratingservice.dtos.UpdateRatingRequestDTO;
 import com.microsercives.ratingservice.entities.AuthenticatedUser;
 import com.microsercives.ratingservice.entities.Rating;
-import com.microsercives.ratingservice.external.services.userservice.UserService;
 import com.microsercives.ratingservice.repositories.RatingRepository;
 import com.microsercives.ratingservice.services.RatingService;
 import com.microsercives.ratingservice.utility.ValidationUtility;
@@ -29,8 +28,6 @@ public class RatingServiceImpl implements RatingService {
     private ModelMapper modelMapper;
     @Autowired
     private ValidationUtility validationUtility;
-    @Autowired
-    private UserService userService;
 
     public RatingServiceImpl() {
     }
@@ -47,6 +44,10 @@ public class RatingServiceImpl implements RatingService {
         if( !validationUtility.validateHotel(createRatingRequestDTO.getHotelId())){
             logger.info("Hotel With Provided Id  Not Active");
             throw new RuntimeException("Hotel With Provided  Id Not Active");
+        }
+        if(ratingRepository.findByCustomerIdAndHotelId(authenticatedUser.getUserId(),createRatingRequestDTO.getHotelId()) != null ){
+            logger.info("Rating With Hotel Id And Customer Id Already Exists");
+            return modelMapper.map( ratingRepository.findByCustomerIdAndHotelId(authenticatedUser.getUserId(),createRatingRequestDTO.getHotelId()),RatingResponseDTO.class);
         }
         Rating rating = modelMapper.map(createRatingRequestDTO, Rating.class);
         rating.setCustomerId(authenticatedUser.getUserId());
