@@ -1,9 +1,11 @@
 package com.microsercives.ratingservice.repositories;
 
 import com.microsercives.ratingservice.entities.Rating;
+import feign.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,5 +28,8 @@ public interface RatingRepository extends JpaRepository<Rating, String> {
             Pageable pageable
     );
 
-    Double findAverageRatingByHotelId(String hotelId);
+    @Query("SELECT AVG(r.rating) FROM Rating r WHERE r.hotelId = :hotelId")
+    Double findAverageRatingByHotelId(@Param("hotelId") String hotelId);
+
+    long countByHotelId(String hotelId);
 }

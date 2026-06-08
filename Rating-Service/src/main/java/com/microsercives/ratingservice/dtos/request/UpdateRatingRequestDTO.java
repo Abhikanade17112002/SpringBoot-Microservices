@@ -1,4 +1,4 @@
-package com.microsercives.ratingservice.dtos;
+package com.microsercives.ratingservice.dtos.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

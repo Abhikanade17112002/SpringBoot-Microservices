@@ -1,13 +1,12 @@
 
 package com.microsercives.ratingservice.services;
 
-import com.microsercives.ratingservice.dtos.CreateRatingRequestDTO;
-import com.microsercives.ratingservice.dtos.RatingResponseDTO;
-import com.microsercives.ratingservice.dtos.UpdateRatingRequestDTO;
+import com.microsercives.ratingservice.dtos.request.CreateRatingRequestDTO;
+import com.microsercives.ratingservice.dtos.response.GetHotelAverageRatingResponseDTO;
+import com.microsercives.ratingservice.dtos.response.RatingResponseDTO;
+import com.microsercives.ratingservice.dtos.request.UpdateRatingRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public interface RatingService {
     RatingResponseDTO createRating(@Valid CreateRatingRequestDTO createRatingRequestDTO);
@@ -24,5 +23,5 @@ public interface RatingService {
 
     Page<RatingResponseDTO> getRatingsByHotelId(String hotelId, int page, int size, String sortby, Boolean ascending);
 
-    Double getAverageRatingForHotel(String hotelId);
+    GetHotelAverageRatingResponseDTO getAverageRatingForHotel(String hotelId);
 }

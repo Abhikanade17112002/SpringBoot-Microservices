@@ -1,7 +1,8 @@
 package com.microsercives.ratingservice.utility;
 
-import com.microsercives.ratingservice.dtos.CustomerValidationResponseDTO;
-import com.microsercives.ratingservice.dtos.HotelValidationResponseDTO;
+import com.microsercives.ratingservice.dtos.response.CustomerValidationResponseDTO;
+import com.microsercives.ratingservice.dtos.response.HotelValidationResponseDTO;
+
 import com.microsercives.ratingservice.external.services.hotelservice.HotelServiceFeingClient;
 import com.microsercives.ratingservice.external.services.userservice.UserServiceFeingClient;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
 package com.microsercives.ratingservice.external.services.userservice;
 
-import com.microsercives.ratingservice.dtos.CustomerValidationResponseDTO;
-import jakarta.ws.rs.GET;
+import com.microsercives.ratingservice.dtos.response.CustomerValidationResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

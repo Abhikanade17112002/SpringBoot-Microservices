@@ -1,4 +1,4 @@
-package com.microsercives.ratingservice.dtos;
+package com.microsercives.ratingservice.dtos.response;
 
 public class CustomerValidationResponseDTO {
     private String hotelId ;

@@ -1,8 +1,7 @@
 package com.microsercives.ratingservice.external.services.hotelservice;
 
 
-import com.microsercives.ratingservice.dtos.CustomerValidationResponseDTO;
-import com.microsercives.ratingservice.dtos.HotelValidationResponseDTO;
+import com.microsercives.ratingservice.dtos.response.HotelValidationResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

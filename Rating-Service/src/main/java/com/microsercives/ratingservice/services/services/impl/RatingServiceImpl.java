@@ -1,8 +1,9 @@
 package com.microsercives.ratingservice.services.services.impl;
 
-import com.microsercives.ratingservice.dtos.CreateRatingRequestDTO;
-import com.microsercives.ratingservice.dtos.RatingResponseDTO;
-import com.microsercives.ratingservice.dtos.UpdateRatingRequestDTO;
+import com.microsercives.ratingservice.dtos.request.CreateRatingRequestDTO;
+import com.microsercives.ratingservice.dtos.response.GetHotelAverageRatingResponseDTO;
+import com.microsercives.ratingservice.dtos.response.RatingResponseDTO;
+import com.microsercives.ratingservice.dtos.request.UpdateRatingRequestDTO;
 import com.microsercives.ratingservice.entities.AuthenticatedUser;
 import com.microsercives.ratingservice.entities.Rating;
 import com.microsercives.ratingservice.repositories.RatingRepository;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RatingServiceImpl implements RatingService {
@@ -45,9 +48,14 @@ public class RatingServiceImpl implements RatingService {
             logger.info("Hotel With Provided Id  Not Active");
             throw new RuntimeException("Hotel With Provided  Id Not Active");
         }
-        if(ratingRepository.findByCustomerIdAndHotelId(authenticatedUser.getUserId(),createRatingRequestDTO.getHotelId()) != null ){
+        String authUserId = authenticatedUser.getUserId();
+        String hotelId = createRatingRequestDTO.getHotelId();
+        Optional<Rating> rerating = ratingRepository.findByCustomerIdAndHotelId(authenticatedUser.getUserId(),createRatingRequestDTO.getHotelId());
+        System.out.println("authUserId ==> " +  authUserId + " hotelId ==> " + hotelId + " rating ==> " + rerating);
+
+        if( rerating.isPresent() ){
             logger.info("Rating With Hotel Id And Customer Id Already Exists");
-            return modelMapper.map( ratingRepository.findByCustomerIdAndHotelId(authenticatedUser.getUserId(),createRatingRequestDTO.getHotelId()),RatingResponseDTO.class);
+            return modelMapper.map( rerating, RatingResponseDTO.class);
         }
         Rating rating = modelMapper.map(createRatingRequestDTO, Rating.class);
         rating.setCustomerId(authenticatedUser.getUserId());
@@ -210,17 +218,16 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public Double getAverageRatingForHotel(
+    public GetHotelAverageRatingResponseDTO getAverageRatingForHotel(
             String hotelId) {
-
-        Double averageRating =
-                ratingRepository
-                        .findAverageRatingByHotelId(
-                                hotelId
-                        );
-
-        return averageRating == null
-                ? 0.0
-                : averageRating;
+        Double averageRating = ratingRepository.findAverageRatingByHotelId(hotelId);
+        long totalNoOfRatings = ratingRepository.countByHotelId(hotelId);
+        System.out.println("totalNoOfRatings = " + totalNoOfRatings);
+        System.out.println("averageRating = " + averageRating);
+        GetHotelAverageRatingResponseDTO responseDTO = new GetHotelAverageRatingResponseDTO();
+        responseDTO.setAverageRating(averageRating == null ? 0.0 : averageRating);
+        responseDTO.setHotelId(hotelId);
+        responseDTO.setNoOfRatings((int)totalNoOfRatings);
+        return responseDTO;
     }
 }

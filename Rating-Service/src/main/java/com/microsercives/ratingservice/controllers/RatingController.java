@@ -1,8 +1,9 @@
 package com.microsercives.ratingservice.controllers;
 
-import com.microsercives.ratingservice.dtos.CreateRatingRequestDTO;
-import com.microsercives.ratingservice.dtos.RatingResponseDTO;
-import com.microsercives.ratingservice.dtos.UpdateRatingRequestDTO;
+import com.microsercives.ratingservice.dtos.request.CreateRatingRequestDTO;
+import com.microsercives.ratingservice.dtos.response.GetHotelAverageRatingResponseDTO;
+import com.microsercives.ratingservice.dtos.response.RatingResponseDTO;
+import com.microsercives.ratingservice.dtos.request.UpdateRatingRequestDTO;
 import com.microsercives.ratingservice.services.RatingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,10 +123,9 @@ public class RatingController {
                         ascending));
     }
 
-    @GetMapping("/hotels/{hotelId}/average")
-    public ResponseEntity<Double> getAverageRatingForHotel(
+    @GetMapping("/{hotelId}/average")
+    public ResponseEntity<GetHotelAverageRatingResponseDTO> getAverageRatingForHotel(
             @PathVariable String hotelId) {
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ratingService.getAverageRatingForHotel(hotelId));

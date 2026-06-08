@@ -182,11 +182,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO getRegisteredCustomerById(String customerId) {
-        if( !customerRepository.existsById(customerId) ){
-            throw new EntityNotFoundException("Customer With Id ==> " + customerId + " Not Found");
-        }
-        Customer retreivedCutomer =  customerRepository.findById(customerId).orElse(new Customer());
-        return modelMapper.map(retreivedCutomer, CustomerResponseDTO.class) ;
+        Customer retrievedCustomer = customerRepository.findById(customerId).orElseThrow(() -> new EntityNotFoundException("Customer With Id ==> " + customerId + " Not Found"));
+        return modelMapper.map(retrievedCustomer, CustomerResponseDTO.class);
     }
 
     @Override
