@@ -20,11 +20,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private CustomerRepository customerRepository ;
-    @Autowired
-    private ModelMapper modelMapper ;
+    private final CustomerRepository customerRepository ;
+    private final ModelMapper modelMapper ;
 
+    public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper) {
+        this.customerRepository = customerRepository;
+        this.modelMapper = modelMapper;
+    }
 
 
     /*
@@ -182,8 +184,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO getRegisteredCustomerById(String customerId) {
-        Customer retrievedCustomer = customerRepository.findById(customerId).orElseThrow(() -> new EntityNotFoundException("Customer With Id ==> " + customerId + " Not Found"));
-        return modelMapper.map(retrievedCustomer, CustomerResponseDTO.class);
+        if (!customerRepository.existsById(customerId)) {
+            throw new EntityNotFoundException(
+                    "Customer With Id ==> "
+                            + customerId
+                            + " Not Found"
+            );
+        }
+        Customer retrievedCustomer =
+                customerRepository.findById(customerId)
+                        .orElse(new Customer());
+        return modelMapper.map(
+                retrievedCustomer,
+                CustomerResponseDTO.class
+        );
     }
 
     @Override
