@@ -1,23 +1,23 @@
 package com.microsercives.userservice.dtos.response;
 
 public class CustomerValidationResponseDTO {
-    private String hotelId ;
+    private String customerId ;
     private Boolean isActive;
 
-    public CustomerValidationResponseDTO(String hotelId, Boolean isActive) {
-        this.hotelId = hotelId;
+    public CustomerValidationResponseDTO(String customerId, Boolean isActive) {
+        this.customerId = customerId;
         this.isActive = isActive;
     }
 
     public CustomerValidationResponseDTO() {
     }
 
-    public String getHotelId() {
-        return hotelId;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setHotelId(String hotelId) {
-        this.hotelId = hotelId;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public Boolean getActive() {
@@ -31,7 +31,7 @@ public class CustomerValidationResponseDTO {
     @Override
     public String toString() {
         return "HotelValidationResponseDTO{" +
-                "hotelId='" + hotelId + '\'' +
+                "customerId='" + customerId + '\'' +
                 ", isActive=" + isActive +
                 '}';
     }
