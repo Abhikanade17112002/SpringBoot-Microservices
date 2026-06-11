@@ -30,7 +30,7 @@ public class CustomerValidationResponseDTO {
 
     @Override
     public String toString() {
-        return "HotelValidationResponseDTO{" +
+        return "CustomerValidationResponseDTO{" +
                 "customerId='" + customerId + '\'' +
                 ", isActive=" + isActive +
                 '}';
