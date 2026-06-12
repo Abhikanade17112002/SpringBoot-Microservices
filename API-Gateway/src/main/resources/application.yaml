@@ -27,7 +27,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8888/eureka/
       # Register service in Eureka using IP address instead of hostname
       #
       # Without this:

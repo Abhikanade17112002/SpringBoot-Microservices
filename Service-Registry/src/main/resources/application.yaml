@@ -1,0 +1,25 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: Service-Registry
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+info:
+  app:
+    name: User Service
+    version: 1.0.0
+    description: User Management Microservice
+
+
+
