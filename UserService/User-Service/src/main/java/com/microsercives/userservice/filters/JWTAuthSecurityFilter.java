@@ -28,26 +28,30 @@ public class JWTAuthSecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // ✅ Temporary: print ALL incoming headers to see what's arriving
+        logger.info("=== ALL INCOMING HEADERS ===");
+        java.util.Collections.list(request.getHeaderNames())
+                .forEach(headerName ->
+                        logger.info("Header: "+ headerName + " " + " = "+  request.getHeader(headerName))
+                );
+        logger.info("============================");
 
-        String authorisationHeader = request.getHeader("Authorization");
-        LOG.info("AuthorisationHeader ==> "  + authorisationHeader);
+        String username =
+                request.getHeader("X-USERNAME");
+        String rolesHeader =
+                request.getHeader("X-ROLES");
 
-        if( authorisationHeader == null || authorisationHeader.isBlank() || !authorisationHeader.startsWith("Bearer ")){
+        if( username == null || rolesHeader == null || username.isBlank() ||rolesHeader.isBlank() ) {
             filterChain.doFilter(request,response);
             return ;
         }
-        String jwtToken = authorisationHeader.split(" ")[1];
-        LOG.info("JWT Token ==> " + jwtToken );
-
-        String emailId =  jwtUtility.extractUsername(jwtToken);
-
-        LOG.info("EmailId ==> " + emailId );
-
-        User retrivedUser = (User) userRepository.findAllByEmailId(emailId);
+        logger.info("UserName {}" + username);
+        logger.info("Roles {}" + rolesHeader);
+        User retrivedUser = (User) userRepository.findAllByEmailId(username);
 
         LOG.info("User ==> {} " + retrivedUser.toString());
 
-        if(jwtUtility.validateToken(jwtToken,retrivedUser) && SecurityContextHolder.getContext().getAuthentication() == null ){
+        if(SecurityContextHolder.getContext().getAuthentication() == null ){
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(retrivedUser,null,retrivedUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(token);
         }

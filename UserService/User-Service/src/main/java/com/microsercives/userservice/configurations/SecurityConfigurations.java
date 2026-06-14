@@ -46,6 +46,7 @@ public class SecurityConfigurations {
        return securityFilterChain ;
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration)

@@ -5,6 +5,8 @@ import com.microsercives.userservice.dtos.UserResponseDTO;
 import com.microsercives.userservice.dtos.response.CustomerResponseDTO;
 import com.microsercives.userservice.repositories.CustomerRepository;
 import com.microsercives.userservice.services.CustomerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -25,9 +27,8 @@ public class CustomerController {
             @RequestParam(name = "page" , defaultValue = "0") int page ,
             @RequestParam(name = "size" , defaultValue = "5") int size ,
             @RequestParam(name = "sortby" , defaultValue = "user.firstName") String sortby ,
-            @RequestParam(name = "ascending" , defaultValue = "true") boolean ascending
-
-    ){
+            @RequestParam(name = "ascending" , defaultValue = "true") boolean ascending, HttpServletRequest request, HttpServletResponse response){
+        System.out.println("request ==> " + request.getHeader("X-SOURCE"));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(customerSevice.getAllRegisteredCustomers(page,size,sortby,ascending));
