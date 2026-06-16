@@ -1,9 +1,8 @@
 package com.microsercives.hotelservice.configurations;
 
 
-import com.microsercives.hotelservice.filters.JWTAuthenticationFilter;
+import com.microsercives.hotelservice.filters.JWTAuthSecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -21,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfigurations {
     @Autowired
     @Lazy
-    private JWTAuthenticationFilter jwtAuthenticationFilter;
+    private JWTAuthSecurityFilter jwtAuthenticationFilter;
     @Bean
     public PasswordEncoder BcryptPasswordEncoder(){
         return new BCryptPasswordEncoder();

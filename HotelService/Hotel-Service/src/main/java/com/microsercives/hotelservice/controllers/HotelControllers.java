@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,12 +28,14 @@ public class HotelControllers {
 
     // CREATE HOTEL
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<HotelResponseDTO> createHotel(@RequestBody CreateHotelRequestDTO createHotelRequestDTO) {
         return  ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(hotelService.createHotel(createHotelRequestDTO));
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<HotelResponseDTO>> getAllHotels(@RequestParam(name = "page" ,defaultValue = "0") int page , @RequestParam(name = "size", defaultValue = "5") int size , @RequestParam(name = "sortby" , defaultValue = "hotelName")  String sortby, @RequestParam(name = "ascending" , defaultValue = "true") Boolean ascending ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -41,6 +44,7 @@ public class HotelControllers {
 
     // GET HOTEL BY ID
     @GetMapping("/{hotelId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<HotelResponseDTO> getHotelById(@PathVariable(name = "hotelId") String hotelId) {
      return ResponseEntity
              .status(HttpStatus.OK)
@@ -49,6 +53,7 @@ public class HotelControllers {
 
     // UPDATE HOTEL
     @PutMapping("/{hotelId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<HotelResponseDTO> updateHotelById(@PathVariable String hotelId,@RequestBody UpdateHotelRequestDTO updateHotelRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -57,6 +62,7 @@ public class HotelControllers {
 
     // DELETE HOTEL
     @DeleteMapping("/{hotelId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     public ResponseEntity<Void> deleteHotelById(@PathVariable String hotelId) {
         hotelService.deleteHotelById(hotelId);
         return ResponseEntity.noContent().build();
@@ -75,6 +81,7 @@ public class HotelControllers {
                 .body(hotelService.findByLocationContainingIgnoreCase(location,page,size,sortby,ascending));
     }
     @GetMapping("/search/by-owner/{ownerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<HotelResponseDTO>> findHotelsByOwnerId(@PathVariable( name ="ownerId" ) String ownerId , @RequestParam(name = "page" ,defaultValue = "0") int page , @RequestParam(name = "size", defaultValue = "5") int size , @RequestParam(name = "sortby" , defaultValue = "hotelName")  String sortby, @RequestParam(name = "ascending" , defaultValue = "true") Boolean ascending ){
         return ResponseEntity
                 .status(HttpStatus.OK)

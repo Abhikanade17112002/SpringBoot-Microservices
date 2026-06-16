@@ -1,9 +1,10 @@
 package com.microsercives.ratingservice.utility;
-import com.microsercives.ratingservice.entities.AuthenticatedUser;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -23,6 +24,8 @@ public class JWTUtility {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
+
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -36,7 +39,7 @@ public class JWTUtility {
         return claimsResolver.apply(claims);
     }
 
-    public Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
@@ -48,9 +51,10 @@ public class JWTUtility {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean validateToken(String token, AuthenticatedUser authenticatedUser) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         String username = extractUsername(token);
-        return username.equals(authenticatedUser.getEmailId())
+
+        return username.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
     }
 }

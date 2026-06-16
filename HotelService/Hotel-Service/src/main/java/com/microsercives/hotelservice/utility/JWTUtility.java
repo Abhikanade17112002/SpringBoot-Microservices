@@ -1,5 +1,5 @@
 package com.microsercives.hotelservice.utility;
-import com.microsercives.hotelservice.entities.AuthenticatedUser;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -24,6 +24,8 @@ public class JWTUtility {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
+
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -37,7 +39,7 @@ public class JWTUtility {
         return claimsResolver.apply(claims);
     }
 
-    public Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
@@ -49,9 +51,13 @@ public class JWTUtility {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean validateToken(String token, AuthenticatedUser authenticatedUser) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         String username = extractUsername(token);
-        return username.equals(authenticatedUser.getEmailId())
+
+        return username.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
+    }
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", String.class));
     }
 }

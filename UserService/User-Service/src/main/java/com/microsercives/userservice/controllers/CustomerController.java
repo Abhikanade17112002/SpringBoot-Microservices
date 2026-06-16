@@ -23,6 +23,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerSevice ;
     @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<CustomerResponseDTO>> getAllRegisteredCustomers(
             @RequestParam(name = "page" , defaultValue = "0") int page ,
             @RequestParam(name = "size" , defaultValue = "5") int size ,
@@ -35,13 +36,14 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerResponseDTO> getRegisteredCustomerById(@PathVariable( name = "customerId") String customerId){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(customerSevice.getRegisteredCustomerById(customerId));
     }
 
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{customerId}/activate")
     public ResponseEntity<CustomerResponseDTO> activateCustomerById(@PathVariable( name = "customerId") String customerId){
         return ResponseEntity
@@ -49,12 +51,14 @@ public class CustomerController {
                 .body(customerSevice.activateCustomerById(customerId));
     }
     @PutMapping("/{customerId}/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerResponseDTO> deActivateCustomerById(@PathVariable( name = "customerId") String customerId){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(customerSevice.deActivateCustomerById(customerId));
     }
     @DeleteMapping("/{customerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> deleteCustomerById(@PathVariable( name = "customerId") String customerId){
         return ResponseEntity
                 .status(HttpStatus.OK)

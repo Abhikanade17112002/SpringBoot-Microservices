@@ -4,10 +4,14 @@ import com.microsercives.userservice.dtos.request.DeleteUserAccountRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserPasswordRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserProfileRequestDTO;
 import com.microsercives.userservice.services.UserService;
+import jakarta.ws.rs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -23,13 +27,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserResponseDTO> getLoggedInUserProfile(){
+    @GetMapping("/me/{userId}")
+    @PreAuthorize("#userId == authentication.principal.userId")
+    public ResponseEntity<UserResponseDTO> getLoggedInUserProfile(@PathVariable(name = "userId") String userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getLoggedInUserProfile());
     }
     @GetMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllRegisteredUsers(){
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -37,34 +43,39 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
     public ResponseEntity<UserResponseDTO> getRegisteredUserById(@PathVariable(name = "userId") String userId){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getRegisteredUserById(userId));
     }
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
     public ResponseEntity<Boolean> deleteRegisteredUserById(@PathVariable(name = "userId") String userId){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.deleteRegisteredUserById(userId));
     }
 
-    @PutMapping("/me")
-    public ResponseEntity<UserResponseDTO> updatedLoggedInUserProfile(@RequestBody UpdateUserProfileRequestDTO updateUserProfileRequestDTO){
+    @PutMapping("/me/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
+    public ResponseEntity<UserResponseDTO> updatedLoggedInUserProfile(@PathVariable(name = "userId") String userId,@RequestBody UpdateUserProfileRequestDTO updateUserProfileRequestDTO){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updatedLoggedInUserProfile(updateUserProfileRequestDTO)) ;
     }
 
-    @PutMapping("/me/change-password")
-    public ResponseEntity<Boolean> updatedLoggedInUserPassword(@RequestBody UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
+    @PutMapping("/me/{userId}/change-password")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
+    public ResponseEntity<Boolean> updatedLoggedInUserPassword(@PathVariable(name = "userId") String userId,@RequestBody UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updatedLoggedInUserPassword(updateUserPasswordRequestDTO)) ;
     }
 
-    @DeleteMapping("/me/deleteaccount")
-    public ResponseEntity deleteUserAccount(@RequestBody DeleteUserAccountRequestDTO deleteUserAccountRequestDTO){
+    @DeleteMapping("/me/{userId}/deleteaccount")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
+    public ResponseEntity deleteUserAccount(@PathVariable(name = "userId") String userId,@RequestBody DeleteUserAccountRequestDTO deleteUserAccountRequestDTO){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.deleteUserAccount(deleteUserAccountRequestDTO)) ;

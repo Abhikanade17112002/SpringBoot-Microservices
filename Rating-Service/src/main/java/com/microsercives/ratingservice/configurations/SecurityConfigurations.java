@@ -1,6 +1,6 @@
 package com.microsercives.ratingservice.configurations;
 
-import com.microsercives.ratingservice.filters.JWTAuthenticationFilter;
+import com.microsercives.ratingservice.filters.JWTAuthSecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfigurations {
     @Autowired
     @Lazy
-    private JWTAuthenticationFilter jwtAuthenticationFilter;
+    private JWTAuthSecurityFilter jwtAuthenticationFilter;
     @Bean
     public PasswordEncoder BcryptPasswordEncoder(){
         return new BCryptPasswordEncoder();

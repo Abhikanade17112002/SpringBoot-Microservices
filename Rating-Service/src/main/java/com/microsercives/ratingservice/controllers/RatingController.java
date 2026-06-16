@@ -22,7 +22,7 @@ public class RatingController {
     public RatingController() {
     }
 
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping
     public ResponseEntity<RatingResponseDTO> createRating(
             @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO) {
@@ -32,7 +32,7 @@ public class RatingController {
                 .body(ratingService.createRating(createRatingRequestDTO));
     }
     @PreAuthorize(
-            "hasAnyAuthority('ROLE_ADMIN','ROLE_OWNER','ROLE_CUSTOMER')"
+            "hasAnyRole('ADMIN','OWNER','CUSTOMER')"
     )
     @GetMapping("/{ratingId}")
     public ResponseEntity<RatingResponseDTO> getRatingById(
@@ -42,7 +42,7 @@ public class RatingController {
                 .status(HttpStatus.OK)
                 .body(ratingService.getRatingById(ratingId));
     }
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @GetMapping
     public ResponseEntity<Page<RatingResponseDTO>> getAllRatings(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -59,7 +59,7 @@ public class RatingController {
                         ascending));
     }
     @PreAuthorize(
-            "hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')"
+            "hasAnyRole('ADMIN','CUSTOMER')"
     )
     @PutMapping("/{ratingId}")
     public ResponseEntity<RatingResponseDTO> updateRatingById(
@@ -74,7 +74,7 @@ public class RatingController {
     }
 
     @PreAuthorize(
-            "hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')"
+            "hasAnyRole('ADMIN','CUSTOMER')"
     )
     @DeleteMapping("/{ratingId}")
     public ResponseEntity<Boolean> deleteRatingById(
@@ -85,7 +85,7 @@ public class RatingController {
                 .body(ratingService.deleteRatingById(ratingId));
     }
     @PreAuthorize(
-            "hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')"
+            "hasAnyRole('ADMIN','CUSTOMER')"
     )
     @GetMapping("/customers/{customerId}")
     public ResponseEntity<Page<RatingResponseDTO>> getRatingsByCustomerId(
@@ -106,6 +106,9 @@ public class RatingController {
     }
 
     @GetMapping("/hotels/{hotelId}")
+    @PreAuthorize(
+            "hasAnyRole('ADMIN','OWNER','CUSTOMER')"
+    )
     public ResponseEntity<Page<RatingResponseDTO>> getRatingsByHotelId(
             @PathVariable String hotelId,
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -124,6 +127,9 @@ public class RatingController {
     }
 
     @GetMapping("/{hotelId}/average")
+    @PreAuthorize(
+            "hasAnyRole('ADMIN','OWNER','CUSTOMER')"
+    )
     public ResponseEntity<GetHotelAverageRatingResponseDTO> getAverageRatingForHotel(
             @PathVariable String hotelId) {
         return ResponseEntity

@@ -67,6 +67,8 @@ public class AuthenticationFilter implements GlobalFilter , Ordered {
         logger.info("userName ==>" + username);
         String roles = jwtUtility.extractRoles(authToken);
         logger.info("roles ==>" + roles);
+        String userId = jwtUtility.extractUserId(authToken);
+        logger.info("userId =>" + userId);
 
         ServerHttpRequest modifiedRequest =
                 exchange.getRequest()
@@ -78,6 +80,10 @@ public class AuthenticationFilter implements GlobalFilter , Ordered {
                         .header(
                                 "X-ROLES",
                                 roles
+                        )
+                        .header(
+                                "X-USER-ID",
+                                userId
                         )
                         .build();
 

@@ -129,4 +129,7 @@ public class JWTUtility {
         };
         return userRoles.toString();
     }
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", String.class));
+    }
 }

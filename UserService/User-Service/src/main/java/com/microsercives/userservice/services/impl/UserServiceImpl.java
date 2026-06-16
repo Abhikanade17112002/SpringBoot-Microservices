@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
             }
             else{
                 LOG.info("Old Password  Do Not Match " );
+                return false ;
             }
         }
         else if(retrivedUser.getRole() == Role.ROLE_OWNER){
@@ -116,6 +117,7 @@ public class UserServiceImpl implements UserService {
             }
             else{
                 LOG.info("Old Password  Do Not Match " );
+                return false ;
             }
         }
         return true ;
