@@ -33,6 +33,8 @@ public class SecurityConfigurations {
         return http
                 .csrf((csrfConfig)-> csrfConfig.disable())
                 .httpBasic((httpConfig)->httpConfig.disable())
+                .authorizeHttpRequests((req)-> req.requestMatchers("/swagger-ui/**" , "/actuator/**",
+                         "/v3/api-docs/**").permitAll())
                 .formLogin((formConfig)->formConfig.disable())
                 .authorizeHttpRequests((req)->
                         req.anyRequest().authenticated()

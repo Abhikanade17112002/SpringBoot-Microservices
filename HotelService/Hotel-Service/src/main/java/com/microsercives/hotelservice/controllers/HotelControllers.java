@@ -5,6 +5,8 @@ import com.microsercives.hotelservice.dtos.response.HotelResponseDTO;
 import com.microsercives.hotelservice.dtos.request.UpdateHotelRequestDTO;
 import com.microsercives.hotelservice.entities.Hotel;
 import com.microsercives.hotelservice.services.HotelService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,11 +31,32 @@ public class HotelControllers {
     // CREATE HOTEL
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
+    @Retry(
+            name = "createNewHotelRetry",
+            fallbackMethod = "createHotelFallBack"
+    )
+    @CircuitBreaker(
+            name = "createNewHotelCB"
+    )
     public ResponseEntity<HotelResponseDTO> createHotel(@RequestBody CreateHotelRequestDTO createHotelRequestDTO) {
+        System.out.println("CALLING CREATE HOTEL");
         return  ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(hotelService.createHotel(createHotelRequestDTO));
     }
+    public ResponseEntity<HotelResponseDTO> createHotelFallBack(@RequestBody CreateHotelRequestDTO createHotelRequestDTO,Exception e) {
+        HotelResponseDTO response = new HotelResponseDTO();
+        response.setHotelId("INVALID-HOTEL-ID");
+        response.setHotelName("INVALID-HOTEL-NAME");
+        response.setActive(false);
+        response.setDescription("INVALID-HOTEL-DESCRIPTION   ==> " +  e.getMessage());
+        response.setOwnerId("INVALID-HOTEL-OWNER-ID");
+        response.setLocation("INVALID-HOTEL-LOCATION");
+        return  ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<HotelResponseDTO>> getAllHotels(@RequestParam(name = "page" ,defaultValue = "0") int page , @RequestParam(name = "size", defaultValue = "5") int size , @RequestParam(name = "sortby" , defaultValue = "hotelName")  String sortby, @RequestParam(name = "ascending" , defaultValue = "true") Boolean ascending ) {

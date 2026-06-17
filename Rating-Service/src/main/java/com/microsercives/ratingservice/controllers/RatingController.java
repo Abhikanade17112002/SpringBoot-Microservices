@@ -5,6 +5,8 @@ import com.microsercives.ratingservice.dtos.response.GetHotelAverageRatingRespon
 import com.microsercives.ratingservice.dtos.response.RatingResponseDTO;
 import com.microsercives.ratingservice.dtos.request.UpdateRatingRequestDTO;
 import com.microsercives.ratingservice.services.RatingService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,11 @@ public class RatingController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping
+    @Retry(
+            name = "createNewRatingRetry",
+            fallbackMethod = "createHotelFallBack"
+    )
+    @CircuitBreaker(name = "createNewRatingCB")
     public ResponseEntity<RatingResponseDTO> createRating(
             @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO) {
 
@@ -31,6 +38,22 @@ public class RatingController {
                 .status(HttpStatus.CREATED)
                 .body(ratingService.createRating(createRatingRequestDTO));
     }
+
+    public ResponseEntity<RatingResponseDTO> createRatingFallback(
+            @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO , Exception e) {
+
+        RatingResponseDTO response = new RatingResponseDTO();
+        response.setRatingId("INVALID-RATING-ID");
+        response.setRating(-1);
+        response.setFeedback(e.getMessage());
+        response.setCustomerId("INVALID-CUSTOMER-ID");
+        response.setHotelId("INVALID-HOTEL-ID");
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
+    }
+
+
     @PreAuthorize(
             "hasAnyRole('ADMIN','OWNER','CUSTOMER')"
     )
@@ -42,6 +65,7 @@ public class RatingController {
                 .status(HttpStatus.OK)
                 .body(ratingService.getRatingById(ratingId));
     }
+
     @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @GetMapping
     public ResponseEntity<Page<RatingResponseDTO>> getAllRatings(
