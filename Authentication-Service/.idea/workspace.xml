@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5f8b4170-bee1-4f9f-a019-c9411db6cfd3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HotelService/Hotel-Service/src/main/java/com/microsercives/hotelservice/configurations/SecurityConfigurations.java" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelService/Hotel-Service/src/main/java/com/microsercives/hotelservice/configurations/SecurityConfigurations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HotelService/Hotel-Service/src/main/java/com/microsercives/hotelservice/controllers/HotelControllers.java" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelService/Hotel-Service/src/main/java/com/microsercives/hotelservice/controllers/HotelControllers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rating-Service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Rating-Service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/configurations/SecurityConfigurations.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/configurations/SecurityConfigurations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/controllers/RatingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/controllers/RatingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rating-Service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Rating-Service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +81,7 @@
       <recent name="com.microsercives.hotelservice.filters" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.ApiGatewayApplication">
+  <component name="RunManager" selected="Spring Boot.UserServiceApplication">
     <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
       <module name="API-Gateway" />
@@ -194,10 +190,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.UserServiceApplication" />
-        <item itemvalue="Spring Boot.HotelServiceApplication" />
-        <item itemvalue="Spring Boot.RatingServiceApplication" />
         <item itemvalue="Spring Boot.ApiGatewayApplication" />
+        <item itemvalue="Spring Boot.HotelServiceApplication" />
+        <item itemvalue="Spring Boot.UserServiceApplication" />
+        <item itemvalue="Spring Boot.RatingServiceApplication" />
         <item itemvalue="Spring Boot.ConfigServerApplication" />
       </list>
     </recent_temporary>

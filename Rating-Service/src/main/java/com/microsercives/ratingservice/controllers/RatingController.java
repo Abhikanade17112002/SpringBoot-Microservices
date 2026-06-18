@@ -5,8 +5,6 @@ import com.microsercives.ratingservice.dtos.response.GetHotelAverageRatingRespon
 import com.microsercives.ratingservice.dtos.response.RatingResponseDTO;
 import com.microsercives.ratingservice.dtos.request.UpdateRatingRequestDTO;
 import com.microsercives.ratingservice.services.RatingService;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,7 +26,6 @@ public class RatingController {
     @PostMapping
     public ResponseEntity<RatingResponseDTO> createRating(
             @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO) {
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ratingService.createRating(createRatingRequestDTO));
