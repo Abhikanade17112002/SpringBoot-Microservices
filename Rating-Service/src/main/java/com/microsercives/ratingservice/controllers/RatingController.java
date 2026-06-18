@@ -26,11 +26,6 @@ public class RatingController {
 
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping
-    @Retry(
-            name = "createNewRatingRetry",
-            fallbackMethod = "createHotelFallBack"
-    )
-    @CircuitBreaker(name = "createNewRatingCB")
     public ResponseEntity<RatingResponseDTO> createRating(
             @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO) {
 
@@ -38,21 +33,6 @@ public class RatingController {
                 .status(HttpStatus.CREATED)
                 .body(ratingService.createRating(createRatingRequestDTO));
     }
-
-    public ResponseEntity<RatingResponseDTO> createRatingFallback(
-            @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO , Exception e) {
-
-        RatingResponseDTO response = new RatingResponseDTO();
-        response.setRatingId("INVALID-RATING-ID");
-        response.setRating(-1);
-        response.setFeedback(e.getMessage());
-        response.setCustomerId("INVALID-CUSTOMER-ID");
-        response.setHotelId("INVALID-HOTEL-ID");
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
-    }
-
 
     @PreAuthorize(
             "hasAnyRole('ADMIN','OWNER','CUSTOMER')"

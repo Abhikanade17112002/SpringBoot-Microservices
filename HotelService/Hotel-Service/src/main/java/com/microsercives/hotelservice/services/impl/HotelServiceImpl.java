@@ -8,6 +8,8 @@ import com.microsercives.hotelservice.entities.Hotel;
 import com.microsercives.hotelservice.repositories.HotelRepositories;
 import com.microsercives.hotelservice.services.HotelOwnerVerificationService;
 import com.microsercives.hotelservice.services.HotelService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -17,7 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -39,6 +44,13 @@ public class HotelServiceImpl implements HotelService {
 
     // CREATE
     @Override
+    @Retry(
+            name = "createNewHotelRetry",
+            fallbackMethod = "createHotelFallBack"
+    )
+    @CircuitBreaker(
+            name = "createNewHotelCB"
+    )
     public HotelResponseDTO createHotel(CreateHotelRequestDTO createHotelRequestDTO) {
 
         if( !verificationService.verifyHotelOwner(createHotelRequestDTO.getOwnerId()) ){
@@ -55,6 +67,19 @@ public class HotelServiceImpl implements HotelService {
         hotel.setLocation(createHotelRequestDTO.getLocation());
         Hotel savedHotel =  hotelRepositories.save(hotel);
         return modelMapper.map(savedHotel, HotelResponseDTO.class);
+    }
+
+    public ResponseEntity<HotelResponseDTO> createHotelFallBack(@RequestBody CreateHotelRequestDTO createHotelRequestDTO, Exception e) {
+        HotelResponseDTO response = new HotelResponseDTO();
+        response.setHotelId("INVALID-HOTEL-ID");
+        response.setHotelName("INVALID-HOTEL-NAME");
+        response.setActive(false);
+        response.setDescription("INVALID-HOTEL-DESCRIPTION   ==> " +  e.getMessage());
+        response.setOwnerId("INVALID-HOTEL-OWNER-ID");
+        response.setLocation("INVALID-HOTEL-LOCATION");
+        return  ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
     }
 
     @Override

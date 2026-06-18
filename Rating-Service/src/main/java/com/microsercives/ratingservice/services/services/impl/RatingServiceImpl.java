@@ -9,15 +9,21 @@ import com.microsercives.ratingservice.entities.Rating;
 import com.microsercives.ratingservice.repositories.RatingRepository;
 import com.microsercives.ratingservice.services.RatingService;
 import com.microsercives.ratingservice.utility.ValidationUtility;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -36,6 +42,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Retry(
+            name = "createNewRatingRetry",
+            fallbackMethod = "createHotelFallBack"
+    )
+    @CircuitBreaker(name = "createNewRatingCB")
     public RatingResponseDTO createRating(
             CreateRatingRequestDTO createRatingRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,6 +76,19 @@ public class RatingServiceImpl implements RatingService {
                 savedRating,
                 RatingResponseDTO.class
         );
+    }
+    public ResponseEntity<RatingResponseDTO> createRatingFallback(
+            @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO , Exception e) {
+
+        RatingResponseDTO response = new RatingResponseDTO();
+        response.setRatingId("INVALID-RATING-ID");
+        response.setRating(-1);
+        response.setFeedback(e.getMessage());
+        response.setCustomerId("INVALID-CUSTOMER-ID");
+        response.setHotelId("INVALID-HOTEL-ID");
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
     }
 
     @Override
