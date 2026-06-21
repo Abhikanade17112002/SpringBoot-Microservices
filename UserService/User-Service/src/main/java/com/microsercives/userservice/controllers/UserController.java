@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PutMapping("/me/{userId}/change-password")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
+//    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
     public ResponseEntity<Boolean> updatedLoggedInUserPassword(@PathVariable(name = "userId") String userId,@RequestBody UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -4,6 +4,7 @@ import com.microsercives.hotelservice.dtos.request.CreateHotelRequestDTO;
 import com.microsercives.hotelservice.dtos.request.UpdateHotelRequestDTO;
 import com.microsercives.hotelservice.dtos.response.HotelResponseDTO;
 import com.microsercives.hotelservice.dtos.response.HotelValidationResponseDTO;
+import com.microsercives.hotelservice.dtos.response.ListOfHotelOwnerHotelIdsListResponseDTO;
 import com.microsercives.hotelservice.entities.Hotel;
 import org.springframework.data.domain.Page;
 
@@ -30,4 +31,6 @@ public interface HotelService {
     Page<HotelResponseDTO> findHotelsByOwnerId(String ownerId, int page, int size, String sortby, Boolean ascending);
 
     HotelValidationResponseDTO validateHotel(String hotelId);
+
+    ListOfHotelOwnerHotelIdsListResponseDTO getOwnerHotelsIdList(String ownerId);
 }

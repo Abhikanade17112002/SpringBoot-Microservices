@@ -5,7 +5,7 @@ jwt:
   expiration: 300000
 spring:
   application:
-    name: Api-Gateway
+    name: API-GATEWAY
   config:
     import: optional:configserver:http://localhost:8084
   profiles:

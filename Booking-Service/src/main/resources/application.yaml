@@ -1,0 +1,96 @@
+server:
+  servlet:
+    context-path: "/api/v1"
+jwt:
+  secret-key: "ThisIsMySuperSecretKeyForJWTAuthentication123456789"
+  expiration: 300000
+spring:
+  application:
+    name: BOOKING-SERVICE
+  profiles:
+    active: dev
+  config:
+    import: optional:configserver:http://localhost:8084
+
+
+
+#jwt:
+#  secret-key: "ThisIsMySuperSecretKeyForJWTAuthentication123456789"
+#  expiration: 300000
+#server:
+#  servlet:
+#    context-path: "/api/v1"
+#  port: 8085
+#spring:
+#  application:
+#    name: BOOKING-SERVICE
+#  profiles:
+#    active: dev
+#  config:
+#    import: optional:configserver:http://localhost:8084
+##  datasource:
+##    url: jdbc:mysql://localhost:3306/bookingservice?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+##    username: root
+##    password: Pass@123
+##    driver-class-name: com.mysql.cj.jdbc.Driver
+##  jpa:
+##    hibernate:
+##      ddl-auto: update
+##    show-sql: true
+##    open-in-view: false
+##    properties:
+##      hibernate:
+##        format_sql: true
+##
+##eureka:
+##  client:
+##    service-url:
+##      defaultZone: http://localhost:8761/eureka/
+##
+##  instance:
+##    prefer-ip-address: true
+##
+##resilience4j:
+##  retry:
+##    instances:
+##      createNewHotelRetry:
+##        maxAttempts: 3
+##        waitDuration: 2s
+##
+##  circuitbreaker:
+##    instances:
+##      createNewHotelCB:
+##        registerHealthIndicator: true
+##        slidingWindowSize: 10
+##        minimumNumberOfCalls: 5
+##        failureRateThreshold: 50
+##        waitDurationInOpenState: 20s
+##        permittedNumberOfCallsInHalfOpenState: 3
+##        automaticTransitionFromOpenToHalfOpenEnabled: true
+##
+##management:
+##  endpoints:
+##    web:
+##      exposure:
+##        include: health,info,metrics,circuitbreakers,retry,retryevents
+##
+##  endpoint:
+##    health:
+##      show-details: always
+##
+##  health:
+##    circuitbreakers:
+##      enabled: true
+##
+##  info:
+##    env:
+##      enabled: true
+##
+##info:
+##  app:
+##    name: BOOKING-SERVICE
+##    description: Booking Service API
+##    version: 1.0
+##
+##
+##

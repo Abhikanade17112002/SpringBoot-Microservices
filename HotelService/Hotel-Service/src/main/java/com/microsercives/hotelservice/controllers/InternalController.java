@@ -1,6 +1,7 @@
 package com.microsercives.hotelservice.controllers;
 
 import com.microsercives.hotelservice.dtos.response.HotelValidationResponseDTO;
+import com.microsercives.hotelservice.dtos.response.ListOfHotelOwnerHotelIdsListResponseDTO;
 import com.microsercives.hotelservice.services.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,5 +18,10 @@ public class InternalController {
     @GetMapping("/hotels/{hotelId}")
     public HotelValidationResponseDTO validateHotel(@PathVariable("hotelId") String hotelId) {
         return hotelService.validateHotel(hotelId) ;
+    }
+
+    @GetMapping("/hotels/owners/{ownerId}")
+    public ListOfHotelOwnerHotelIdsListResponseDTO getOwnerHotelsIdList(@PathVariable("ownerId") String ownerId) {
+        return hotelService.getOwnerHotelsIdList(ownerId) ;
     }
 }

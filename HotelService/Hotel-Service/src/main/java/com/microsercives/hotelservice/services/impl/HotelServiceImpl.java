@@ -4,6 +4,7 @@ import com.microsercives.hotelservice.dtos.request.CreateHotelRequestDTO;
 import com.microsercives.hotelservice.dtos.request.UpdateHotelRequestDTO;
 import com.microsercives.hotelservice.dtos.response.HotelResponseDTO;
 import com.microsercives.hotelservice.dtos.response.HotelValidationResponseDTO;
+import com.microsercives.hotelservice.dtos.response.ListOfHotelOwnerHotelIdsListResponseDTO;
 import com.microsercives.hotelservice.entities.Hotel;
 import com.microsercives.hotelservice.repositories.HotelRepositories;
 import com.microsercives.hotelservice.services.HotelOwnerVerificationService;
@@ -159,6 +160,24 @@ public class HotelServiceImpl implements HotelService {
             return new HotelValidationResponseDTO(hotelId,true);
         }
         return new HotelValidationResponseDTO(hotelId,false);
+    }
+
+    @Override
+    public ListOfHotelOwnerHotelIdsListResponseDTO getOwnerHotelsIdList(String ownerId) {
+        if( !verificationService.verifyHotelOwner(ownerId) ){
+            logger.info("Hotel owner verification failed");
+            return new ListOfHotelOwnerHotelIdsListResponseDTO();
+        }
+        Sort sort = Sort.by("hotelId").ascending() ;
+        Pageable pageable = PageRequest.of(0, 10000, sort);
+        Page<Hotel> retreivedHotels = hotelRepositories.findByOwnerId(ownerId,pageable);
+        List<String> hotelIds = retreivedHotels.map((hotel)->hotel.getHotelId()).stream().toList();
+
+        logger.info("Hotel owner ids {}", hotelIds);
+
+        ListOfHotelOwnerHotelIdsListResponseDTO response =  new ListOfHotelOwnerHotelIdsListResponseDTO(hotelIds);
+
+        return response;
     }
 
 }
