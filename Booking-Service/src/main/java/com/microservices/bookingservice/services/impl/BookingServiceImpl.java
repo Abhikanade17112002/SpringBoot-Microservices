@@ -130,7 +130,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponseDTO checkOutBookingById(String bookingId) {
         Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_IN) ){
-            reterivedBooking.setBookingStatus(BookingStatus.CHECKED_IN);
+            reterivedBooking.setBookingStatus(BookingStatus.CHECKED_OUT);
             reterivedBooking = bookingRepository.save(reterivedBooking);
         }
         return modelMapper.map(reterivedBooking, BookingResponseDTO.class);

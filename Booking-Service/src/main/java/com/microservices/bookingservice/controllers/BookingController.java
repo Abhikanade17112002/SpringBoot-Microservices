@@ -94,35 +94,35 @@ public class BookingController {
                 .status(HttpStatus.OK)
                 .body( bookingService.checkOutBookingById(bookingId) );
     }
-    @GetMapping("/customers/{{customerId}}")
+    @GetMapping("/customers/{customerId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<BookingResponseDTO>> getBookingsByCustomerId(@PathVariable("customerId")String customerId, @RequestParam( name = "pageno" , defaultValue = "0") int pageno,@RequestParam( name = "pagesize" , defaultValue = "10") int pagesize,@RequestParam( name = "sortby" , defaultValue = "bookingId") String sortby, @RequestParam( name = "asce" , defaultValue = "true")Boolean asce) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body( bookingService.getBookingsByCustomerId(customerId,pageno,pagesize,sortby,asce) );
     }
-    @GetMapping("/hotels/{{hotelId}}")
+    @GetMapping("/hotels/{hotelId}")
     @PreAuthorize("hasAnyRole('ADMIN','OWNER')")
     public ResponseEntity<Page<BookingResponseDTO>> getBookingsByHotelId(@PathVariable("hotelId")String hotelId, @RequestParam( name = "pageno" , defaultValue = "0") int pageno,@RequestParam( name = "pagesize" , defaultValue = "10") int pagesize,@RequestParam( name = "sortby" , defaultValue = "bookingId") String sortby, @RequestParam( name = "asce" , defaultValue = "true")Boolean asce) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body( bookingService.getBookingsByHotelId(hotelId,pageno,pagesize,sortby,asce) );
     }
-    @GetMapping("/hotels/{{hotelId}}/status")
+    @GetMapping("/hotels/{hotelId}/status")
     @PreAuthorize("hasAnyRole('ADMIN','OWNER')")
     public ResponseEntity<Page<BookingResponseDTO>> getBookingsByHotelIdAndStatus(@PathVariable("hotelId")String hotelId, @RequestParam("status") BookingStatus status, @RequestParam( name = "pageno" , defaultValue = "0") int pageno, @RequestParam( name = "pagesize" , defaultValue = "10") int pagesize, @RequestParam( name = "sortby" , defaultValue = "bookingId") String sortby, @RequestParam( name = "asce" , defaultValue = "true")Boolean asce) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body( bookingService.getBookingsByHotelIdAndStatus(hotelId,status,pageno,pagesize,sortby,asce) );
     }
-    @GetMapping("/hotels/{{hotelId}}/between")
+    @GetMapping("/hotels/{hotelId}/between")
     @PreAuthorize("hasAnyRole('ADMIN','OWNER')")
     public ResponseEntity<Page<BookingResponseDTO>> getBookingsByHotelIdAndDatesBetween(@PathVariable("hotelId")String hotelId, @RequestParam(name = "startdate")LocalDate starteDate , @RequestParam(name = "enddate")LocalDate endDate, @RequestParam( name = "pageno" , defaultValue = "0") int pageno, @RequestParam( name = "pagesize" , defaultValue = "10") int pagesize, @RequestParam( name = "sortby" , defaultValue = "bookingId") String sortby, @RequestParam( name = "asce" , defaultValue = "true")Boolean asce) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body( bookingService.getBookingsByHotelIdAndDatesBetween(hotelId,starteDate,endDate,pageno,pagesize,sortby,asce) );
     }
-    @DeleteMapping("/softdelete/{{bookingId}}")
+    @DeleteMapping("/softdelete/{bookingId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookingResponseDTO> softDeleteBookingById(@PathVariable("bookingId") String bookingId) {
         return ResponseEntity
