@@ -9,6 +9,7 @@ import com.microservices.bookingservice.repositories.BookingRepository;
 import com.microservices.bookingservice.services.BookingService;
 import com.microservices.bookingservice.services.internal.validation.BookingValidationService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.ws.rs.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +120,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDTO checkInBookingById(String bookingId) {
         Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
+        if(!validationService.validateHotelIsActive(reterivedBooking.getHotelId())){
+            logger.info("Hotel with Id ==> {} Is Not Active ", reterivedBooking.getHotelId());
+            throw  new BadRequestException("Hotel With Id " + reterivedBooking.getHotelId() + " Is Not Active ");
+        }
+
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.CONFIRMED) ){
             reterivedBooking.setBookingStatus(BookingStatus.CHECKED_IN);
             reterivedBooking = bookingRepository.save(reterivedBooking);
@@ -129,6 +135,12 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDTO checkOutBookingById(String bookingId) {
         Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
+
+        if(!validationService.validateHotelIsActive(reterivedBooking.getHotelId())){
+            logger.info("Hotel with Id ==> {} Is Not Active ", reterivedBooking.getHotelId());
+            throw  new BadRequestException("Hotel With Id " + reterivedBooking.getHotelId() + " Is Not Active ");
+        }
+
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_IN) ){
             reterivedBooking.setBookingStatus(BookingStatus.CHECKED_OUT);
             reterivedBooking = bookingRepository.save(reterivedBooking);
@@ -146,6 +158,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Page<BookingResponseDTO> getBookingsByHotelId(String hotelId, int pageno, int pagesize, String sortby, Boolean asce) {
+
+        if(!validationService.validateHotelIsActive(hotelId)){
+            logger.info("Hotel with Id ==> {} Is Not Active ", hotelId);
+            throw  new BadRequestException("Hotel With Id " + hotelId + " Is Not Active ");
+        }
+
         Sort sort = asce ? Sort.by(sortby).ascending() :  Sort.by(sortby).descending() ;
         Pageable page =  PageRequest.of(pageno, pagesize, sort);
         Page<Booking> bookings = bookingRepository.findByHotelId(hotelId,page);
