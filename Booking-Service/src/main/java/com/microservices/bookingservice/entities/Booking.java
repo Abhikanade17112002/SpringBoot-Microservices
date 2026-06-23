@@ -23,6 +23,7 @@ public class Booking {
     @Column(nullable = false)
     private LocalDate checkOutDate;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
     @Column(nullable = false)
     private double totalPrice;
