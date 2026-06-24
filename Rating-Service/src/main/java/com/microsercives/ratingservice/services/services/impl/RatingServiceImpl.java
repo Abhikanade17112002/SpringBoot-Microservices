@@ -8,9 +8,7 @@ import com.microsercives.ratingservice.entities.AuthenticatedUser;
 import com.microsercives.ratingservice.entities.Rating;
 import com.microsercives.ratingservice.repositories.RatingRepository;
 import com.microsercives.ratingservice.services.RatingService;
-import com.microsercives.ratingservice.utility.ValidationUtility;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
+import com.microsercives.ratingservice.services.ValidationService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -31,31 +29,26 @@ import java.util.Optional;
 public class RatingServiceImpl implements RatingService {
 
     private Logger logger = LoggerFactory.getLogger(RatingServiceImpl.class);
-    @Autowired
-    private RatingRepository ratingRepository;
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private ValidationUtility validationUtility;
+    private final  RatingRepository ratingRepository;
+    private final ModelMapper modelMapper;
+    private final ValidationService validationService;
 
-    public RatingServiceImpl() {
+    public RatingServiceImpl(RatingRepository ratingRepository, ModelMapper modelMapper, ValidationService validationService) {
+        this.ratingRepository = ratingRepository;
+        this.modelMapper = modelMapper;
+        this.validationService = validationService;
     }
 
     @Override
-    @Retry(
-            name = "createNewRatingRetry",
-            fallbackMethod = "createHotelFallBack"
-    )
-    @CircuitBreaker(name = "createNewRatingCB")
     public RatingResponseDTO createRating(
             CreateRatingRequestDTO createRatingRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-        if( !validationUtility.validateCustomer(authenticatedUser.getUserId())){
+        if( !validationService.validateCustomer(authenticatedUser.getUserId())){
             logger.info("Customer With Provided Id Not Active");
             throw new RuntimeException("Customer With Provided Id Id Not Active");
         }
-        if( !validationUtility.validateHotel(createRatingRequestDTO.getHotelId())){
+        if( !validationService.validateHotel(createRatingRequestDTO.getHotelId())){
             logger.info("Hotel With Provided Id  Not Active");
             throw new RuntimeException("Hotel With Provided  Id Not Active");
         }

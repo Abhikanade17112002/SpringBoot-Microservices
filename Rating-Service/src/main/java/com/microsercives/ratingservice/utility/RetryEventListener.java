@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
 
 @Component
 public class RetryEventListener {
@@ -32,21 +33,24 @@ public class RetryEventListener {
 
                             .onRetry(event ->
                                     logger.info(
-                                            "[{}] Retry Attempt {}",
+                                            "[{}] Retry Attempt {} Occurred At Time Stamp {}",
                                             event.getName(),
-                                            event.getNumberOfRetryAttempts()
+                                            event.getNumberOfRetryAttempts(),
+                                            LocalDateTime.now()
                                     ))
 
                             .onSuccess(event ->
                                     logger.info(
-                                            "[{}] Retry Successful",
-                                            event.getName()
+                                            "[{}] Retry Successful Occurred At Time Stamp {}",
+                                            event.getName(),
+                                            LocalDateTime.now()
                                     ))
 
                             .onError(event ->
                                     logger.info(
-                                            "[{}] Retry Exhausted",
-                                            event.getName()
+                                            "[{}] Retry Exhausted Occurred At Time Stamp {}",
+                                            event.getName(),
+                                            LocalDateTime.now()
                                     ));
                 });
     }

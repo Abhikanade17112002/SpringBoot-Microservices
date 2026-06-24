@@ -45,13 +45,6 @@ public class HotelServiceImpl implements HotelService {
 
     // CREATE
     @Override
-    @Retry(
-            name = "createNewHotelRetry",
-            fallbackMethod = "createHotelFallBack"
-    )
-    @CircuitBreaker(
-            name = "createNewHotelCB"
-    )
     public HotelResponseDTO createHotel(CreateHotelRequestDTO createHotelRequestDTO) {
 
         if( !verificationService.verifyHotelOwner(createHotelRequestDTO.getOwnerId()) ){
@@ -70,18 +63,6 @@ public class HotelServiceImpl implements HotelService {
         return modelMapper.map(savedHotel, HotelResponseDTO.class);
     }
 
-    public ResponseEntity<HotelResponseDTO> createHotelFallBack(@RequestBody CreateHotelRequestDTO createHotelRequestDTO, Exception e) {
-        HotelResponseDTO response = new HotelResponseDTO();
-        response.setHotelId("INVALID-HOTEL-ID");
-        response.setHotelName("INVALID-HOTEL-NAME");
-        response.setActive(false);
-        response.setDescription("INVALID-HOTEL-DESCRIPTION   ==> " +  e.getMessage());
-        response.setOwnerId("INVALID-HOTEL-OWNER-ID");
-        response.setLocation("INVALID-HOTEL-LOCATION");
-        return  ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
-    }
 
     @Override
     public Page<HotelResponseDTO> getAllHotels(int page, int size, String sortby, Boolean ascending) {

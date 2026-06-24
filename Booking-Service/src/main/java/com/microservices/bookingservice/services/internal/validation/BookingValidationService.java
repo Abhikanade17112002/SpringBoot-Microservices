@@ -8,6 +8,7 @@ import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Slf4j
@@ -19,41 +20,41 @@ public class BookingValidationService {
         this.internalHotelService = internalHotelService;
         this.internalUserService = internalUserService;
     }
-    @CircuitBreaker( name = "hotel-service-cb")
-    @Retry(name = "hotel-service-retry", fallbackMethod = "validateHotelIsActiveFallback")
+    @CircuitBreaker( name = "hotel-service-cb", fallbackMethod = "validateHotelIsActiveFallback")
+    @Retry(name = "hotel-service-retry")
     public Boolean validateHotelIsActive(String hotelId){
         return internalHotelService.validateHotel(hotelId).getActive();
     }
     public Boolean validateHotelIsActiveFallback(String hotelId,Exception exception){
-        log.error(exception.getMessage(), exception);
+        log.info("ERROR {} OCCURED AT {}",exception.getMessage(), LocalDateTime.now());
         return false;
     }
-    @CircuitBreaker( name = "hotel-service-cb")
-    @Retry(name = "hotel-service-retry", fallbackMethod = "validateHotelOwnerHotelIdsListFallBackMethode")
+    @CircuitBreaker( name = "hotel-service-cb", fallbackMethod = "validateHotelOwnerHotelIdsListFallBackMethode")
+    @Retry(name = "hotel-service-retry")
     public ListOfHotelOwnerHotelIdsListResponseDTO validateHotelOwnerHotelIdsList(String HotelOwnerId){
         return internalHotelService.getOwnerHotelsIdList(HotelOwnerId);
     }
     public ListOfHotelOwnerHotelIdsListResponseDTO validateHotelOwnerHotelIdsListFallBackMethode(String HotelOwnerId,Exception exception){
-        log.error(exception.getMessage(), exception);
+        log.info("ERROR {} OCCURED AT {}",exception.getMessage(), LocalDateTime.now());
         return new ListOfHotelOwnerHotelIdsListResponseDTO(Collections.emptyList());
     }
 
-    @CircuitBreaker( name = "user-service-cb")
-    @Retry(name = "user-service-retry", fallbackMethod = "validateCustomerIsActiveFallback")
+    @CircuitBreaker( name = "user-service-cb", fallbackMethod = "validateCustomerIsActiveFallback")
+    @Retry(name = "user-service-retry")
     public Boolean validateCustomerIsActive(String customerId){
         return internalUserService.validateCustomer(customerId).getActive();
     }
     public Boolean validateCustomerIsActiveFallback(String customerId,Exception exception){
-        log.error(exception.getMessage(), exception);
+        log.info("ERROR {} OCCURED AT {}",exception.getMessage(), LocalDateTime.now());
         return false;
     }
-    @CircuitBreaker( name = "user-service-cb")
-    @Retry(name = "user-service-retry", fallbackMethod = "validateHotelOwnerIsActiveFallback")
+    @CircuitBreaker( name = "user-service-cb", fallbackMethod = "validateHotelOwnerIsActiveFallback")
+    @Retry(name = "user-service-retry")
     public Boolean validateHotelOwnerIsActive( String HotelOwnerId ){
         return internalUserService.validateOwner(HotelOwnerId).getActive();
     }
     public Boolean validateHotelOwnerIsActiveFallback(String HotelOwnerId,Exception exception){
-        log.error(exception.getMessage(), exception);
+        log.info("ERROR {} OCCURED AT {}",exception.getMessage(), LocalDateTime.now());
         return false;
     }
 
