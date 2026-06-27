@@ -9,8 +9,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="rating-service" />
         <module name="API-Gateway" />
-        <module name="Config-Server" />
         <module name="UserService" />
+        <module name="Payment-Service" />
+        <module name="Config-Server" />
         <module name="Service-Registry" />
         <module name="hotel-service" />
       </profile>
@@ -34,6 +35,7 @@
       <module name="Authentication-Service" options="-parameters" />
       <module name="Booking-Service" options="-parameters" />
       <module name="Config-Server" options="-parameters" />
+      <module name="Payment-Service" options="-parameters" />
       <module name="Service-Registry" options="-parameters" />
       <module name="UserService" options="-parameters" />
       <module name="hotel-service" options="-parameters" />
