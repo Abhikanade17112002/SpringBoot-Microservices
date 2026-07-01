@@ -1,27 +1,27 @@
 package com.microservices.paymentservice.dtos.request;
 
 public class PaymentRefundRequestDTO {
-    private String refundResponse ;
-
-    public PaymentRefundRequestDTO(String refundResponse) {
-        this.refundResponse = refundResponse;
-    }
+    private String bookigId ;
 
     public PaymentRefundRequestDTO() {
     }
 
-    public String getRefundResponse() {
-        return refundResponse;
+    public PaymentRefundRequestDTO(String bookigId) {
+        this.bookigId = bookigId;
     }
 
-    public void setRefundResponse(String refundResponse) {
-        this.refundResponse = refundResponse;
+    public String getBookigId() {
+        return bookigId;
+    }
+
+    public void setBookigId(String bookigId) {
+        this.bookigId = bookigId;
     }
 
     @Override
     public String toString() {
         return "PaymentRefundRequestDTO{" +
-                "refundResponse='" + refundResponse + '\'' +
+                "bookigId='" + bookigId + '\'' +
                 '}';
     }
 }

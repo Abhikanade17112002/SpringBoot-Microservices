@@ -6,7 +6,7 @@ import com.microservices.paymentservice.entities.Payment;
 
 public interface PaymentProcessor {
 
-    PaymentProcessingResult processPayment(CreatePaymentRequestDTO request);
+    PaymentProcessingResult processPayment(Payment request);
 
     PaymentProcessingResult refundPayment(Payment payment);
 }

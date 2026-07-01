@@ -15,8 +15,9 @@ public class PaymentResponseDTO {
     private PaymentMethode paymentMethode;
     private String transactionReference ;
     private LocalDateTime createdAt;
+    private String message ;
 
-    public PaymentResponseDTO(String paymentId, String bookingId, String customerId, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethode paymentMethode, String transactionReference, LocalDateTime createdAt) {
+    public PaymentResponseDTO(String paymentId, String bookingId, String customerId, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethode paymentMethode, String transactionReference, LocalDateTime createdAt , String message) {
         this.paymentId = paymentId;
         this.bookingId = bookingId;
         this.customerId = customerId;
@@ -25,6 +26,7 @@ public class PaymentResponseDTO {
         this.paymentMethode = paymentMethode;
         this.transactionReference = transactionReference;
         this.createdAt = createdAt;
+        this.message = message ;
     }
     public PaymentResponseDTO() {}
 
@@ -92,6 +94,10 @@ public class PaymentResponseDTO {
         this.createdAt = createdAt;
     }
 
+    public String getMessage() {return message;}
+
+    public void setMessage(String message) {this.message = message;}
+
     @Override
     public String toString() {
         return "PaymentResponseDTO{" +
@@ -103,6 +109,7 @@ public class PaymentResponseDTO {
                 ", paymentMethode=" + paymentMethode +
                 ", transactionReference='" + transactionReference + '\'' +
                 ", createdAt=" + createdAt +
+                ", message='" + message + '\'' +
                 '}';
     }
 }

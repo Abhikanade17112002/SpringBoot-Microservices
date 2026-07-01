@@ -30,7 +30,7 @@ import java.math.BigDecimal;
 public class MockPaymentProcessor implements PaymentProcessor {
     private final static Logger LOG = LoggerFactory.getLogger(MockPaymentProcessor.class);
     @Override
-    public PaymentProcessingResult processPayment(CreatePaymentRequestDTO request) {
+    public PaymentProcessingResult processPayment(Payment request) {
         LOG.info("Entered Process Payment");
         PaymentProcessingResult result = new PaymentProcessingResult() ;
         if( request.getAmount().compareTo(BigDecimal.valueOf(1000)) <= 0 ){

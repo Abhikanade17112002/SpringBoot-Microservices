@@ -13,7 +13,6 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String bookingId;
-
     @Column( nullable = false)
     private String customerId;
     @Column(nullable = false)

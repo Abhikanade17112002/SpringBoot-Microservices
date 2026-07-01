@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StripePaymentProcessor implements PaymentProcessor {
+
+
     @Override
-    public PaymentProcessingResult processPayment(CreatePaymentRequestDTO request) {
+    public PaymentProcessingResult processPayment(Payment request) {
         return null;
     }
 

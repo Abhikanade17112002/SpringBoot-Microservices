@@ -60,7 +60,8 @@ public class Payment {
     private String refundTransactionReference ;
     @Column( nullable = false)
     private Boolean active ;
-
+    @Column( nullable = false)
+    private String message ;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -68,7 +69,7 @@ public class Payment {
     private LocalDateTime updatedAt;
 
 
-    public Payment(String paymentId, String bookingId, String customerId, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethode paymentMethod, String paymentGatewayReference, String transactionReference, String refundTransactionReference, Boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Payment(String paymentId, String bookingId, String customerId, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethode paymentMethod, String paymentGatewayReference, String transactionReference, String refundTransactionReference, Boolean active, LocalDateTime createdAt, LocalDateTime updatedAt , String message) {
         this.paymentId = paymentId;
         this.bookingId = bookingId;
         this.customerId = customerId;
@@ -81,6 +82,7 @@ public class Payment {
         this.active = active;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.message = message;
     }
 
 
@@ -182,6 +184,10 @@ public class Payment {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public String getMessage() {return message;}
+
+    public void setMessage(String message) {this.message = message;}
 
     @Override
     public String toString() {
