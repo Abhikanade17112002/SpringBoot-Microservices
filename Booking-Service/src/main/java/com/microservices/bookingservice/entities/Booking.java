@@ -31,11 +31,13 @@ public class Booking {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     private boolean active;
+    private Integer paymentRetryCount  = 3 ;
+    private LocalDateTime paymentExpiryTime ;
 
     public Booking(){
     }
 
-    public Booking(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, double totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active) {
+    public Booking(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, double totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active, Integer paymentRetryCount, LocalDateTime paymentExpiryTime) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.hotelId = hotelId;
@@ -46,6 +48,8 @@ public class Booking {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.active = active;
+        this.paymentRetryCount = paymentRetryCount;
+        this.paymentExpiryTime = paymentExpiryTime;
     }
 
     public String getBookingId() {
@@ -128,6 +132,22 @@ public class Booking {
         this.active = active;
     }
 
+    public Integer getPaymentRetryCount() {
+        return paymentRetryCount;
+    }
+
+    public void setPaymentRetryCount(Integer paymentRetryCount) {
+        this.paymentRetryCount = paymentRetryCount;
+    }
+
+    public LocalDateTime getPaymentExpiryTime() {
+        return paymentExpiryTime;
+    }
+
+    public void setPaymentExpiryTime(LocalDateTime paymentExpiryTime) {
+        this.paymentExpiryTime = paymentExpiryTime;
+    }
+
     @Override
     public String toString() {
         return "Booking{" +
@@ -141,6 +161,8 @@ public class Booking {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", active=" + active +
+                ", paymentRetryCount=" + paymentRetryCount +
+                ", paymentExpiryTime=" + paymentExpiryTime +
                 '}';
     }
 }
