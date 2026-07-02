@@ -8,7 +8,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings")
+@Table(
+        name = "bookings",
+        indexes = {
+                @Index(
+                        name = "idx_status_expirytime",
+                        columnList = "bookingStatus,paymentExpiryTime"
+                )
+        }
+)
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

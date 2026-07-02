@@ -17,11 +17,9 @@ public class InternalController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<PaymentResponseDTO> processPayment(@Valid @RequestBody CreatePaymentRequestDTO paymentRequestDTO ) throws Exception {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body( paymentService.processPayment(paymentRequestDTO));
+    @PostMapping
+    public PaymentResponseDTO processPayment(@Valid @RequestBody CreatePaymentRequestDTO paymentRequestDTO ) throws Exception {
+        return paymentService.processPayment(paymentRequestDTO);
     }
 
 //    public ResponseEntity<PaymentResponseDTO> refundPayment(@Valid @RequestBody PaymentRefundRequestDTO paymentRefundRequestDTO) {
@@ -31,9 +29,12 @@ public class InternalController {
 //    }
 
     @GetMapping("/booking/{bookingId}")
-    public ResponseEntity<PaymentResponseDTO> getPaymentByBookingId(@Valid @PathVariable( name = "bookingId") String bookingId ){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body( paymentService.getPaymentByBookingId(bookingId) ) ;
+    public PaymentResponseDTO getPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId ){
+        return paymentService.getPaymentByBookingId(bookingId) ;
+    }
+
+    @PutMapping("/{bookingId}/retry")
+    public PaymentResponseDTO retryPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId ){
+        return paymentService.retryPaymentByBookingId(bookingId) ;
     }
 }

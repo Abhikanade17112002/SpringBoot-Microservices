@@ -16,4 +16,5 @@ public interface PaymentService {
     Page<PaymentResponseDTO> getAllPaymentsByStatus(PaymentStatus paymentStatus, int pageno, int pagesize, String sortby, Boolean ascending);
     Page<PaymentResponseDTO> getAllPaymentsByPaymentStatus(PaymentMethode paymentMethode, int pageno, int pagesize, String sortby, Boolean ascending);
     PaymentResponseDTO processBookingPaymentRefund(String bookingId);
+    PaymentResponseDTO retryPaymentByBookingId(String bookingId);
 }

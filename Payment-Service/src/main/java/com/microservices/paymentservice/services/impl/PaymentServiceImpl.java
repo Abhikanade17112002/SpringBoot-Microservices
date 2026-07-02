@@ -128,4 +128,9 @@ public class PaymentServiceImpl implements PaymentService {
         retrivedPayment.setRefundTransactionReference("TNXRNF0000" +  (int)( Math.random() * 999999999));
         return modelMapper.map(  paymentRepository.save(retrivedPayment)  ,PaymentResponseDTO.class);
     }
+
+    @Override
+    public PaymentResponseDTO retryPaymentByBookingId(String bookingId) {
+        return null;
+    }
 }
