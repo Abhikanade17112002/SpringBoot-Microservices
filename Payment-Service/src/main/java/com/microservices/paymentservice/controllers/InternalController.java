@@ -1,19 +1,15 @@
 package com.microservices.paymentservice.controllers;
 
 import com.microservices.paymentservice.dtos.request.CreatePaymentRequestDTO;
-import com.microservices.paymentservice.dtos.request.PaymentRefundRequestDTO;
 import com.microservices.paymentservice.dtos.response.PaymentResponseDTO;
 import com.microservices.paymentservice.services.PaymentService;
-import jakarta.transaction.Status;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/internal")
+@RequestMapping("/internal/payments")
 public class InternalController {
     private final PaymentService paymentService ;
 
@@ -21,15 +17,23 @@ public class InternalController {
         this.paymentService = paymentService;
     }
 
+    @GetMapping("/")
     public ResponseEntity<PaymentResponseDTO> processPayment(@Valid @RequestBody CreatePaymentRequestDTO paymentRequestDTO ) throws Exception {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body( paymentService.processPayment(paymentRequestDTO));
     }
 
-    public ResponseEntity<PaymentResponseDTO> refundPayment(@Valid @RequestBody PaymentRefundRequestDTO paymentRefundRequestDTO) {
+//    public ResponseEntity<PaymentResponseDTO> refundPayment(@Valid @RequestBody PaymentRefundRequestDTO paymentRefundRequestDTO) {
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(paymentService.refundPayment(paymentRefundRequestDTO));
+//    }
+
+    @GetMapping("/booking/{bookingId}")
+    public ResponseEntity<PaymentResponseDTO> getPaymentByBookingId(@Valid @PathVariable( name = "bookingId") String bookingId ){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(paymentService.refundPayment(paymentRefundRequestDTO));
+                .body( paymentService.getPaymentByBookingId(bookingId) ) ;
     }
 }
