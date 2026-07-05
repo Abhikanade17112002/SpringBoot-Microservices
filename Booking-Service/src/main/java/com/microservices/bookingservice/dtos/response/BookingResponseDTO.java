@@ -13,12 +13,13 @@ public class BookingResponseDTO {
     private BookingStatus bookingStatus;
     private double totalPrice;
     private boolean active;
+    private String message ;
 
     public BookingResponseDTO() {
 
     }
 
-    public BookingResponseDTO(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, double totalPrice, boolean active) {
+    public BookingResponseDTO(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, double totalPrice, boolean active, String message) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.hotelId = hotelId;
@@ -27,6 +28,7 @@ public class BookingResponseDTO {
         this.bookingStatus = bookingStatus;
         this.totalPrice = totalPrice;
         this.active = active;
+        this.message = message;
     }
 
     public String getBookingId() {
@@ -93,6 +95,14 @@ public class BookingResponseDTO {
         this.active = active;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public String toString() {
         return "BookingResponseDTO{" +
@@ -104,6 +114,7 @@ public class BookingResponseDTO {
                 ", bookingStatus=" + bookingStatus +
                 ", totalPrice=" + totalPrice +
                 ", active=" + active +
+                ", message='" + message + '\'' +
                 '}';
     }
 }

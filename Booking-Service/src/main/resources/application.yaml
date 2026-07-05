@@ -1,3 +1,9 @@
+
+booking:
+  payment:
+    max-attempts: 3
+    payment-expiry-time: 15m
+
 server:
   servlet:
     context-path: "/api/v1"

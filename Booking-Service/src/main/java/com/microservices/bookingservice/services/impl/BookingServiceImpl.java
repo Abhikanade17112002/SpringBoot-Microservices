@@ -1,5 +1,6 @@
 package com.microservices.bookingservice.services.impl;
 
+import com.microservices.bookingservice.configurations.BookingPaymentProperties;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
 import com.microservices.bookingservice.entities.AuthenticatedUser;
@@ -28,11 +29,13 @@ public class BookingServiceImpl implements BookingService {
     private final ModelMapper modelMapper;
     private final BookingRepository bookingRepository;
     private final BookingValidationService validationService;
+    private final BookingPaymentProperties paymentProperties ;
 
-    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService) {
+    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService, BookingPaymentProperties paymentProperties) {
         this.modelMapper = modelMapper;
         this.bookingRepository = bookingRepository;
         this.validationService = validationService;
+        this.paymentProperties = paymentProperties;
     }
 
     @Override
@@ -57,6 +60,8 @@ public class BookingServiceImpl implements BookingService {
         newBooking.setCheckOutDate(bookingRequestDTO.getCheckOutDate());
         newBooking.setCustomerId(user.getUserId());
         newBooking.setTotalPrice(bookingRequestDTO.getTotalPrice());
+        newBooking.setPaymentAttemptCount(0);
+//        newBooking.setPaymentExpiryTime();
         Booking saveBooking = bookingRepository.save(newBooking);
         logger.info("Booking Created ==> {}", saveBooking);
         return modelMapper.map(saveBooking, BookingResponseDTO.class);

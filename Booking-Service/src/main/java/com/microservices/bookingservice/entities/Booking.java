@@ -1,5 +1,4 @@
 package com.microservices.bookingservice.entities;
-
 import com.microservices.bookingservice.enums.BookingStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,13 +38,13 @@ public class Booking {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     private boolean active;
-    private Integer paymentRetryCount  = 3 ;
+    private Integer paymentAttemptCount  = 0;
     private LocalDateTime paymentExpiryTime ;
 
     public Booking(){
     }
 
-    public Booking(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, double totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active, Integer paymentRetryCount, LocalDateTime paymentExpiryTime) {
+    public Booking(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, double totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active, Integer paymentAttemptCount, LocalDateTime paymentExpiryTime) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.hotelId = hotelId;
@@ -56,7 +55,7 @@ public class Booking {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.active = active;
-        this.paymentRetryCount = paymentRetryCount;
+        this.paymentAttemptCount = paymentAttemptCount;
         this.paymentExpiryTime = paymentExpiryTime;
     }
 
@@ -140,12 +139,12 @@ public class Booking {
         this.active = active;
     }
 
-    public Integer getPaymentRetryCount() {
-        return paymentRetryCount;
+    public Integer getPaymentAttemptCount() {
+        return paymentAttemptCount;
     }
 
-    public void setPaymentRetryCount(Integer paymentRetryCount) {
-        this.paymentRetryCount = paymentRetryCount;
+    public void setPaymentAttemptCount(Integer paymentRetryCount) {
+        this.paymentAttemptCount = paymentRetryCount;
     }
 
     public LocalDateTime getPaymentExpiryTime() {
@@ -169,7 +168,7 @@ public class Booking {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", active=" + active +
-                ", paymentRetryCount=" + paymentRetryCount +
+                ", paymentAttemptCount=" + paymentAttemptCount +
                 ", paymentExpiryTime=" + paymentExpiryTime +
                 '}';
     }
