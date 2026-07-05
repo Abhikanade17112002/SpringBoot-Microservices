@@ -1,10 +1,11 @@
 package com.microsercives.userservice.utility;
 
+import com.microsercives.userservice.configurations.JwtConfigurationProperties;
 import com.microsercives.userservice.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -17,15 +18,11 @@ import java.util.stream.Collectors;
 
 @Component
 public class JWTUtility {
-
-    @Value("${jwt.secret-key}")
-    private String secretKey;
-
-    @Value("${jwt.expiration}")
-    private long expiration;
+    @Autowired
+    private JwtConfigurationProperties jwtConfigurationProperties;
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
+        return Keys.hmacShaKeyFor(jwtConfigurationProperties.getSecretKey().getBytes());
     }
 
     public String generateToken(User userDetails) {
@@ -38,7 +35,7 @@ public class JWTUtility {
                 .claim("userRoles", roles)
                 .claim("userId",userDetails.getUserId())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .expiration(new Date(System.currentTimeMillis() + jwtConfigurationProperties.getExpiration()))
                 .signWith(getSigningKey())
                 .compact();
     }

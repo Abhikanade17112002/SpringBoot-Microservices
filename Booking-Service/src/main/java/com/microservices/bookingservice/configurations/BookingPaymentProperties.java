@@ -28,4 +28,19 @@ public class BookingPaymentProperties {
     public Duration getPaymentExpiryTime() {
         return paymentExpiryTime;
     }
+
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+    public void setPaymentExpiryTime(Duration paymentExpiryTime) {
+        this.paymentExpiryTime = paymentExpiryTime;
+    }
+
+    @Override
+    public String toString() {
+        return "BookingPaymentProperties{" +
+                "maxAttempts=" + maxAttempts +
+                ", paymentExpiryTime=" + paymentExpiryTime +
+                '}';
+    }
 }

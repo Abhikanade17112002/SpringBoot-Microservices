@@ -1,32 +1,28 @@
 package com.microservices.apigateway.utility;
 
+import com.microservices.apigateway.configurations.JwtConfigurationProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class JWTUtility {
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
-
-    @Value("${jwt.expiration}")
-    private long expiration;
+    @Autowired
+    private JwtConfigurationProperties jwtConfigurationProperties;
 
     /**
      * Convert Secret String -> SecretKey
      */
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(
-                secretKey.getBytes()
+                jwtConfigurationProperties.getSecretKey().getBytes()
         );
     }
 
@@ -40,7 +36,7 @@ public class JWTUtility {
         Date expiryDate =
                 new Date(
                         currentDate.getTime()
-                                + expiration
+                                + jwtConfigurationProperties.getExpiration()
                 );
 
         return Jwts.builder()

@@ -22,8 +22,6 @@ public class JWTAuthSecurityFilter extends OncePerRequestFilter {
     private static final Logger LOG =
             (Logger) LoggerFactory.getLogger(JWTAuthSecurityFilter.class);
     @Autowired
-    private JWTUtility jwtUtility ;
-    @Autowired
     private UserRepository userRepository ;
 
     @Override

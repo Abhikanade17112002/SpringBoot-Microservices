@@ -1,9 +1,10 @@
 package com.microservices.paymentservice.utility;
 
+import com.microservices.paymentservice.configurations.JwtConfigurationProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +15,11 @@ import java.util.function.Function;
 @Component
 public class JWTUtility {
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
-
-    @Value("${jwt.expiration}")
-    private long expiration;
+    @Autowired
+    private JwtConfigurationProperties jwtConfigurationProperties;
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
+        return Keys.hmacShaKeyFor(jwtConfigurationProperties.getSecretKey().getBytes());
     }
 
 
