@@ -14,7 +14,8 @@ import com.microservices.paymentservice.exception.exceptions.PaymentNotFoundExce
 import com.microservices.paymentservice.processor.PaymentProcessor;
 import com.microservices.paymentservice.repositories.PaymentRepository;
 import com.microservices.paymentservice.services.PaymentService;
-import jakarta.ws.rs.BadRequestException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +73,7 @@ public class PaymentServiceImpl implements PaymentService {
         AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal() ;
         if( user.getRole().equals("CUSTOMER") && !user.getUserId().equals(reterivedPayment.getCustomerId())){
             LOG.info("Customer With Id ==> " + user.getUserId() + " Not Permitted To Access The Payment Wth Id ==> " + reterivedPayment.getPaymentId());
-            throw new BadRequestException("Customer With Id ==> " + user.getUserId() + " Not Permitted To Access The Payment Wth Id ==> " + reterivedPayment.getPaymentId());
+            throw new RuntimeException("Customer With Id ==> " + user.getUserId() + " Not Permitted To Access The Payment Wth Id ==> " + reterivedPayment.getPaymentId());
         }
         return modelMapper.map(reterivedPayment,PaymentResponseDTO.class);
     }
@@ -130,7 +131,29 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public PaymentResponseDTO retryPaymentByBookingId(String bookingId) {
-        return null;
+        Payment reterivedpayment = paymentRepository
+                .findTopByBookingIdOrderByCreatedAtDesc(bookingId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Payment with Booking Id ==> " + bookingId + " Not Found"
+                        ));
+        if( !reterivedpayment.getPaymentStatus().equals(PaymentStatus.FAILED)){
+            throw new RuntimeException("Payment Status ==> " + reterivedpayment.getPaymentStatus());
+        }
+        Payment payment = new Payment();
+        payment.setActive(true);
+        payment.setAmount(reterivedpayment.getAmount());
+        payment.setBookingId(reterivedpayment.getBookingId());
+        payment.setPaymentMethod(reterivedpayment.getPaymentMethod());
+        payment.setCustomerId(reterivedpayment.getCustomerId());
+        payment.setPaymentStatus(PaymentStatus.PENDING);
+        payment.setTransactionReference("TNX000" + (int)( Math.random() * 999999999));
+        PaymentProcessingResult paymentProcessResponse = paymentProcessor.processPayment(payment);
+        payment.setPaymentStatus(paymentProcessResponse.getPaymentStatus());
+        payment.setPaymentGatewayReference(paymentProcessResponse.getGatewayReference());
+        payment.setMessage(paymentProcessResponse.getMessage());
+        return modelMapper.map(  paymentRepository.save(payment)  ,PaymentResponseDTO.class);
     }
 }

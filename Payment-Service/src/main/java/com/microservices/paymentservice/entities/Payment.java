@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Table(name = "payments",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "bookingId"),
+                @UniqueConstraint(columnNames = "bookingId,paymentId"),
                 @UniqueConstraint(columnNames = "transactionReference")
         },
         indexes = {
@@ -56,7 +56,7 @@ public class Payment {
     private String paymentGatewayReference ;
     @Column( nullable = false)
     private String transactionReference ;
-    @Column( nullable = false)
+    @Column( nullable = true)
     private String refundTransactionReference ;
     @Column( nullable = false)
     private Boolean active ;

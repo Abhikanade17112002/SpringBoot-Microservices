@@ -23,4 +23,5 @@ public interface BookingService {
     Page<BookingResponseDTO> getBookingsByHotelIdAndStatus(String hotelId, BookingStatus status, int pageno, int pagesize, String sortby, Boolean asce);
     Page<BookingResponseDTO> getBookingsByHotelIdAndDatesBetween(String hotelId, LocalDate starteDate, LocalDate endDate, int pageno, int pagesize, String sortby, Boolean asce);
     BookingResponseDTO softDeleteBookingById(String bookingId);
+    BookingResponseDTO retryBookingWithId(String bookingId);
 }

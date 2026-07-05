@@ -1,16 +1,20 @@
 package com.microservices.bookingservice.services.impl;
 
+import com.microservices.bookingservice.clinets.paymentclients.InternalPaymentClient;
 import com.microservices.bookingservice.configurations.BookingPaymentProperties;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
+import com.microservices.bookingservice.dtos.request.CreatePaymentRequestDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
+import com.microservices.bookingservice.dtos.response.InternalPaymentResponseDTO;
 import com.microservices.bookingservice.entities.AuthenticatedUser;
 import com.microservices.bookingservice.entities.Booking;
 import com.microservices.bookingservice.enums.BookingStatus;
+import com.microservices.bookingservice.enums.PaymentStatus;
 import com.microservices.bookingservice.repositories.BookingRepository;
 import com.microservices.bookingservice.services.BookingService;
 import com.microservices.bookingservice.services.internal.validation.BookingValidationService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.ws.rs.BadRequestException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +25,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -30,15 +36,18 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final BookingValidationService validationService;
     private final BookingPaymentProperties paymentProperties ;
+    private final InternalPaymentClient paymentClient ;
 
-    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService, BookingPaymentProperties paymentProperties) {
+    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService, BookingPaymentProperties paymentProperties, InternalPaymentClient paymentClient) {
         this.modelMapper = modelMapper;
         this.bookingRepository = bookingRepository;
         this.validationService = validationService;
         this.paymentProperties = paymentProperties;
+        this.paymentClient = paymentClient;
     }
 
     @Override
+    @Transactional
     public BookingResponseDTO createBooking(BookingRequestDTO bookingRequestDTO) {
         AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if( !validationService.validateCustomerIsActive(user.getUserId()))
@@ -55,16 +64,122 @@ public class BookingServiceImpl implements BookingService {
         Booking newBooking = new Booking();
         newBooking.setBookingStatus(BookingStatus.PENDING);
         newBooking.setActive(true);
+        newBooking.setPaymentMethod(bookingRequestDTO.getPaymentMethod());
         newBooking.setHotelId(bookingRequestDTO.getHotelId());
         newBooking.setCheckInDate(bookingRequestDTO.getCheckInDate());
         newBooking.setCheckOutDate(bookingRequestDTO.getCheckOutDate());
         newBooking.setCustomerId(user.getUserId());
         newBooking.setTotalPrice(bookingRequestDTO.getTotalPrice());
-        newBooking.setPaymentAttemptCount(0);
-//        newBooking.setPaymentExpiryTime();
-        Booking saveBooking = bookingRepository.save(newBooking);
-        logger.info("Booking Created ==> {}", saveBooking);
-        return modelMapper.map(saveBooking, BookingResponseDTO.class);
+        newBooking.setPaymentAttemptCount(1);
+        newBooking.setPaymentExpiryTime(LocalDateTime.now().plusMinutes( paymentProperties.getPaymentExpiryTime().toMinutes() ));
+        Booking initialPendingSavedBooking = bookingRepository.save(newBooking);
+        logger.info("Booking initialPendingSavedBooking Created ==> {}", initialPendingSavedBooking);
+        CreatePaymentRequestDTO createPaymentRequest = new CreatePaymentRequestDTO();
+        createPaymentRequest.setBookingId(initialPendingSavedBooking.getBookingId());
+        createPaymentRequest.setAmount(initialPendingSavedBooking.getTotalPrice());
+        createPaymentRequest.setCustomerId(initialPendingSavedBooking.getCustomerId());
+        createPaymentRequest.setPaymentMethod(initialPendingSavedBooking.getPaymentMethod());
+
+        BookingResponseDTO response = null ;
+        try{
+            InternalPaymentResponseDTO paymentResult  = paymentClient.processPayment(createPaymentRequest);
+            logger.info("Payment Result ==> {}", paymentResult);
+            if( paymentResult.getPaymentStatus() == PaymentStatus.SUCCESS ){
+                initialPendingSavedBooking.setBookingStatus(BookingStatus.CONFIRMED);
+                response = modelMapper.map(bookingRepository.save(initialPendingSavedBooking), BookingResponseDTO.class);
+                response.setMessage(paymentResult.getMessage());
+                return  response;
+            }
+            else{
+                String retryMessage = "Payment Cannot Be Completed Reason ==> " + paymentResult.getMessage() ;
+                response = modelMapper.map(initialPendingSavedBooking, BookingResponseDTO.class);
+                response.setMessage(retryMessage);
+                response.setRetryAllowed(true);
+                return  response;
+            }
+
+        }
+        catch (Exception e){
+            logger.error("Exception Occurred ==> {}", e);
+        }
+        response = modelMapper.map(initialPendingSavedBooking, BookingResponseDTO.class);
+        response.setMessage("We couldn't process your payment at the moment. Your booking is still pending. Please retry within the payment window.");
+        response.setRetryAllowed(true);
+        return  response;
+    }
+
+    @Override
+    @Transactional
+    public BookingResponseDTO retryBookingWithId(String bookingId) {
+        Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
+        AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if( !reterivedBooking.getCustomerId().equals(user.getUserId()) ){
+            throw new RuntimeException("Customer With Id ==> " + user.getUserId() + " Not Authorized for modifying this Booking");
+        }
+        if( !reterivedBooking.getBookingStatus().equals(BookingStatus.PENDING)){
+            throw new RuntimeException("Booking With Id ==> " + bookingId + " Is either Completed or Cancelled");
+        }
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiry = reterivedBooking.getPaymentExpiryTime() ;
+        long timeLeft = Math.max( 0 , Duration.between(now,expiry).toMinutes());
+        int attemptsLeft = Math.max( 0 , paymentProperties.getMaxAttempts() - reterivedBooking.getPaymentAttemptCount() ) ;
+        logger.info("Attempt Left ==> {}", attemptsLeft);
+        logger.info("Time Left ==> {}", timeLeft);
+        if(  timeLeft <= 0 ){
+            logger.info("Time Left ==> {}", timeLeft);
+            reterivedBooking.setBookingStatus(BookingStatus.CANCELLED);
+            Booking updatedBooking = bookingRepository.save(reterivedBooking);
+            logger.info("Booking Updated ==> {}", updatedBooking);
+            BookingResponseDTO response = modelMapper.map(updatedBooking, BookingResponseDTO.class);
+            response.setMessage("Booking cancelled because the payment window has expired.");
+            response.setRetryAllowed(false);
+            return  response;
+        }
+        if(attemptsLeft <= 0){
+            logger.info("Attempts Left ==> {}", attemptsLeft);
+            reterivedBooking.setBookingStatus(BookingStatus.CANCELLED);
+            Booking updatedBooking = bookingRepository.save(reterivedBooking);
+            logger.info("Booking Updated ==> {}", updatedBooking);
+            BookingResponseDTO response = modelMapper.map(updatedBooking, BookingResponseDTO.class);
+            response.setMessage("Booking cancelled because the maximum payment retry attempts have been exhausted.");
+            response.setRetryAllowed(false);
+            return  response;
+        }
+        int attemptCount = reterivedBooking.getPaymentAttemptCount() + 1 ;
+        logger.info("Attempt Count ==> {}", attemptCount);
+        CreatePaymentRequestDTO createPaymentRequest = new CreatePaymentRequestDTO();
+        createPaymentRequest.setBookingId(reterivedBooking.getBookingId());
+        createPaymentRequest.setAmount(reterivedBooking.getTotalPrice());
+        createPaymentRequest.setCustomerId(reterivedBooking.getCustomerId());
+        createPaymentRequest.setPaymentMethod(reterivedBooking.getPaymentMethod());
+        BookingResponseDTO response = null;
+        try{
+            InternalPaymentResponseDTO paymentResult  = paymentClient.retryPaymentByBookingId(bookingId);
+            logger.info("Payment Result ==> {}", paymentResult);
+            if( paymentResult.getPaymentStatus() == PaymentStatus.SUCCESS ){
+                reterivedBooking.setBookingStatus(BookingStatus.CONFIRMED);
+                reterivedBooking.setPaymentAttemptCount(attemptCount);
+                response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingResponseDTO.class);
+                response.setMessage(paymentResult.getMessage());
+                return  response;
+            }
+            else{
+                String retryMessage = "Payment Cannot Be Completed Reason ==> " + paymentResult.getMessage() ;
+                reterivedBooking.setPaymentAttemptCount(attemptCount);
+                response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingResponseDTO.class);
+                response.setMessage(retryMessage);
+                response.setRetryAllowed(true);
+                return  response;
+            }
+
+        }
+        catch (Exception e){
+            logger.error("Exception Occurred ==> {}", e);
+        }
+        response = modelMapper.map(reterivedBooking, BookingResponseDTO.class);
+        response.setMessage("We couldn't process your payment at the moment. Your booking is still pending. Please retry within the payment window.");
+        response.setRetryAllowed(true);
+        return  response;
     }
 
     @Override
@@ -127,7 +242,7 @@ public class BookingServiceImpl implements BookingService {
         Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
         if(!validationService.validateHotelIsActive(reterivedBooking.getHotelId())){
             logger.info("Hotel with Id ==> {} Is Not Active ", reterivedBooking.getHotelId());
-            throw  new BadRequestException("Hotel With Id " + reterivedBooking.getHotelId() + " Is Not Active ");
+            throw  new RuntimeException("Hotel With Id " + reterivedBooking.getHotelId() + " Is Not Active ");
         }
 
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.CONFIRMED) ){
@@ -143,7 +258,7 @@ public class BookingServiceImpl implements BookingService {
 
         if(!validationService.validateHotelIsActive(reterivedBooking.getHotelId())){
             logger.info("Hotel with Id ==> {} Is Not Active ", reterivedBooking.getHotelId());
-            throw  new BadRequestException("Hotel With Id " + reterivedBooking.getHotelId() + " Is Not Active ");
+            throw  new RuntimeException("Hotel With Id " + reterivedBooking.getHotelId() + " Is Not Active ");
         }
 
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_IN) ){
@@ -166,7 +281,7 @@ public class BookingServiceImpl implements BookingService {
 
         if(!validationService.validateHotelIsActive(hotelId)){
             logger.info("Hotel with Id ==> {} Is Not Active ", hotelId);
-            throw  new BadRequestException("Hotel With Id " + hotelId + " Is Not Active ");
+            throw  new RuntimeException("Hotel With Id " + hotelId + " Is Not Active ");
         }
 
         Sort sort = asce ? Sort.by(sortby).ascending() :  Sort.by(sortby).descending() ;

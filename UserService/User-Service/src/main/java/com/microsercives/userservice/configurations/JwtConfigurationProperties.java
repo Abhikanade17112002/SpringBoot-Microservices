@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 public class JwtConfigurationProperties {
 
     private String secretKey;
-    private String expiration ;
+    private long expiration ;
 
     public JwtConfigurationProperties() {
     }
 
-    public JwtConfigurationProperties(String secretKey, String expiration) {
+    public JwtConfigurationProperties(String secretKey, long expiration) {
         this.secretKey = secretKey;
         this.expiration = expiration;
     }
@@ -23,7 +23,7 @@ public class JwtConfigurationProperties {
         return secretKey;
     }
 
-    public String getExpiration() {
+    public long getExpiration() {
         return expiration;
     }
 
@@ -31,7 +31,7 @@ public class JwtConfigurationProperties {
         this.secretKey = secretKey;
     }
 
-    public void setExpiration(String expiration) {
+    public void setExpiration(long expiration) {
         this.expiration = expiration;
     }
 

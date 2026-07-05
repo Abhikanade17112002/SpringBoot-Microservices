@@ -33,6 +33,13 @@ public class BookingController {
                 .status(HttpStatus.CREATED)
                 .body( bookingService.createBooking(bookingRequestDTO) );
     }
+    @PostMapping("/{bookingId}/retry")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<BookingResponseDTO> retryBookingWithId(@PathVariable(name = "bookingId") String bookingId) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body( bookingService.retryBookingWithId(bookingId) );
+    }
 
     @GetMapping("/admins")
     @PreAuthorize("hasRole('ADMIN')")

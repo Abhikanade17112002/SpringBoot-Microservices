@@ -1,9 +1,12 @@
 package com.microservices.bookingservice.dtos.request;
 
+import com.microservices.bookingservice.enums.PaymentMethode;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class BookingRequestDTO {
@@ -16,18 +19,20 @@ public class BookingRequestDTO {
     @Future(message = "Check Out Date Should Be In Future")
     private LocalDate checkOutDate;
     @Positive(message = "Total Price Cannot Be Negative")
-    private double totalPrice;
+    private BigDecimal totalPrice;
     private boolean active;
+    private PaymentMethode paymentMethod;
 
     public BookingRequestDTO() {
     }
 
-    public BookingRequestDTO(String hotelId, LocalDate checkInDate, LocalDate checkOutDate, double totalPrice, boolean active) {
+    public BookingRequestDTO(String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal totalPrice, boolean active, PaymentMethode paymentMethod) {
         this.hotelId = hotelId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.totalPrice = totalPrice;
         this.active = active;
+        this.paymentMethod = paymentMethod;
     }
 
     public  String getHotelId() {
@@ -54,11 +59,11 @@ public class BookingRequestDTO {
         this.checkOutDate = checkOutDate;
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice( double totalPrice) {
+    public void setTotalPrice( BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -70,14 +75,23 @@ public class BookingRequestDTO {
         this.active = active;
     }
 
+    public PaymentMethode getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethode paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     @Override
     public String toString() {
         return "BookingRequestDTO{" +
-                "hotelId='" + hotelId + '\'' +
-                ", checkInDate=" + checkInDate +
-                ", checkOutDate=" + checkOutDate +
+                "active=" + active +
+                ", paymentMethod=" + paymentMethod +
                 ", totalPrice=" + totalPrice +
-                ", active=" + active +
+                ", checkOutDate=" + checkOutDate +
+                ", checkInDate=" + checkInDate +
+                ", hotelId='" + hotelId + '\'' +
                 '}';
     }
 }

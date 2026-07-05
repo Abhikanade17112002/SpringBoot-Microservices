@@ -33,15 +33,15 @@ public class MockPaymentProcessor implements PaymentProcessor {
     public PaymentProcessingResult processPayment(Payment request) {
         LOG.info("Entered Process Payment");
         PaymentProcessingResult result = new PaymentProcessingResult() ;
-        if( request.getAmount().compareTo(BigDecimal.valueOf(1000)) <= 0 ){
+        if( request.getAmount().compareTo(BigDecimal.valueOf(100000)) <= 0 ){
             result.setPaymentStatus(PaymentStatus.SUCCESS);
             result.setMessage("Mock Payment Of Amount ==> " + request.getAmount() + " Successfully Completed ");
-            result.setGatewayReference(null);
+            result.setGatewayReference("MOCK");
         }
         else{
             result.setPaymentStatus(PaymentStatus.FAILED);
             result.setMessage("Mock Payment Of Amount ==> " + request.getAmount() + " Failed");
-            result.setGatewayReference(null);
+            result.setGatewayReference("MOCK");
         }
         return result;
     }

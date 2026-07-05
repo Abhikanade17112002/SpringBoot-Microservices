@@ -1,8 +1,11 @@
 package com.microservices.bookingservice.entities;
 import com.microservices.bookingservice.enums.BookingStatus;
+import com.microservices.bookingservice.enums.PaymentMethode;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -32,7 +35,7 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
     @Column(nullable = false)
-    private double totalPrice;
+    private BigDecimal totalPrice;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
@@ -40,11 +43,12 @@ public class Booking {
     private boolean active;
     private Integer paymentAttemptCount  = 0;
     private LocalDateTime paymentExpiryTime ;
+    private PaymentMethode paymentMethod;
 
     public Booking(){
     }
 
-    public Booking(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, double totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active, Integer paymentAttemptCount, LocalDateTime paymentExpiryTime) {
+    public Booking(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, BigDecimal totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active, Integer paymentAttemptCount, LocalDateTime paymentExpiryTime, PaymentMethode paymentMethod) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.hotelId = hotelId;
@@ -57,6 +61,15 @@ public class Booking {
         this.active = active;
         this.paymentAttemptCount = paymentAttemptCount;
         this.paymentExpiryTime = paymentExpiryTime;
+        this.paymentMethod = paymentMethod;
+    }
+
+    public PaymentMethode getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethode paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public String getBookingId() {
@@ -107,11 +120,11 @@ public class Booking {
         this.bookingStatus = bookingStatus;
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -170,6 +183,7 @@ public class Booking {
                 ", active=" + active +
                 ", paymentAttemptCount=" + paymentAttemptCount +
                 ", paymentExpiryTime=" + paymentExpiryTime +
+                ", paymentMethod=" + paymentMethod +
                 '}';
     }
 }
