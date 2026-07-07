@@ -6,6 +6,8 @@ import com.microservices.paymentservice.enums.PaymentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, String> {
@@ -29,4 +31,10 @@ public interface PaymentRepository extends JpaRepository<Payment, String> {
             Pageable pageable
     );
     Optional<Payment> findTopByBookingIdOrderByCreatedAtDesc(String bookingId);
+
+    Page<Payment> findByCreatedAtBetween(LocalDate start, LocalDate end, Pageable page);
+
+    Optional<Payment>  findByTransactionReference(String transactionReference);
+
+    Optional<Payment> findByPaymentGatewayReference(String gatewayReference);
 }

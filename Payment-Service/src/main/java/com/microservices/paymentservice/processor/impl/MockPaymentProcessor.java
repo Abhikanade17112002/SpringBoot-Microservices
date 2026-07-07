@@ -49,6 +49,6 @@ public class MockPaymentProcessor implements PaymentProcessor {
     @Override
     public PaymentProcessingResult refundPayment(Payment payment) {
         LOG.info("Payment With Payment Id ==> " + payment.getPaymentId() + " Processed For Refund");
-        return new PaymentProcessingResult(PaymentStatus.REFUNDED,null,"Payment With Payment Id ==> " + payment.getPaymentId() + " Refund Successfully Completed");
+        return new PaymentProcessingResult(PaymentStatus.REFUNDED,"MOCK","Payment With Payment Id ==> " + payment.getPaymentId() + " Refund Successfully Completed");
     }
 }

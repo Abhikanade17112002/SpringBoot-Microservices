@@ -4,6 +4,7 @@ import com.microservices.bookingservice.clinets.paymentclients.InternalPaymentCl
 import com.microservices.bookingservice.configurations.BookingPaymentProperties;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
 import com.microservices.bookingservice.dtos.request.CreatePaymentRequestDTO;
+import com.microservices.bookingservice.dtos.response.BookingRefundResponseDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
 import com.microservices.bookingservice.dtos.response.InternalPaymentResponseDTO;
 import com.microservices.bookingservice.entities.AuthenticatedUser;
@@ -110,7 +111,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingResponseDTO retryBookingWithId(String bookingId) {
+    public BookingResponseDTO
+    retryBookingWithId(String bookingId) {
         Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
         AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if( !reterivedBooking.getCustomerId().equals(user.getUserId()) ){
@@ -179,6 +181,42 @@ public class BookingServiceImpl implements BookingService {
         response = modelMapper.map(reterivedBooking, BookingResponseDTO.class);
         response.setMessage("We couldn't process your payment at the moment. Your booking is still pending. Please retry within the payment window.");
         response.setRetryAllowed(true);
+        return  response;
+    }
+
+    @Override
+    @Transactional
+    public BookingRefundResponseDTO refundBookingWithId(String bookingId) {
+        Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with id " + bookingId + " not found."));
+        AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if( user.getRole().equals("CUSTOMER") && !user.getUserId().equals(reterivedBooking.getCustomerId()) ){
+            throw new RuntimeException("Customer With Id ==> " +  reterivedBooking.getCustomerId() + " Not Allowed to Refund This Booking");
+        }
+        if (reterivedBooking.getBookingStatus() != BookingStatus.CONFIRMED){
+            throw new RuntimeException("Booking With Id ==> " +   reterivedBooking.getBookingId() + " Not Allowed to Refund In Non Confirmed Status" );
+        }
+        BookingRefundResponseDTO response = null ;
+        try {
+
+            logger.info("Starting Booking Refund ==> {}", reterivedBooking);
+            InternalPaymentResponseDTO paymentResponse  =  paymentClient.processBookingRefundWithId(bookingId);
+            logger.info("Booking Refund Response From Payment ==> {}", paymentResponse);
+
+            if(  paymentResponse.getPaymentStatus() == PaymentStatus.REFUNDED ){
+                reterivedBooking.setBookingStatus(BookingStatus.REFUNDED);
+                response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingRefundResponseDTO.class);
+                response.setMessage(paymentResponse.getMessage());
+                return  response;
+            }
+
+        }
+        catch (Exception e){
+            logger.error("Exception Occurred ==> {}", e);
+        }
+
+        response = modelMapper.map(reterivedBooking, BookingRefundResponseDTO.class);
+        response.setMessage("We couldn't process your Refund Request at the moment. Please retry later.");
         return  response;
     }
 

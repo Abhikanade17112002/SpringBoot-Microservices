@@ -21,12 +21,12 @@ public class InternalController {
     public PaymentResponseDTO processPayment(@Valid @RequestBody CreatePaymentRequestDTO paymentRequestDTO ) throws Exception {
         return paymentService.processPayment(paymentRequestDTO);
     }
-
-//    public ResponseEntity<PaymentResponseDTO> refundPayment(@Valid @RequestBody PaymentRefundRequestDTO paymentRefundRequestDTO) {
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(paymentService.refundPayment(paymentRefundRequestDTO));
-//    }
+    @PostMapping("/booking/{bookingId}/refund")
+    public ResponseEntity<PaymentResponseDTO> refundPaymentWithBookingId(@PathVariable(name = "bookingId") String bookingId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(paymentService.refundPaymentWithBookingId(bookingId));
+    }
 
     @GetMapping("/booking/{bookingId}")
     public PaymentResponseDTO getPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId ){

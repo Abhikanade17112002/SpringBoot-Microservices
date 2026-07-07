@@ -6,25 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="5f8b4170-bee1-4f9f-a019-c9411db6cfd3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/BookingServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/BookingServiceApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/clinets/paymentclients/InternalPaymentClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/clinets/paymentclients/InternalPaymentClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/configurations/JwtConfigurationProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/configurations/JwtConfigurationProperties.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/controllers/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/controllers/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/dtos/request/BookingRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/dtos/request/BookingRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/dtos/response/BookingResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/dtos/response/BookingResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/entities/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/entities/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/enums/BookingStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/enums/BookingStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/BookingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/impl/BookingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/impl/BookingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HotelService/Hotel-Service/src/main/java/com/microsercives/hotelservice/configurations/JwtConfigurationProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelService/Hotel-Service/src/main/java/com/microsercives/hotelservice/configurations/JwtConfigurationProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/configurations/JwtConfigurationProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/configurations/JwtConfigurationProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/dtos/response/PaymentResultResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/dtos/response/InternalPaymentResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/entities/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/entities/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/InternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/InternalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/PaymentsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/PaymentsController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/processor/impl/MockPaymentProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/processor/impl/MockPaymentProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/repositories/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/repositories/PaymentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/configurations/JwtConfigurationProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/configurations/JwtConfigurationProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/configurations/JwtConfigurationProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/configurations/JwtConfigurationProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/AuthenticationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/AuthenticationServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,20 +103,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.BookingServiceApplication">
-    <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
-      <module name="API-Gateway" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.microservices.apigateway.ApiGatewayApplication" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.microservices.apigateway.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="BookingServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
       <module name="Booking-Service" />
@@ -181,6 +159,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
+      <module name="UserService" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.microsercives.userservice.UserServiceApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.microsercives.userservice.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="tests" factoryName="Autodetect">
       <module name="Authentication-Service" />
       <option name="ENV_FILES" value="" />
@@ -219,11 +211,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.BookingServiceApplication" />
         <item itemvalue="Spring Boot.PaymentServiceApplication" />
         <item itemvalue="Spring Boot.HotelServiceApplication" />
-        <item itemvalue="Spring Boot.BookingServiceApplication" />
-        <item itemvalue="Spring Boot.ApiGatewayApplication" />
         <item itemvalue="Spring Boot.RatingServiceApplication" />
+        <item itemvalue="Spring Boot.UserServiceApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -243,20 +235,5 @@
       <updated>1781258980148</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java</url>
-          <line>18</line>
-          <properties class="com.microservices.paymentservice.services.PaymentService" method="retryPaymentByBookingId">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

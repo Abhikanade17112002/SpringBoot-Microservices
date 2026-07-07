@@ -1,5 +1,6 @@
 package com.microservices.bookingservice.controllers;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
+import com.microservices.bookingservice.dtos.response.BookingRefundResponseDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
 import com.microservices.bookingservice.enums.BookingStatus;
 import com.microservices.bookingservice.services.BookingService;
@@ -39,6 +40,13 @@ public class BookingController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body( bookingService.retryBookingWithId(bookingId) );
+    }
+    @PutMapping("/{bookingId}/refund")
+    @PreAuthorize("hasRole('ADMIN','CUSTOMER')")
+    public ResponseEntity<BookingRefundResponseDTO> refundBookingWithId(@PathVariable(name = "bookingId") String bookingId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( bookingService.refundBookingWithId(bookingId) );
     }
 
     @GetMapping("/admins")

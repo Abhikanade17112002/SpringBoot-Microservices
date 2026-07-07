@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/payments")
 public class PaymentsController {
@@ -62,9 +64,40 @@ public class PaymentsController {
     public ResponseEntity<PaymentResponseDTO> processBookingPaymentRefundById(@PathVariable(name = "bookingId") String bookingId){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body( paymentService.processBookingPaymentRefund(bookingId) );
+                .body( paymentService.refundPaymentWithBookingId(bookingId) );
     }
 
+    @GetMapping("/bookings/{bookingId}")
+    @PreAuthorize("hasAuthority('CUSTOMER','ADMIN')")
+    public ResponseEntity<PaymentResponseDTO> getPaymentByBookingId(@PathVariable(name = "bookingId") String bookingId){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( paymentService.getPaymentByBookingIdForAdminOrCustomer(bookingId) );
+    }
+
+    @GetMapping("/date-range")
+    @PreAuthorize("hasAuthority('CUSTOMER','ADMIN')")
+    public ResponseEntity<Page<PaymentResponseDTO>> getPaymentsBetweenDates(@RequestParam(name = "start") LocalDate start , @RequestParam(name = "end") LocalDate end , @RequestParam( name = "pageno" , defaultValue = "0") int pageno , @RequestParam(name = "size" , defaultValue = "5") int size , @RequestParam(name = "sortby" ,defaultValue = "paymentId") String sortby , @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending ){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( paymentService.getPaymentsBetweenDates(start,end,pageno,size,sortby,ascending) );
+    }
+
+    @GetMapping("/transaction/{transactionReference}")
+    @PreAuthorize("hasAuthority('CUSTOMER','ADMIN')")
+    public ResponseEntity<PaymentResponseDTO> getPaymentByTransactionReference(@PathVariable(name = "transactionReference") String transactionReference){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( paymentService.getPaymentByTransactionReference(transactionReference) );
+    }
+
+    @GetMapping("/gateway/{gatewayReference}")
+    @PreAuthorize("hasAuthority('CUSTOMER','ADMIN')")
+    public ResponseEntity<PaymentResponseDTO> getPaymentByGatewayReference(@PathVariable(name = "gatewayReference") String gatewayReference){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( paymentService.getPaymentByGatewayReference(gatewayReference) );
+    }
 
 
 }

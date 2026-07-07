@@ -15,4 +15,6 @@ public interface InternalPaymentClient {
     public PaymentResponseDTO getPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId );
     @PutMapping("/{bookingId}/retry")
     public InternalPaymentResponseDTO retryPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId );
+    @PostMapping("/booking/{bookingId}/refund")
+    public InternalPaymentResponseDTO processBookingRefundWithId(@PathVariable(name = "bookingId") String BookingId);
 }

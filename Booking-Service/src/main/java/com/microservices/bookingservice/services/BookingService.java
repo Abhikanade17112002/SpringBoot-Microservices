@@ -1,6 +1,7 @@
 package com.microservices.bookingservice.services;
 
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
+import com.microservices.bookingservice.dtos.response.BookingRefundResponseDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
 import com.microservices.bookingservice.enums.BookingStatus;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,5 @@ public interface BookingService {
     Page<BookingResponseDTO> getBookingsByHotelIdAndDatesBetween(String hotelId, LocalDate starteDate, LocalDate endDate, int pageno, int pagesize, String sortby, Boolean asce);
     BookingResponseDTO softDeleteBookingById(String bookingId);
     BookingResponseDTO retryBookingWithId(String bookingId);
+    BookingRefundResponseDTO refundBookingWithId(String bookingId);
 }

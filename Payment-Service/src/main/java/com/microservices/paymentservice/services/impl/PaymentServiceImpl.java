@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import java.time.LocalDate;
 
 @Component
 public class PaymentServiceImpl implements PaymentService {
@@ -38,7 +39,6 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentRepository = paymentRepository;
         this.paymentProcessor = paymentProcessor;
     }
-
     @Override
     public PaymentResponseDTO processPayment(CreatePaymentRequestDTO paymentRequest)  {
         if(paymentRepository.findByBookingId(paymentRequest.getBookingId()).isPresent()){
@@ -63,6 +63,42 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponseDTO getPaymentByBookingId(String bookingId) {
         Payment reterivedPayment = paymentRepository.findByBookingId(bookingId)
                 .orElseThrow(()-> new PaymentNotFoundException("Payment With Booking Id ==> " + bookingId + " Not Found" )) ;
+        return modelMapper.map( reterivedPayment , PaymentResponseDTO.class);
+    }
+    @Override
+    public PaymentResponseDTO getPaymentByBookingIdForAdminOrCustomer(String bookingId) {
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Payment reterivedPayment = paymentRepository.findByBookingId(bookingId).orElseThrow(()-> new PaymentNotFoundException("Payment With Booking Id ==> " + bookingId + " Not Found" )) ;
+        if( authenticatedUser.getRole().equals("CUSTOMER") && !reterivedPayment.getCustomerId().equals(reterivedPayment.getCustomerId()) ){
+            throw new RuntimeException("Customer With Id ==> " + authenticatedUser.getUserId() + " Cannot Access This Payment");
+        }
+        return modelMapper.map( reterivedPayment , PaymentResponseDTO.class);
+    }
+    @Override
+    public Page<PaymentResponseDTO> getPaymentsBetweenDates(LocalDate start, LocalDate end, int pageno, int size, String sortby, Boolean ascending) {
+        Sort sort = ascending ? Sort.by(sortby).ascending() : Sort.by(sortby).descending();
+        Pageable pageable = PageRequest.of(pageno, size, sort);
+        Page<Payment> paymentsPage = paymentRepository.findByCreatedAtBetween(start, end, pageable);
+        return paymentsPage.map( payments -> modelMapper.map(payments, PaymentResponseDTO.class));
+    }
+
+    @Override
+    public PaymentResponseDTO getPaymentByTransactionReference(String transactionReference) {
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Payment reterivedPayment = paymentRepository.findByTransactionReference(transactionReference).orElseThrow(()-> new PaymentNotFoundException("Payment With Transaction Reference ==> " + transactionReference + " Not Found" )) ;
+        if( authenticatedUser.getRole().equals("CUSTOMER") && !reterivedPayment.getCustomerId().equals(reterivedPayment.getCustomerId()) ){
+            throw new RuntimeException("Customer With Id ==> " + authenticatedUser.getUserId() + " Cannot Access This Payment");
+        }
+        return modelMapper.map( reterivedPayment , PaymentResponseDTO.class);
+    }
+
+    @Override
+    public PaymentResponseDTO getPaymentByGatewayReference(String gatewayReference) {
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Payment reterivedPayment = paymentRepository.findByPaymentGatewayReference(gatewayReference).orElseThrow(()-> new PaymentNotFoundException("Payment With Gateway Reference==> " + gatewayReference + " Not Found" )) ;
+        if( authenticatedUser.getRole().equals("CUSTOMER") && !reterivedPayment.getCustomerId().equals(reterivedPayment.getCustomerId()) ){
+            throw new RuntimeException("Customer With Id ==> " + authenticatedUser.getUserId() + " Cannot Access This Payment");
+        }
         return modelMapper.map( reterivedPayment , PaymentResponseDTO.class);
     }
 
@@ -107,30 +143,6 @@ public class PaymentServiceImpl implements PaymentService {
         return pagedPayments.map((payment)-> modelMapper.map(payment,PaymentResponseDTO.class));
     }
     @Override
-    public PaymentResponseDTO processBookingPaymentRefund(String bookingId) {
-        Payment retrivedPayment = paymentRepository.findByBookingId(bookingId)
-                .orElseThrow(()-> new RuntimeException("Payment With Id ==> " + bookingId + " Not Found"));
-        if( retrivedPayment.getPaymentStatus().equals(PaymentStatus.REFUNDED)){
-            LOG.info("Payment Refund Status ==> " + retrivedPayment.getPaymentStatus() + " Payment Already Refunded ");
-            retrivedPayment.setActive(false);
-            paymentRepository.save(retrivedPayment);
-            throw new PaymentAlreadyRefundedException("Payment Already Refunded");
-        }
-
-        if( !retrivedPayment.getPaymentStatus().equals(PaymentStatus.SUCCESS)){
-            LOG.info("Payment Refund Status ==> " + retrivedPayment.getPaymentStatus() + " Payment Should Be Completed To Be Refunded");
-            throw new PaymentCannotBeRefundedException("Payment Should Be Completed To Be Refunded");
-        }
-
-        PaymentProcessingResult result =  paymentProcessor.refundPayment(retrivedPayment);
-        retrivedPayment.setPaymentStatus(result.getPaymentStatus());
-        retrivedPayment.setPaymentGatewayReference(result.getGatewayReference());
-        retrivedPayment.setMessage( result.getMessage());
-        retrivedPayment.setRefundTransactionReference("TNXRNF0000" +  (int)( Math.random() * 999999999));
-        return modelMapper.map(  paymentRepository.save(retrivedPayment)  ,PaymentResponseDTO.class);
-    }
-
-    @Override
     @Transactional
     public PaymentResponseDTO retryPaymentByBookingId(String bookingId) {
         Payment reterivedpayment = paymentRepository
@@ -156,4 +168,29 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setMessage(paymentProcessResponse.getMessage());
         return modelMapper.map(  paymentRepository.save(payment)  ,PaymentResponseDTO.class);
     }
+    @Override
+    public PaymentResponseDTO refundPaymentWithBookingId(String bookingId) {
+        Payment retrivedPayment = paymentRepository.findByBookingId(bookingId)
+                .orElseThrow(()-> new RuntimeException("Payment With Id ==> " + bookingId + " Not Found"));
+        if( retrivedPayment.getPaymentStatus().equals(PaymentStatus.REFUNDED)){
+            LOG.info("Payment Refund Status ==> " + retrivedPayment.getPaymentStatus() + " Payment Already Refunded ");
+            retrivedPayment.setActive(false);
+            paymentRepository.save(retrivedPayment);
+            throw new PaymentAlreadyRefundedException("Payment Already Refunded");
+        }
+
+        if( !retrivedPayment.getPaymentStatus().equals(PaymentStatus.SUCCESS)){
+            LOG.info("Payment Refund Status ==> " + retrivedPayment.getPaymentStatus() + " Payment Should Be Completed To Be Refunded");
+            throw new PaymentCannotBeRefundedException("Payment Should Be Completed To Be Refunded");
+        }
+
+        PaymentProcessingResult result =  paymentProcessor.refundPayment(retrivedPayment);
+        retrivedPayment.setPaymentStatus(result.getPaymentStatus());
+        retrivedPayment.setPaymentGatewayReference(result.getGatewayReference());
+        retrivedPayment.setMessage( result.getMessage());
+        retrivedPayment.setRefundTransactionReference("TNXRFND0000" +  (int)( Math.random() * 999999999));
+        return modelMapper.map(  paymentRepository.save(retrivedPayment)  ,PaymentResponseDTO.class);
+    }
+
+
 }
