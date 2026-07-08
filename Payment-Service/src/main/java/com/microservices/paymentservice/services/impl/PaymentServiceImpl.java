@@ -41,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
     @Override
     public PaymentResponseDTO processPayment(CreatePaymentRequestDTO paymentRequest)  {
-        if(paymentRepository.findByBookingId(paymentRequest.getBookingId()).isPresent()){
+        if(paymentRepository.findTopByBookingIdOrderByCreatedAtDesc(paymentRequest.getBookingId()).isPresent()){
             LOG.info("Payment Already Exists For Booking With Id ==> " + paymentRequest.getBookingId());
             throw new PaymentAlreadyExistsException(paymentRequest.getBookingId());
         }
@@ -57,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setPaymentStatus(paymentProcessResponse.getPaymentStatus());
         payment.setPaymentGatewayReference(paymentProcessResponse.getGatewayReference());
         payment.setMessage(paymentProcessResponse.getMessage());
-        return modelMapper.map(  paymentRepository.save(payment)  ,PaymentResponseDTO.class);
+        return modelMapper.map(paymentRepository.save(payment),PaymentResponseDTO.class);
     }
     @Override
     public PaymentResponseDTO getPaymentByBookingId(String bookingId) {
