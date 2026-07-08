@@ -1,6 +1,7 @@
 package com.microservices.paymentservice.exception;
 
 import com.microservices.paymentservice.dtos.response.ApiErrorResponseDTO;
+import com.microservices.paymentservice.enums.ErrorCode;
 import com.microservices.paymentservice.exception.exceptions.PaymentAlreadyExistsException;
 import com.microservices.paymentservice.exception.exceptions.PaymentAlreadyRefundedException;
 import com.microservices.paymentservice.exception.exceptions.PaymentCannotBeRefundedException;
@@ -31,6 +32,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND,
                 exception.getMessage(),
                 request.getRequestURI(),
+                ErrorCode.PAYMENT_NOT_FOUND_EXCEPTION,
                 null
         );
     }
@@ -45,6 +47,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT,
                 exception.getMessage(),
                 request.getRequestURI(),
+                ErrorCode.PAYMENT_ALREADY_EXISTS_EXCEPTION,
                 null
         );
     }
@@ -59,6 +62,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 exception.getMessage(),
                 request.getRequestURI(),
+                ErrorCode.PAYMENT_ALREADY_REFUNDED_EXCEPTION,
                 null
         );
     }
@@ -73,6 +77,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 exception.getMessage(),
                 request.getRequestURI(),
+                ErrorCode.PAYMENT_CANNOT_BE_REFUNDED_EXCEPTION,
                 null
         );
     }
@@ -94,6 +99,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 "Validation Failed",
                 request.getRequestURI(),
+                ErrorCode.METHOD_ARGUMENT_NOT_VALID_EXCEPTION,
                 validationErrors
         );
     }
@@ -114,6 +120,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 "Validation Failed",
                 request.getRequestURI(),
+                ErrorCode.CONSTRAINT_VIOLATION_EXCEPTION,
                 validationErrors
         );
     }
@@ -128,6 +135,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 exception.getMessage(),
                 request.getRequestURI(),
+                ErrorCode.GENERIC_EXCEPTION,
                 Collections.emptyList()
         );
     }
@@ -136,6 +144,7 @@ public class GlobalExceptionHandler {
             HttpStatus status,
             String message,
             String path,
+            ErrorCode errorCode,
             List<String> validationErrors
     ) {
 
@@ -146,6 +155,7 @@ public class GlobalExceptionHandler {
                         status.getReasonPhrase(),
                         message,
                         path,
+                        errorCode,
                         validationErrors
                 );
 

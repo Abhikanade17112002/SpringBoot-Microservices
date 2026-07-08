@@ -20,7 +20,9 @@ public class BookingRequestDTO {
     private LocalDate checkOutDate;
     @Positive(message = "Total Price Cannot Be Negative")
     private BigDecimal totalPrice;
+    @NotNull(message = "Booking Active Status Cannot Be Null")
     private boolean active;
+    @NotNull(message = "Payment Methode Cannot Be Null")
     private PaymentMethode paymentMethod;
 
     public BookingRequestDTO() {

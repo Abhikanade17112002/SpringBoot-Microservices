@@ -1,9 +1,12 @@
 package com.microservices.bookingservice.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.bookingservice.clinets.paymentclients.InternalPaymentClient;
 import com.microservices.bookingservice.configurations.BookingPaymentProperties;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
 import com.microservices.bookingservice.dtos.request.CreatePaymentRequestDTO;
+import com.microservices.bookingservice.dtos.response.ApiErrorResponseDTO;
 import com.microservices.bookingservice.dtos.response.BookingRefundResponseDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
 import com.microservices.bookingservice.dtos.response.InternalPaymentResponseDTO;
@@ -11,9 +14,11 @@ import com.microservices.bookingservice.entities.AuthenticatedUser;
 import com.microservices.bookingservice.entities.Booking;
 import com.microservices.bookingservice.enums.BookingStatus;
 import com.microservices.bookingservice.enums.PaymentStatus;
+import com.microservices.bookingservice.exception.exceptions.*;
 import com.microservices.bookingservice.repositories.BookingRepository;
 import com.microservices.bookingservice.services.BookingService;
 import com.microservices.bookingservice.services.internal.validation.BookingValidationService;
+import feign.FeignException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -30,6 +35,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
+import static com.microservices.bookingservice.enums.ErrorCode.*;
+
 @Service
 public class BookingServiceImpl implements BookingService {
     private final static Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
@@ -38,13 +47,15 @@ public class BookingServiceImpl implements BookingService {
     private final BookingValidationService validationService;
     private final BookingPaymentProperties paymentProperties ;
     private final InternalPaymentClient paymentClient ;
+    private final ObjectMapper objectMapper;
 
-    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService, BookingPaymentProperties paymentProperties, InternalPaymentClient paymentClient) {
+    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService, BookingPaymentProperties paymentProperties, InternalPaymentClient paymentClient, ObjectMapper objectMapper, ObjectMapper objectMapper1) {
         this.modelMapper = modelMapper;
         this.bookingRepository = bookingRepository;
         this.validationService = validationService;
         this.paymentProperties = paymentProperties;
         this.paymentClient = paymentClient;
+        this.objectMapper = objectMapper1;
     }
 
     @Override
@@ -60,6 +71,13 @@ public class BookingServiceImpl implements BookingService {
         if( !validationService.validateHotelIsActive(bookingRequestDTO.getHotelId())){
             logger.info("Hotel With Id ==> {} Is Not Active", bookingRequestDTO.getHotelId());
             return new BookingResponseDTO();
+        }
+        Optional<Booking> existingBooking = bookingRepository.findByHotelIdAndCustomerIdAndCheckInDateAndCheckOutDate(bookingRequestDTO.getHotelId(),user.getUserId(),bookingRequestDTO.getCheckInDate(),bookingRequestDTO.getCheckOutDate());
+        if( existingBooking.isPresent() ) {
+            logger.info("Booking With Customer Id  ==> {} , Check In Date {} And Check Out Date {} Exists", user.getUserId(), bookingRequestDTO.getCheckInDate(), bookingRequestDTO.getCheckOutDate());
+            BookingResponseDTO response =  modelMapper.map(existingBooking.get(), BookingResponseDTO.class);
+            response.setMessage("Booking Already Exists");
+            return response;
         }
 
         Booking newBooking = new Booking();
@@ -100,13 +118,33 @@ public class BookingServiceImpl implements BookingService {
             }
 
         }
-        catch (Exception e){
-            logger.error("Exception Occurred ==> {}", e);
+        catch (FeignException ex) {
+            String json = ex.contentUTF8();
+            try {
+                ApiErrorResponseDTO error = objectMapper.readValue(json, ApiErrorResponseDTO.class);
+                logger.error("Caught the Feign exception ==> {}", error);
+
+                switch (error.getErrorCode()) {
+                    case PAYMENT_NOT_FOUND_EXCEPTION ->
+                            throw new PaymentNotFoundException(error.getMessage());
+                    case PAYMENT_ALREADY_EXISTS_EXCEPTION ->
+                            throw new PaymentAlreadyExistsException(error.getMessage());
+                    case PAYMENT_ALREADY_REFUNDED_EXCEPTION ->
+                            throw new PaymentAlreadyRefundedException(error.getMessage());
+                    case PAYMENT_CANNOT_BE_REFUNDED_EXCEPTION ->
+                            throw new PaymentCannotBeRefundedException(error.getMessage());
+                    case METHOD_ARGUMENT_NOT_VALID_EXCEPTION,
+                         CONSTRAINT_VIOLATION_EXCEPTION ->
+                            throw new DownstreamValidationException(error.getMessage(), error.getErrorCode(),error.getValidationErrors());
+                    case FEIGN_CLIENT_EXCEPTION, GENERIC_EXCEPTION ->
+                            throw new RuntimeException(error.getMessage());
+                    default ->
+                            throw new RuntimeException("Unknown error occurred: " + error.getMessage());
+                }
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
-        response = modelMapper.map(initialPendingSavedBooking, BookingResponseDTO.class);
-        response.setMessage("We couldn't process your payment at the moment. Your booking is still pending. Please retry within the payment window.");
-        response.setRetryAllowed(true);
-        return  response;
     }
 
     @Override
