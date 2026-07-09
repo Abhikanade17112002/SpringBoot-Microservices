@@ -1,6 +1,7 @@
 package com.microservices.paymentservice.services;
 
 import com.microservices.paymentservice.dtos.request.CreatePaymentRequestDTO;
+import com.microservices.paymentservice.dtos.response.InternalPaymentResponseDTO;
 import com.microservices.paymentservice.dtos.response.PaymentResponseDTO;
 import com.microservices.paymentservice.entities.AuthenticatedUser;
 import com.microservices.paymentservice.entities.Payment;
@@ -14,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.time.LocalDate;
 
 public interface PaymentService {
-    PaymentResponseDTO processPayment(@Valid CreatePaymentRequestDTO paymentRequest) throws Exception;
+    InternalPaymentResponseDTO processPayment(@Valid CreatePaymentRequestDTO paymentRequest) throws Exception;
     PaymentResponseDTO getPaymentByBookingId(String bookingId);
     PaymentResponseDTO getPaymentById(String paymentId);
     Page<PaymentResponseDTO> getAllPayments(int pageno, int pagesize, String sortby, Boolean ascending);
@@ -22,7 +23,7 @@ public interface PaymentService {
     Page<PaymentResponseDTO> getAllPaymentsByStatus(PaymentStatus paymentStatus, int pageno, int pagesize, String sortby, Boolean ascending);
     Page<PaymentResponseDTO> getAllPaymentsByPaymentStatus(PaymentMethode paymentMethode, int pageno, int pagesize, String sortby, Boolean ascending);
     PaymentResponseDTO retryPaymentByBookingId(String bookingId);
-    PaymentResponseDTO refundPaymentWithBookingId(String bookingId);
+    InternalPaymentResponseDTO  refundPaymentWithBookingId(String bookingId);
     PaymentResponseDTO getPaymentByBookingIdForAdminOrCustomer(String bookingId);
     Page<PaymentResponseDTO> getPaymentsBetweenDates(LocalDate start, LocalDate end, int pageno, int size, String sortby, Boolean ascending);
     PaymentResponseDTO getPaymentByTransactionReference(String transactionReference);

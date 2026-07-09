@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 public interface InternalPaymentClient {
     @PostMapping
     public InternalPaymentResponseDTO processPayment(@RequestBody CreatePaymentRequestDTO createPaymentRequestDTO);
-    @GetMapping("/bookings/{bookingId}")
+    @GetMapping("/booking/{bookingId}")
     public PaymentResponseDTO getPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId );
     @PutMapping("/{bookingId}/retry")
-    public InternalPaymentResponseDTO retryPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId );
+    public PaymentResponseDTO retryPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId );
     @PostMapping("/booking/{bookingId}/refund")
     public InternalPaymentResponseDTO processBookingRefundWithId(@PathVariable(name = "bookingId") String BookingId);
 }

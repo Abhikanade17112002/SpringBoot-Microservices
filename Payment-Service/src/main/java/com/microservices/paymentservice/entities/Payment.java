@@ -48,11 +48,13 @@ public class Payment {
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentMethode paymentMethod;
-    @Column( nullable = false)
+    @Column( nullable = true)
     private String paymentGatewayReference ;
     @Column( nullable = false)
     private String transactionReference ;
@@ -60,7 +62,7 @@ public class Payment {
     private String refundTransactionReference ;
     @Column( nullable = false)
     private Boolean active ;
-    @Column( nullable = false)
+    @Column( nullable = true)
     private String message ;
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -3,6 +3,7 @@ package com.microservices.bookingservice.services;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
 import com.microservices.bookingservice.dtos.response.BookingRefundResponseDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
+import com.microservices.bookingservice.dtos.response.PaymentResponseDTO;
 import com.microservices.bookingservice.enums.BookingStatus;
 import org.springframework.data.domain.Page;
 
@@ -26,4 +27,5 @@ public interface BookingService {
     BookingResponseDTO softDeleteBookingById(String bookingId);
     BookingResponseDTO retryBookingWithId(String bookingId);
     BookingRefundResponseDTO refundBookingWithId(String bookingId);
+    PaymentResponseDTO getPaymentByBookingId(String bookingId);
 }

@@ -1,6 +1,7 @@
 package com.microservices.paymentservice.services.impl;
 
 import com.microservices.paymentservice.dtos.request.CreatePaymentRequestDTO;
+import com.microservices.paymentservice.dtos.response.InternalPaymentResponseDTO;
 import com.microservices.paymentservice.dtos.response.PaymentProcessingResult;
 import com.microservices.paymentservice.dtos.response.PaymentResponseDTO;
 import com.microservices.paymentservice.entities.AuthenticatedUser;
@@ -39,12 +40,38 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentRepository = paymentRepository;
         this.paymentProcessor = paymentProcessor;
     }
+
     @Override
-    public PaymentResponseDTO processPayment(CreatePaymentRequestDTO paymentRequest)  {
-        if(paymentRepository.findTopByBookingIdOrderByCreatedAtDesc(paymentRequest.getBookingId()).isPresent()){
-            LOG.info("Payment Already Exists For Booking With Id ==> " + paymentRequest.getBookingId());
+    public InternalPaymentResponseDTO processPayment(CreatePaymentRequestDTO paymentRequest) {
+
+
+        if (paymentRepository.findTopByBookingIdOrderByCreatedAtDesc(paymentRequest.getBookingId()).isPresent()) {
+            LOG.info("Payment already exists for Booking Id: {}", paymentRequest.getBookingId());
             throw new PaymentAlreadyExistsException(paymentRequest.getBookingId());
         }
+        Payment payment = createInitialPaymentWithPendingStatus(paymentRequest);
+
+        try {
+            PaymentProcessingResult paymentProcessResponse = paymentProcessor.processPayment(payment);
+
+            InternalPaymentResponseDTO response = getPaymentResponseDTO(payment, paymentProcessResponse);
+
+            return response;
+
+        } catch (Exception e) {
+            LOG.error("Exception occurred while processing payment", e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Transactional
+    private InternalPaymentResponseDTO getPaymentResponseDTO(Payment payment,PaymentProcessingResult result) {
+        payment.setPaymentStatus(result.getPaymentStatus());
+        payment.setPaymentGatewayReference(result.getGatewayReference());
+        payment.setMessage(result.getMessage());
+        return modelMapper.map(paymentRepository.save(payment),InternalPaymentResponseDTO.class);
+    }
+    @Transactional
+    private Payment createInitialPaymentWithPendingStatus(CreatePaymentRequestDTO paymentRequest) {
         Payment payment = new Payment();
         payment.setActive(true);
         payment.setAmount(paymentRequest.getAmount());
@@ -53,11 +80,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setCustomerId(paymentRequest.getCustomerId());
         payment.setPaymentStatus(PaymentStatus.PENDING);
         payment.setTransactionReference("TNX000" + (int)( Math.random() * 999999999));
-        PaymentProcessingResult paymentProcessResponse = paymentProcessor.processPayment(payment);
-        payment.setPaymentStatus(paymentProcessResponse.getPaymentStatus());
-        payment.setPaymentGatewayReference(paymentProcessResponse.getGatewayReference());
-        payment.setMessage(paymentProcessResponse.getMessage());
-        return modelMapper.map(paymentRepository.save(payment),PaymentResponseDTO.class);
+        return paymentRepository.save(payment);
     }
     @Override
     public PaymentResponseDTO getPaymentByBookingId(String bookingId) {
@@ -147,10 +170,10 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponseDTO retryPaymentByBookingId(String bookingId) {
         Payment reterivedpayment = paymentRepository
                 .findTopByBookingIdOrderByCreatedAtDesc(bookingId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "Payment with Booking Id ==> " + bookingId + " Not Found"
-                        ));
+                .orElse(null);
+        if( reterivedpayment == null){
+
+        }
         if( !reterivedpayment.getPaymentStatus().equals(PaymentStatus.FAILED)){
             throw new RuntimeException("Payment Status ==> " + reterivedpayment.getPaymentStatus());
         }
@@ -169,9 +192,9 @@ public class PaymentServiceImpl implements PaymentService {
         return modelMapper.map(  paymentRepository.save(payment)  ,PaymentResponseDTO.class);
     }
     @Override
-    public PaymentResponseDTO refundPaymentWithBookingId(String bookingId) {
+    public InternalPaymentResponseDTO  refundPaymentWithBookingId(String bookingId) {
         Payment retrivedPayment = paymentRepository.findByBookingId(bookingId)
-                .orElseThrow(()-> new RuntimeException("Payment With Id ==> " + bookingId + " Not Found"));
+                .orElseThrow(()-> new PaymentNotFoundException("Payment With Id ==> " + bookingId + " Not Found"));
         if( retrivedPayment.getPaymentStatus().equals(PaymentStatus.REFUNDED)){
             LOG.info("Payment Refund Status ==> " + retrivedPayment.getPaymentStatus() + " Payment Already Refunded ");
             retrivedPayment.setActive(false);
@@ -184,12 +207,23 @@ public class PaymentServiceImpl implements PaymentService {
             throw new PaymentCannotBeRefundedException("Payment Should Be Completed To Be Refunded");
         }
 
-        PaymentProcessingResult result =  paymentProcessor.refundPayment(retrivedPayment);
+        try {
+            PaymentProcessingResult result =  paymentProcessor.refundPayment(retrivedPayment);
+            InternalPaymentResponseDTO response = getPaymentRefundResponseDTO(retrivedPayment, result);
+            return response;
+        } catch (Exception e) {
+            LOG.error("Exception occurred while processing payment", e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private InternalPaymentResponseDTO getPaymentRefundResponseDTO(Payment retrivedPayment,PaymentProcessingResult result) {
         retrivedPayment.setPaymentStatus(result.getPaymentStatus());
         retrivedPayment.setPaymentGatewayReference(result.getGatewayReference());
         retrivedPayment.setMessage( result.getMessage());
         retrivedPayment.setRefundTransactionReference("TNXRFND0000" +  (int)( Math.random() * 999999999));
-        return modelMapper.map(  paymentRepository.save(retrivedPayment)  ,PaymentResponseDTO.class);
+        return modelMapper.map(  paymentRepository.save(retrivedPayment)  ,InternalPaymentResponseDTO.class);
     }
 
 

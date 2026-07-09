@@ -1,6 +1,7 @@
 package com.microservices.paymentservice.controllers;
 
 
+import com.microservices.paymentservice.dtos.response.InternalPaymentResponseDTO;
 import com.microservices.paymentservice.dtos.response.PaymentResponseDTO;
 import com.microservices.paymentservice.enums.PaymentMethode;
 import com.microservices.paymentservice.enums.PaymentStatus;
@@ -61,7 +62,7 @@ public class PaymentsController {
     }
     @PutMapping("/refund/{bookingId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<PaymentResponseDTO> processBookingPaymentRefundById(@PathVariable(name = "bookingId") String bookingId){
+    public ResponseEntity<InternalPaymentResponseDTO> processBookingPaymentRefundById(@PathVariable(name = "bookingId") String bookingId){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body( paymentService.refundPaymentWithBookingId(bookingId) );

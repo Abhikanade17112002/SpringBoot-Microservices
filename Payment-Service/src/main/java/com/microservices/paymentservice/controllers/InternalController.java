@@ -1,6 +1,7 @@
 package com.microservices.paymentservice.controllers;
 
 import com.microservices.paymentservice.dtos.request.CreatePaymentRequestDTO;
+import com.microservices.paymentservice.dtos.response.InternalPaymentResponseDTO;
 import com.microservices.paymentservice.dtos.response.PaymentResponseDTO;
 import com.microservices.paymentservice.services.PaymentService;
 import jakarta.validation.Valid;
@@ -18,14 +19,12 @@ public class InternalController {
     }
 
     @PostMapping
-    public PaymentResponseDTO processPayment(@Valid @RequestBody CreatePaymentRequestDTO paymentRequestDTO ) throws Exception {
+    public InternalPaymentResponseDTO processPayment(@Valid @RequestBody CreatePaymentRequestDTO paymentRequestDTO ) throws Exception {
         return paymentService.processPayment(paymentRequestDTO);
     }
     @PostMapping("/booking/{bookingId}/refund")
-    public ResponseEntity<PaymentResponseDTO> refundPaymentWithBookingId(@PathVariable(name = "bookingId") String bookingId) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(paymentService.refundPaymentWithBookingId(bookingId));
+    public InternalPaymentResponseDTO refundPaymentWithBookingId(@PathVariable(name = "bookingId") String bookingId) {
+        return paymentService.refundPaymentWithBookingId(bookingId);
     }
 
     @GetMapping("/booking/{bookingId}")

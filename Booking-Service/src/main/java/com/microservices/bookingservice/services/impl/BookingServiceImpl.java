@@ -6,10 +6,7 @@ import com.microservices.bookingservice.clinets.paymentclients.InternalPaymentCl
 import com.microservices.bookingservice.configurations.BookingPaymentProperties;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
 import com.microservices.bookingservice.dtos.request.CreatePaymentRequestDTO;
-import com.microservices.bookingservice.dtos.response.ApiErrorResponseDTO;
-import com.microservices.bookingservice.dtos.response.BookingRefundResponseDTO;
-import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
-import com.microservices.bookingservice.dtos.response.InternalPaymentResponseDTO;
+import com.microservices.bookingservice.dtos.response.*;
 import com.microservices.bookingservice.entities.AuthenticatedUser;
 import com.microservices.bookingservice.entities.Booking;
 import com.microservices.bookingservice.enums.BookingStatus;
@@ -59,7 +56,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional
     public BookingResponseDTO createBooking(BookingRequestDTO bookingRequestDTO) {
         AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if( !validationService.validateCustomerIsActive(user.getUserId()))
@@ -79,44 +75,13 @@ public class BookingServiceImpl implements BookingService {
             response.setMessage("Booking Already Exists");
             return response;
         }
-
-        Booking newBooking = new Booking();
-        newBooking.setBookingStatus(BookingStatus.PENDING);
-        newBooking.setActive(true);
-        newBooking.setPaymentMethod(bookingRequestDTO.getPaymentMethod());
-        newBooking.setHotelId(bookingRequestDTO.getHotelId());
-        newBooking.setCheckInDate(bookingRequestDTO.getCheckInDate());
-        newBooking.setCheckOutDate(bookingRequestDTO.getCheckOutDate());
-        newBooking.setCustomerId(user.getUserId());
-        newBooking.setTotalPrice(bookingRequestDTO.getTotalPrice());
-        newBooking.setPaymentAttemptCount(1);
-        newBooking.setPaymentExpiryTime(LocalDateTime.now().plusMinutes( paymentProperties.getPaymentExpiryTime().toMinutes() ));
-        Booking initialPendingSavedBooking = bookingRepository.save(newBooking);
+        Booking initialPendingSavedBooking = getSavedInitialBookingWithPendingStatus(bookingRequestDTO,user.getUserId());
         logger.info("Booking initialPendingSavedBooking Created ==> {}", initialPendingSavedBooking);
-        CreatePaymentRequestDTO createPaymentRequest = new CreatePaymentRequestDTO();
-        createPaymentRequest.setBookingId(initialPendingSavedBooking.getBookingId());
-        createPaymentRequest.setAmount(initialPendingSavedBooking.getTotalPrice());
-        createPaymentRequest.setCustomerId(initialPendingSavedBooking.getCustomerId());
-        createPaymentRequest.setPaymentMethod(initialPendingSavedBooking.getPaymentMethod());
-
-        BookingResponseDTO response = null ;
+        CreatePaymentRequestDTO createPaymentRequest = createPaymentRequestDTO(initialPendingSavedBooking);
         try{
             InternalPaymentResponseDTO paymentResult  = paymentClient.processPayment(createPaymentRequest);
             logger.info("Payment Result ==> {}", paymentResult);
-            if( paymentResult.getPaymentStatus() == PaymentStatus.SUCCESS ){
-                initialPendingSavedBooking.setBookingStatus(BookingStatus.CONFIRMED);
-                response = modelMapper.map(bookingRepository.save(initialPendingSavedBooking), BookingResponseDTO.class);
-                response.setMessage(paymentResult.getMessage());
-                return  response;
-            }
-            else{
-                String retryMessage = "Payment Cannot Be Completed Reason ==> " + paymentResult.getMessage() ;
-                response = modelMapper.map(initialPendingSavedBooking, BookingResponseDTO.class);
-                response.setMessage(retryMessage);
-                response.setRetryAllowed(true);
-                return  response;
-            }
-
+            return createBookingResponseDTO(paymentResult,initialPendingSavedBooking);
         }
         catch (FeignException ex) {
             String json = ex.contentUTF8();
@@ -194,7 +159,7 @@ public class BookingServiceImpl implements BookingService {
         createPaymentRequest.setPaymentMethod(reterivedBooking.getPaymentMethod());
         BookingResponseDTO response = null;
         try{
-            InternalPaymentResponseDTO paymentResult  = paymentClient.retryPaymentByBookingId(bookingId);
+            PaymentResponseDTO paymentResult  = paymentClient.retryPaymentByBookingId(bookingId);
             logger.info("Payment Result ==> {}", paymentResult);
             if( paymentResult.getPaymentStatus() == PaymentStatus.SUCCESS ){
                 reterivedBooking.setBookingStatus(BookingStatus.CONFIRMED);
@@ -231,31 +196,93 @@ public class BookingServiceImpl implements BookingService {
         if( user.getRole().equals("CUSTOMER") && !user.getUserId().equals(reterivedBooking.getCustomerId()) ){
             throw new RuntimeException("Customer With Id ==> " +  reterivedBooking.getCustomerId() + " Not Allowed to Refund This Booking");
         }
+        if( reterivedBooking.getBookingStatus().equals(BookingStatus.REFUNDED)){
+            reterivedBooking.setActive(false);
+            bookingRepository.save(reterivedBooking);
+            throw new PaymentAlreadyRefundedException("Payment Already Refunded");
+        }
         if (reterivedBooking.getBookingStatus() != BookingStatus.CONFIRMED){
             throw new RuntimeException("Booking With Id ==> " +   reterivedBooking.getBookingId() + " Not Allowed to Refund In Non Confirmed Status" );
         }
-        BookingRefundResponseDTO response = null ;
         try {
-
-            logger.info("Starting Booking Refund ==> {}", reterivedBooking);
             InternalPaymentResponseDTO paymentResponse  =  paymentClient.processBookingRefundWithId(bookingId);
-            logger.info("Booking Refund Response From Payment ==> {}", paymentResponse);
+            return getBookingRefundByResponseDTO(reterivedBooking, paymentResponse);
+        } catch (FeignException ex) {
+            String json = ex.contentUTF8();
+            try {
+                ApiErrorResponseDTO error = objectMapper.readValue(json, ApiErrorResponseDTO.class);
+                logger.error("Caught the Feign exception ==> {}", error);
 
-            if(  paymentResponse.getPaymentStatus() == PaymentStatus.REFUNDED ){
-                reterivedBooking.setBookingStatus(BookingStatus.REFUNDED);
-                response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingRefundResponseDTO.class);
-                response.setMessage(paymentResponse.getMessage());
-                return  response;
+                switch (error.getErrorCode()) {
+                    case PAYMENT_NOT_FOUND_EXCEPTION ->
+                            throw new PaymentNotFoundException(error.getMessage());
+                    case PAYMENT_ALREADY_EXISTS_EXCEPTION ->
+                            throw new PaymentAlreadyExistsException(error.getMessage());
+                    case PAYMENT_ALREADY_REFUNDED_EXCEPTION ->
+                            throw new PaymentAlreadyRefundedException(error.getMessage());
+                    case PAYMENT_CANNOT_BE_REFUNDED_EXCEPTION ->
+                            throw new PaymentCannotBeRefundedException(error.getMessage());
+                    case METHOD_ARGUMENT_NOT_VALID_EXCEPTION,
+                         CONSTRAINT_VIOLATION_EXCEPTION ->
+                            throw new DownstreamValidationException(error.getMessage(), error.getErrorCode(),error.getValidationErrors());
+                    case FEIGN_CLIENT_EXCEPTION, GENERIC_EXCEPTION ->
+                            throw new RuntimeException(error.getMessage());
+                    default ->
+                            throw new RuntimeException("Unknown error occurred: " + error.getMessage());
+                }
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
-
         }
-        catch (Exception e){
-            logger.error("Exception Occurred ==> {}", e);
-        }
+    }
 
-        response = modelMapper.map(reterivedBooking, BookingRefundResponseDTO.class);
-        response.setMessage("We couldn't process your Refund Request at the moment. Please retry later.");
-        return  response;
+    private BookingRefundResponseDTO getBookingRefundByResponseDTO(Booking reterivedBooking ,InternalPaymentResponseDTO paymentResponse) {
+        BookingRefundResponseDTO response = null ;
+        if(  paymentResponse.getPaymentStatus() == PaymentStatus.REFUNDED ){
+            reterivedBooking.setBookingStatus(BookingStatus.REFUNDED);
+            response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingRefundResponseDTO.class);
+            response.setMessage(paymentResponse.getMessage());
+            return  response;
+        }
+        else {
+            response = modelMapper.map(reterivedBooking, BookingRefundResponseDTO.class);
+            response.setMessage(paymentResponse.getMessage());
+            return  response;
+        }
+    }
+
+    @Override
+    public PaymentResponseDTO getPaymentByBookingId(String bookingId) {
+        try {
+           return paymentClient.getPaymentByBookingId(bookingId);
+        }
+        catch (FeignException ex){
+            String json = ex.contentUTF8();
+            try {
+                ApiErrorResponseDTO error = objectMapper.readValue(json, ApiErrorResponseDTO.class);
+                logger.error("Caught the Feign exception ==> {}", error);
+
+                switch (error.getErrorCode()) {
+                    case PAYMENT_NOT_FOUND_EXCEPTION ->
+                            throw new PaymentNotFoundException(error.getMessage());
+                    case PAYMENT_ALREADY_EXISTS_EXCEPTION ->
+                            throw new PaymentAlreadyExistsException(error.getMessage());
+                    case PAYMENT_ALREADY_REFUNDED_EXCEPTION ->
+                            throw new PaymentAlreadyRefundedException(error.getMessage());
+                    case PAYMENT_CANNOT_BE_REFUNDED_EXCEPTION ->
+                            throw new PaymentCannotBeRefundedException(error.getMessage());
+                    case METHOD_ARGUMENT_NOT_VALID_EXCEPTION,
+                         CONSTRAINT_VIOLATION_EXCEPTION ->
+                            throw new DownstreamValidationException(error.getMessage(), error.getErrorCode(),error.getValidationErrors());
+                    case FEIGN_CLIENT_EXCEPTION, GENERIC_EXCEPTION ->
+                            throw new RuntimeException(error.getMessage());
+                    default ->
+                            throw new RuntimeException("Unknown error occurred: " + error.getMessage());
+                }
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
@@ -390,5 +417,45 @@ public class BookingServiceImpl implements BookingService {
             reterivedBooking = bookingRepository.save(reterivedBooking);
         }
         return  modelMapper.map(reterivedBooking, BookingResponseDTO.class);
+    }
+    @Transactional
+    private Booking getSavedInitialBookingWithPendingStatus(BookingRequestDTO bookingRequestDTO,String customerId){
+        Booking newBooking = new Booking();
+        newBooking.setBookingStatus(BookingStatus.PENDING);
+        newBooking.setActive(true);
+        newBooking.setPaymentMethod(bookingRequestDTO.getPaymentMethod());
+        newBooking.setHotelId(bookingRequestDTO.getHotelId());
+        newBooking.setCheckInDate(bookingRequestDTO.getCheckInDate());
+        newBooking.setCheckOutDate(bookingRequestDTO.getCheckOutDate());
+        newBooking.setCustomerId(customerId);
+        newBooking.setTotalPrice(bookingRequestDTO.getTotalPrice());
+        newBooking.setPaymentAttemptCount(1);
+        newBooking.setPaymentExpiryTime(LocalDateTime.now().plusMinutes( paymentProperties.getPaymentExpiryTime().toMinutes() ));
+        return bookingRepository.save(newBooking);
+    }
+    private CreatePaymentRequestDTO createPaymentRequestDTO(Booking  booking){
+        CreatePaymentRequestDTO createPaymentRequest = new CreatePaymentRequestDTO();
+        createPaymentRequest.setBookingId(booking.getBookingId());
+        createPaymentRequest.setAmount(booking.getTotalPrice());
+        createPaymentRequest.setCustomerId(booking.getCustomerId());
+        createPaymentRequest.setPaymentMethod(booking.getPaymentMethod());
+        return createPaymentRequest;
+    }
+    @Transactional
+    private BookingResponseDTO createBookingResponseDTO(InternalPaymentResponseDTO paymentResult , Booking initialPendingSavedBooking){
+        BookingResponseDTO response = null ;
+        if( paymentResult.getPaymentStatus() == PaymentStatus.SUCCESS ){
+            initialPendingSavedBooking.setBookingStatus(BookingStatus.CONFIRMED);
+            response = modelMapper.map(bookingRepository.save(initialPendingSavedBooking), BookingResponseDTO.class);
+            response.setMessage(paymentResult.getMessage());
+            return  response;
+        }
+        else{
+            String retryMessage = "Payment Cannot Be Completed Reason ==> " + paymentResult.getMessage() ;
+            response = modelMapper.map(initialPendingSavedBooking, BookingResponseDTO.class);
+            response.setMessage(retryMessage);
+            response.setRetryAllowed(true);
+            return  response;
+        }
     }
 }

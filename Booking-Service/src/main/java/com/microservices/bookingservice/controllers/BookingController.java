@@ -2,8 +2,10 @@ package com.microservices.bookingservice.controllers;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
 import com.microservices.bookingservice.dtos.response.BookingRefundResponseDTO;
 import com.microservices.bookingservice.dtos.response.BookingResponseDTO;
+import com.microservices.bookingservice.dtos.response.PaymentResponseDTO;
 import com.microservices.bookingservice.enums.BookingStatus;
 import com.microservices.bookingservice.services.BookingService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class BookingController {
 
     @PostMapping
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<BookingResponseDTO> createBooking(@RequestBody BookingRequestDTO bookingRequestDTO) {
+    public ResponseEntity<BookingResponseDTO> createBooking(@Valid @RequestBody BookingRequestDTO bookingRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body( bookingService.createBooking(bookingRequestDTO) );
@@ -42,7 +44,7 @@ public class BookingController {
                 .body( bookingService.retryBookingWithId(bookingId) );
     }
     @PutMapping("/{bookingId}/refund")
-    @PreAuthorize("hasRole('ADMIN','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     public ResponseEntity<BookingRefundResponseDTO> refundBookingWithId(@PathVariable(name = "bookingId") String bookingId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -143,6 +145,13 @@ public class BookingController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body( bookingService.softDeleteBookingById(bookingId) );
+    }
+    @GetMapping("/{bookingId}/payment")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
+    public ResponseEntity<PaymentResponseDTO> getPaymentByBookingId(@PathVariable("bookingId") String bookingId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( bookingService.getPaymentByBookingId(bookingId) );
     }
 
 }
