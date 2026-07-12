@@ -147,6 +147,21 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ServiceUnAvailableException.class)
+    public ResponseEntity<ApiErrorResponseDTO> handleGenericException(
+            ServiceUnAvailableException exception,
+            HttpServletRequest request
+    ) {
+
+        return buildResponse(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                exception.getMessage(),
+                request.getRequestURI(),
+                ErrorCode.SERVICE_UNAVAILABLE,
+                Collections.emptyList()
+        );
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponseDTO> handleGenericException(
             Exception exception,

@@ -12,4 +12,6 @@ public enum BookingStatus {
     CHECKED_OUT,
 
     REFUNDED,
+
+    FAILED
 }

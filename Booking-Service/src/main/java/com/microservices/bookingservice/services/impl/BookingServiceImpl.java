@@ -16,6 +16,7 @@ import com.microservices.bookingservice.repositories.BookingRepository;
 import com.microservices.bookingservice.services.BookingService;
 import com.microservices.bookingservice.services.internal.validation.BookingValidationService;
 import feign.FeignException;
+import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,8 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,7 +71,9 @@ public class BookingServiceImpl implements BookingService {
             logger.info("Hotel With Id ==> {} Is Not Active", bookingRequestDTO.getHotelId());
             return new BookingResponseDTO();
         }
-        Optional<Booking> existingBooking = bookingRepository.findByHotelIdAndCustomerIdAndCheckInDateAndCheckOutDate(bookingRequestDTO.getHotelId(),user.getUserId(),bookingRequestDTO.getCheckInDate(),bookingRequestDTO.getCheckOutDate());
+        List<BookingStatus>  excludeBookingStatus  = List.of(BookingStatus.FAILED,BookingStatus.CANCELLED);
+        Optional<Booking> existingBooking = bookingRepository.findByHotelIdAndCustomerIdAndCheckInDateAndCheckOutDateAndBookingStatusNotIn(bookingRequestDTO.getHotelId(), user.getUserId(), bookingRequestDTO.getCheckInDate(), bookingRequestDTO.getCheckOutDate(), excludeBookingStatus);
+
         if( existingBooking.isPresent() ) {
             logger.info("Booking With Customer Id  ==> {} , Check In Date {} And Check Out Date {} Exists", user.getUserId(), bookingRequestDTO.getCheckInDate(), bookingRequestDTO.getCheckOutDate());
             BookingResponseDTO response =  modelMapper.map(existingBooking.get(), BookingResponseDTO.class);
@@ -84,11 +89,15 @@ public class BookingServiceImpl implements BookingService {
             return createBookingResponseDTO(paymentResult,initialPendingSavedBooking);
         }
         catch (FeignException ex) {
+            initialPendingSavedBooking.setBookingStatus(BookingStatus.FAILED);
+            initialPendingSavedBooking.setActive(false);
+            bookingRepository.save(initialPendingSavedBooking);
             String json = ex.contentUTF8();
+            if(true){
+                throw new ServiceUnAvailableException(json);
+            }
             try {
                 ApiErrorResponseDTO error = objectMapper.readValue(json, ApiErrorResponseDTO.class);
-                logger.error("Caught the Feign exception ==> {}", error);
-
                 switch (error.getErrorCode()) {
                     case PAYMENT_NOT_FOUND_EXCEPTION ->
                             throw new PaymentNotFoundException(error.getMessage());

@@ -6,15 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="5f8b4170-bee1-4f9f-a019-c9411db6cfd3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/clinets/paymentclients/InternalPaymentClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/clinets/paymentclients/InternalPaymentClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/controllers/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/controllers/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/enums/BookingStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/enums/BookingStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/enums/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/enums/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/repositories/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/repositories/BookingRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/impl/BookingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/impl/BookingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/InternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/InternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/PaymentsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/PaymentsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/entities/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/entities/Payment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +23,7 @@
         <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="Exception" />
       </list>
     </option>
   </component>
