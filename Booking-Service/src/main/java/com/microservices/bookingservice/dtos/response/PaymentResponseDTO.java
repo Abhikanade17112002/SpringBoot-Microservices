@@ -12,18 +12,18 @@ public class PaymentResponseDTO {
     private String customerId ;
     private BigDecimal amount;
     private PaymentStatus paymentStatus;
-    private PaymentMethode paymentMethode;
+    private PaymentMethode paymentMethod;
     private String transactionReference ;
     private LocalDateTime createdAt;
     private String message ;
 
-    public PaymentResponseDTO(String paymentId, String bookingId, String customerId, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethode paymentMethode, String transactionReference, LocalDateTime createdAt , String message) {
+    public PaymentResponseDTO(String paymentId, String bookingId, String customerId, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethode paymentMethod, String transactionReference, LocalDateTime createdAt , String message) {
         this.paymentId = paymentId;
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.amount = amount;
         this.paymentStatus = paymentStatus;
-        this.paymentMethode = paymentMethode;
+        this.paymentMethod = paymentMethod;
         this.transactionReference = transactionReference;
         this.createdAt = createdAt;
         this.message = message ;
@@ -70,12 +70,12 @@ public class PaymentResponseDTO {
         this.paymentStatus = paymentStatus;
     }
 
-    public PaymentMethode getPaymentMethode() {
-        return paymentMethode;
+    public PaymentMethode getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setPaymentMethode(PaymentMethode paymentMethode) {
-        this.paymentMethode = paymentMethode;
+    public void setPaymentMethod(PaymentMethode paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public String getTransactionReference() {
@@ -106,7 +106,7 @@ public class PaymentResponseDTO {
                 ", customerId='" + customerId + '\'' +
                 ", amount=" + amount +
                 ", paymentStatus=" + paymentStatus +
-                ", paymentMethode=" + paymentMethode +
+                ", paymentMethod=" + paymentMethod +
                 ", transactionReference='" + transactionReference + '\'' +
                 ", createdAt=" + createdAt +
                 ", message='" + message + '\'' +

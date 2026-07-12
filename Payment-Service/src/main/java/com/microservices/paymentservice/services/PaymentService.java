@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface PaymentService {
     InternalPaymentResponseDTO processPayment(@Valid CreatePaymentRequestDTO paymentRequest) throws Exception;
@@ -25,7 +26,7 @@ public interface PaymentService {
     PaymentResponseDTO retryPaymentByBookingId(String bookingId);
     InternalPaymentResponseDTO  refundPaymentWithBookingId(String bookingId);
     PaymentResponseDTO getPaymentByBookingIdForAdminOrCustomer(String bookingId);
-    Page<PaymentResponseDTO> getPaymentsBetweenDates(LocalDate start, LocalDate end, int pageno, int size, String sortby, Boolean ascending);
+    Page<PaymentResponseDTO> getPaymentsBetweenDates(LocalDateTime start, LocalDateTime end, int pageno, int size, String sortby, Boolean ascending);
     PaymentResponseDTO getPaymentByTransactionReference(String transactionReference);
     public PaymentResponseDTO getPaymentByGatewayReference(String gatewayReference);
 

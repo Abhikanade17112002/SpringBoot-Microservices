@@ -27,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class PaymentServiceImpl implements PaymentService {
@@ -98,7 +99,7 @@ public class PaymentServiceImpl implements PaymentService {
         return modelMapper.map( reterivedPayment , PaymentResponseDTO.class);
     }
     @Override
-    public Page<PaymentResponseDTO> getPaymentsBetweenDates(LocalDate start, LocalDate end, int pageno, int size, String sortby, Boolean ascending) {
+    public Page<PaymentResponseDTO> getPaymentsBetweenDates(LocalDateTime start, LocalDateTime end, int pageno, int size, String sortby, Boolean ascending) {
         Sort sort = ascending ? Sort.by(sortby).ascending() : Sort.by(sortby).descending();
         Pageable pageable = PageRequest.of(pageno, size, sort);
         Page<Payment> paymentsPage = paymentRepository.findByCreatedAtBetween(start, end, pageable);

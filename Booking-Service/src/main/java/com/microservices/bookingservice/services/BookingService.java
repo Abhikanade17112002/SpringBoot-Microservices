@@ -28,4 +28,5 @@ public interface BookingService {
     BookingResponseDTO retryBookingWithId(String bookingId);
     BookingRefundResponseDTO refundBookingWithId(String bookingId);
     PaymentResponseDTO getPaymentByBookingId(String bookingId);
+    Page<BookingResponseDTO> getBookingsByBookingStatus(BookingStatus status, int pageno, int pagesize, String sortby, Boolean asce);
 }

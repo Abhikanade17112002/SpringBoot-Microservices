@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, String> {
@@ -32,7 +33,7 @@ public interface PaymentRepository extends JpaRepository<Payment, String> {
     );
     Optional<Payment> findTopByBookingIdOrderByCreatedAtDesc(String bookingId);
 
-    Page<Payment> findByCreatedAtBetween(LocalDate start, LocalDate end, Pageable page);
+    Page<Payment> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Pageable page);
 
     Optional<Payment>  findByTransactionReference(String transactionReference);
 

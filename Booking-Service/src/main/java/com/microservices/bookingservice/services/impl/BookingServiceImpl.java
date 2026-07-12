@@ -93,7 +93,7 @@ public class BookingServiceImpl implements BookingService {
             initialPendingSavedBooking.setActive(false);
             bookingRepository.save(initialPendingSavedBooking);
             String json = ex.contentUTF8();
-            if(true){
+            if(json != null && json.trim().startsWith("{") && json.trim().endsWith("}")){
                 throw new ServiceUnAvailableException(json);
             }
             try {
@@ -292,6 +292,14 @@ public class BookingServiceImpl implements BookingService {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public Page<BookingResponseDTO> getBookingsByBookingStatus(BookingStatus status, int pageno, int pagesize, String sortby, Boolean asce) {
+        Sort sort = asce ? Sort.by(sortby).ascending() :  Sort.by(sortby).descending() ;
+        Pageable page =  PageRequest.of(pageno, pagesize, sort);
+        Page<Booking> bookings = bookingRepository.findAllByBookingStatus(status,page);
+        return bookings.map(booking -> modelMapper.map(booking, BookingResponseDTO.class));
     }
 
     @Override

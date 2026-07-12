@@ -18,4 +18,5 @@ public interface BookingRepository extends JpaRepository<Booking,String> {
     Page<Booking> findByHotelIdAndBookingStatus(String hotelId, BookingStatus status, Pageable page);
     Page<Booking> findByHotelIdAndCheckInDateBetween(String hotelId, LocalDate starteDate, LocalDate endDate, Pageable page);
     Optional<Booking> findByHotelIdAndCustomerIdAndCheckInDateAndCheckOutDateAndBookingStatusNotIn(String hotelId, String userId, LocalDate checkInDate, LocalDate checkOutDate, List<BookingStatus> excludeBookingStatus);
+    Page<Booking> findAllByBookingStatus(BookingStatus status, Pageable page);
 }

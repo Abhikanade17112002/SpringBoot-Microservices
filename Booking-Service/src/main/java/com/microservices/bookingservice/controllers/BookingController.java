@@ -153,5 +153,11 @@ public class BookingController {
                 .status(HttpStatus.OK)
                 .body( bookingService.getPaymentByBookingId(bookingId) );
     }
-
+    @GetMapping("/status/{status}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<Page<BookingResponseDTO>> getBookingsByBookingStatus(@PathVariable("status")BookingStatus status, @RequestParam( name = "pageno" , defaultValue = "0") int pageno, @RequestParam( name = "pagesize" , defaultValue = "10") int pagesize, @RequestParam( name = "sortby" , defaultValue = "bookingId") String sortby, @RequestParam( name = "asce" , defaultValue = "true")Boolean asce) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( bookingService.getBookingsByBookingStatus(status,pageno,pagesize,sortby,asce) );
+    }
 }
