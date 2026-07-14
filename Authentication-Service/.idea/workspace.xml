@@ -6,16 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="5f8b4170-bee1-4f9f-a019-c9411db6cfd3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/controllers/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/controllers/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/dtos/response/PaymentResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/dtos/response/PaymentResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/BookingServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/BookingServiceApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/repositories/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/repositories/BookingRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/BookingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/impl/BookingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/services/impl/BookingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/PaymentsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/PaymentsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/dtos/response/PaymentResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/dtos/response/PaymentResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/repositories/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/repositories/PaymentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +21,8 @@
       <list>
         <option value="Interface" />
         <option value="Enum" />
-        <option value="Class" />
         <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -159,13 +153,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+    <configuration name="ServiceRegistryApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
-      <module name="UserService" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.microsercives.userservice.UserServiceApplication" />
+      <module name="Service-Registry" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.service_registry.ServiceRegistryApplication" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.microsercives.userservice.*" />
+          <option name="PATTERN" value="com.service_registry.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -215,7 +209,7 @@
         <item itemvalue="Spring Boot.BookingServiceApplication" />
         <item itemvalue="Spring Boot.HotelServiceApplication" />
         <item itemvalue="Spring Boot.RatingServiceApplication" />
-        <item itemvalue="Spring Boot.UserServiceApplication" />
+        <item itemvalue="Spring Boot.ServiceRegistryApplication" />
       </list>
     </recent_temporary>
   </component>

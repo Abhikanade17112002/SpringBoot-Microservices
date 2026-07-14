@@ -123,8 +123,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingResponseDTO
-    retryBookingWithId(String bookingId) {
+    public BookingResponseDTO retryBookingWithId(String bookingId) {
         Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
         AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if( !reterivedBooking.getCustomerId().equals(user.getUserId()) ){
@@ -303,6 +302,27 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
+    public void handleBookingExpiry() {
+        List<Booking> expiredBookings = bookingRepository.findByBookingStatusAndPaymentExpiryTimeBefore(BookingStatus.PENDING, LocalDateTime.now());
+        logger.info(" handleBookingExpiry STARTED");
+        logger.info("EXPIRED BOOKING COUNT ==> {}", expiredBookings.size());
+        if( expiredBookings.size() > 0){
+            for (Booking booking : expiredBookings) {
+                logger.info("EXPIRED BOOKING ==> {} ,  {} ", booking.getBookingId() , booking.getBookingStatus() );
+                booking.setBookingStatus(BookingStatus.CANCELLED);
+                booking.setActive(false);
+            }
+            bookingRepository.saveAll(expiredBookings);
+        }
+        // TODO:
+        // Publish BookingExpired event
+        // or call Notification Service to send expiry email.
+        logger.info("{} BOOKINGS WERE CANCELLED BY SCHEDULER", expiredBookings.size());
+        logger.info(" handleBookingExpiry FINISHED");
+    }
+
+    @Override
     public Page<BookingResponseDTO> getAllBookingsForAdmin(int pageno, int pagesize, String sortby, Boolean asce) {
         Sort sort = asce ? Sort.by(sortby).ascending() :  Sort.by(sortby).descending() ;
         Pageable page =  PageRequest.of(pageno, pagesize, sort);
@@ -339,13 +359,57 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDTO cancleBookingById(String bookingId) {
         Booking reterivedBooking = bookingRepository.findById(bookingId).orElseThrow(()-> new EntityNotFoundException("Booking with Id ==> " + bookingId + " Not Found"));
-        if( !reterivedBooking.getBookingStatus().equals(BookingStatus.CANCELLED) &&!reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_IN)  && !reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_OUT) ){
-            reterivedBooking.setBookingStatus(BookingStatus.CANCELLED);
-            reterivedBooking = bookingRepository.save(reterivedBooking);
-        } else if (reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_IN)  || reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_OUT)) {
-            logger.info("Booking with Id ==> {} Is Either CHECKED In OR CHECKED Out ", bookingId);
+
+        if( !reterivedBooking.getBookingStatus().equals(BookingStatus.CONFIRMED)){
+            logger.info("Booking with Id ==> {} Is Not In Confirmed Status . Current Status {} ", bookingId,reterivedBooking.getBookingStatus());
+            return modelMapper.map(reterivedBooking, BookingResponseDTO.class);
         }
-        return modelMapper.map(reterivedBooking, BookingResponseDTO.class);
+        try {
+            InternalPaymentResponseDTO paymentResponse  =  paymentClient.processBookingRefundWithId(bookingId);
+            return getBookingResponseDTO(reterivedBooking, paymentResponse);
+        } catch (FeignException ex) {
+            String json = ex.contentUTF8();
+            try {
+                ApiErrorResponseDTO error = objectMapper.readValue(json, ApiErrorResponseDTO.class);
+                logger.error("Caught the Feign exception ==> {}", error);
+
+                switch (error.getErrorCode()) {
+                    case PAYMENT_NOT_FOUND_EXCEPTION ->
+                            throw new PaymentNotFoundException(error.getMessage());
+                    case PAYMENT_ALREADY_EXISTS_EXCEPTION ->
+                            throw new PaymentAlreadyExistsException(error.getMessage());
+                    case PAYMENT_ALREADY_REFUNDED_EXCEPTION ->
+                            throw new PaymentAlreadyRefundedException(error.getMessage());
+                    case PAYMENT_CANNOT_BE_REFUNDED_EXCEPTION ->
+                            throw new PaymentCannotBeRefundedException(error.getMessage());
+                    case METHOD_ARGUMENT_NOT_VALID_EXCEPTION,
+                         CONSTRAINT_VIOLATION_EXCEPTION ->
+                            throw new DownstreamValidationException(error.getMessage(), error.getErrorCode(),error.getValidationErrors());
+                    case FEIGN_CLIENT_EXCEPTION, GENERIC_EXCEPTION ->
+                            throw new RuntimeException(error.getMessage());
+                    default ->
+                            throw new RuntimeException("Unknown error occurred: " + error.getMessage());
+                }
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    private BookingResponseDTO getBookingResponseDTO(Booking reterivedBooking ,InternalPaymentResponseDTO paymentResponse) {
+        BookingResponseDTO response = null ;
+        if(  paymentResponse.getPaymentStatus() == PaymentStatus.REFUNDED ){
+            reterivedBooking.setBookingStatus(BookingStatus.CANCELLED);
+            response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingResponseDTO.class);
+            response.setMessage(paymentResponse.getMessage());
+            return  response;
+        }
+        else {
+            response = modelMapper.map(reterivedBooking, BookingResponseDTO.class);
+            response.setMessage(paymentResponse.getMessage());
+            return  response;
+        }
     }
 
     @Override
