@@ -40,8 +40,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingResponseDTO createRating(
-            CreateRatingRequestDTO createRatingRequestDTO) {
+    public RatingResponseDTO createRating(CreateRatingRequestDTO createRatingRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
         if( !validationService.validateCustomer(authenticatedUser.getUserId())){
@@ -69,19 +68,6 @@ public class RatingServiceImpl implements RatingService {
                 savedRating,
                 RatingResponseDTO.class
         );
-    }
-    public ResponseEntity<RatingResponseDTO> createRatingFallback(
-            @Valid @RequestBody CreateRatingRequestDTO createRatingRequestDTO , Exception e) {
-
-        RatingResponseDTO response = new RatingResponseDTO();
-        response.setRatingId("INVALID-RATING-ID");
-        response.setRating(-1);
-        response.setFeedback(e.getMessage());
-        response.setCustomerId("INVALID-CUSTOMER-ID");
-        response.setHotelId("INVALID-HOTEL-ID");
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
     }
 
     @Override

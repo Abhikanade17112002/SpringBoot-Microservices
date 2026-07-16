@@ -29,7 +29,6 @@ public class CustomerController {
             @RequestParam(name = "size" , defaultValue = "5") int size ,
             @RequestParam(name = "sortby" , defaultValue = "user.firstName") String sortby ,
             @RequestParam(name = "ascending" , defaultValue = "true") boolean ascending, HttpServletRequest request, HttpServletResponse response){
-        System.out.println("request ==> " + request.getHeader("X-SOURCE"));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(customerSevice.getAllRegisteredCustomers(page,size,sortby,ascending));

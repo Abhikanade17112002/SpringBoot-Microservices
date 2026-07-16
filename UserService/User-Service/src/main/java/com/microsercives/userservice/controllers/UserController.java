@@ -27,9 +27,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/me/{userId}")
-    @PreAuthorize("#userId == authentication.principal.userId")
-    public ResponseEntity<UserResponseDTO> getLoggedInUserProfile(@PathVariable(name = "userId") String userId) {
+    @GetMapping("/my-profile")
+    @PreAuthorize("hasAnyRole('OWNER','CUSTOMER','ADMIN')")
+    public ResponseEntity<UserResponseDTO> getLoggedInUserProfile() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getLoggedInUserProfile());
@@ -43,14 +43,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER','OWNER')")
     public ResponseEntity<UserResponseDTO> getRegisteredUserById(@PathVariable(name = "userId") String userId){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getRegisteredUserById(userId));
     }
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> deleteRegisteredUserById(@PathVariable(name = "userId") String userId){
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -58,24 +58,24 @@ public class UserController {
     }
 
     @PutMapping("/me/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    public ResponseEntity<UserResponseDTO> updatedLoggedInUserProfile(@PathVariable(name = "userId") String userId,@RequestBody UpdateUserProfileRequestDTO updateUserProfileRequestDTO){
+    @PreAuthorize("hasRole('ADMIN','CUSTOMER','OWNER')")
+    public ResponseEntity<UserResponseDTO> updatedLoggedInUserProfile(@RequestBody UpdateUserProfileRequestDTO updateUserProfileRequestDTO){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updatedLoggedInUserProfile(updateUserProfileRequestDTO)) ;
     }
 
     @PutMapping("/me/{userId}/change-password")
-//    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    public ResponseEntity<Boolean> updatedLoggedInUserPassword(@PathVariable(name = "userId") String userId,@RequestBody UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
+    @PreAuthorize("hasRole('ADMIN','CUSTOMER','OWNER')")
+    public ResponseEntity<Boolean> updatedLoggedInUserPassword(@RequestBody UpdateUserPasswordRequestDTO updateUserPasswordRequestDTO){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updatedLoggedInUserPassword(updateUserPasswordRequestDTO)) ;
     }
 
     @DeleteMapping("/me/{userId}/deleteaccount")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    public ResponseEntity deleteUserAccount(@PathVariable(name = "userId") String userId,@RequestBody DeleteUserAccountRequestDTO deleteUserAccountRequestDTO){
+    @PreAuthorize("hasRole('ADMIN','CUSTOMER','OWNER')")
+    public ResponseEntity deleteUserAccount(@RequestBody DeleteUserAccountRequestDTO deleteUserAccountRequestDTO){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.deleteUserAccount(deleteUserAccountRequestDTO)) ;

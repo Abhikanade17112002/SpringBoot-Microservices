@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -184,40 +183,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO getRegisteredCustomerById(String customerId) {
-        if (!customerRepository.existsById(customerId)) {
-            throw new EntityNotFoundException(
-                    "Customer With Id ==> "
-                            + customerId
-                            + " Not Found"
-            );
-        }
-        Customer retrievedCustomer =
-                customerRepository.findById(customerId)
-                        .orElse(new Customer());
-        return modelMapper.map(
-                retrievedCustomer,
-                CustomerResponseDTO.class
-        );
+        Customer retrievedCustomer = customerRepository.findById(customerId).orElseThrow(()-> new  EntityNotFoundException("Customer with Id ==> " + customerId + " Not Found"));
+        return modelMapper.map(retrievedCustomer, CustomerResponseDTO.class);
     }
 
     @Override
     public CustomerResponseDTO activateCustomerById(String customerId) {
-        if( !customerRepository.existsById(customerId) ){
-            throw new EntityNotFoundException("Customer With Id ==> " + customerId + " Not Found");
-        }
-        Customer retreivedCutomer =  customerRepository.findById(customerId).orElse(new Customer());
-        retreivedCutomer.setActive(true);
-        return modelMapper.map( customerRepository.save(retreivedCutomer), CustomerResponseDTO.class) ;
+        Customer retreivedCustomer =  customerRepository.findById(customerId).orElseThrow(()-> new EntityNotFoundException("Customer with Id ==> " + customerId + " Not Found"));
+        retreivedCustomer.setActive(true);
+        return modelMapper.map( customerRepository.save(retreivedCustomer), CustomerResponseDTO.class) ;
     }
 
     @Override
     public CustomerResponseDTO deActivateCustomerById(String customerId) {
-        if( !customerRepository.existsById(customerId) ){
-            throw new EntityNotFoundException("Customer With Id ==> " + customerId + " Not Found");
-        }
-        Customer retreivedCutomer =  customerRepository.findById(customerId).orElse(new Customer());
-        retreivedCutomer.setActive(false);
-        return modelMapper.map( customerRepository.save(retreivedCutomer), CustomerResponseDTO.class) ;
+        Customer retrievedCutomer =  customerRepository.findById(customerId).orElseThrow(()-> new EntityNotFoundException("Customer with Id ==> " + customerId + " Not Found"));
+        retrievedCutomer.setActive(false);
+        return modelMapper.map( customerRepository.save(retrievedCutomer), CustomerResponseDTO.class) ;
     }
 
     @Override

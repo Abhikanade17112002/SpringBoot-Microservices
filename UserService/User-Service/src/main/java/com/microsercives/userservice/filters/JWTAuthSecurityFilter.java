@@ -45,7 +45,7 @@ public class JWTAuthSecurityFilter extends OncePerRequestFilter {
         }
         logger.info("UserName {}" + username);
         logger.info("Roles {}" + rolesHeader);
-        User retrivedUser = (User) userRepository.findAllByEmailId(username);
+        User retrivedUser = (User) userRepository.findByEmailId(username);
 
         LOG.info("User ==> {} " + retrivedUser.toString());
 

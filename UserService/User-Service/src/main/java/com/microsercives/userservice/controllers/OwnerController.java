@@ -1,6 +1,5 @@
 package com.microsercives.userservice.controllers;
 
-import com.microsercives.userservice.dtos.response.CustomerResponseDTO;
 import com.microsercives.userservice.dtos.response.OwnerResponseDTO;
 import com.microsercives.userservice.services.HotelOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;

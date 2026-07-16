@@ -31,13 +31,9 @@ public class RatingController {
                 .body(ratingService.createRating(createRatingRequestDTO));
     }
 
-    @PreAuthorize(
-            "hasAnyRole('ADMIN','OWNER','CUSTOMER')"
-    )
+    @PreAuthorize("hasAnyRole('ADMIN','OWNER','CUSTOMER')")
     @GetMapping("/{ratingId}")
-    public ResponseEntity<RatingResponseDTO> getRatingById(
-            @PathVariable(name = "ratingId") String ratingId) {
-
+    public ResponseEntity<RatingResponseDTO> getRatingById(@PathVariable(name = "ratingId") String ratingId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ratingService.getRatingById(ratingId));
@@ -45,23 +41,13 @@ public class RatingController {
 
     @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @GetMapping
-    public ResponseEntity<Page<RatingResponseDTO>> getAllRatings(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size,
-            @RequestParam(name = "sortby", defaultValue = "rating") String sortby,
-            @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
+    public ResponseEntity<Page<RatingResponseDTO>> getAllRatings(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @RequestParam(name = "sortby", defaultValue = "rating") String sortby, @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ratingService.getAllRatings(
-                        page,
-                        size,
-                        sortby,
-                        ascending));
+                .body(ratingService.getAllRatings(page, size, sortby, ascending));
     }
-    @PreAuthorize(
-            "hasAnyRole('ADMIN','CUSTOMER')"
-    )
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @PutMapping("/{ratingId}")
     public ResponseEntity<RatingResponseDTO> updateRatingById(
             @PathVariable String ratingId,
@@ -74,9 +60,7 @@ public class RatingController {
                         updateRatingRequestDTO));
     }
 
-    @PreAuthorize(
-            "hasAnyRole('ADMIN','CUSTOMER')"
-    )
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @DeleteMapping("/{ratingId}")
     public ResponseEntity<Boolean> deleteRatingById(
             @PathVariable String ratingId) {
@@ -85,52 +69,25 @@ public class RatingController {
                 .status(HttpStatus.OK)
                 .body(ratingService.deleteRatingById(ratingId));
     }
-    @PreAuthorize(
-            "hasAnyRole('ADMIN','CUSTOMER')"
-    )
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     @GetMapping("/customers/{customerId}")
-    public ResponseEntity<Page<RatingResponseDTO>> getRatingsByCustomerId(
-            @PathVariable String customerId,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size,
-            @RequestParam(name = "sortby", defaultValue = "rating") String sortby,
-            @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
-
+    public ResponseEntity<Page<RatingResponseDTO>> getRatingsByCustomerId(@PathVariable String customerId,@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @RequestParam(name = "sortby", defaultValue = "rating") String sortby, @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ratingService.getRatingsByCustomerId(
-                        customerId,
-                        page,
-                        size,
-                        sortby,
-                        ascending));
+                .body(ratingService.getRatingsByCustomerId(customerId,page,size,sortby,ascending));
     }
 
     @GetMapping("/hotels/{hotelId}")
-    @PreAuthorize(
-            "hasAnyRole('ADMIN','OWNER','CUSTOMER')"
-    )
-    public ResponseEntity<Page<RatingResponseDTO>> getRatingsByHotelId(
-            @PathVariable String hotelId,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size,
-            @RequestParam(name = "sortby", defaultValue = "rating") String sortby,
-            @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
+    @PreAuthorize("hasAnyRole('ADMIN','OWNER','CUSTOMER')")
+    public ResponseEntity<Page<RatingResponseDTO>> getRatingsByHotelId(@PathVariable String hotelId, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @RequestParam(name = "sortby", defaultValue = "rating") String sortby, @RequestParam(name = "ascending", defaultValue = "true") Boolean ascending) {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ratingService.getRatingsByHotelId(
-                        hotelId,
-                        page,
-                        size,
-                        sortby,
-                        ascending));
+                .body(ratingService.getRatingsByHotelId(hotelId, page, size, sortby, ascending));
     }
 
     @GetMapping("/{hotelId}/average")
-    @PreAuthorize(
-            "hasAnyRole('ADMIN','OWNER','CUSTOMER')"
-    )
+    @PreAuthorize("hasAnyRole('ADMIN','OWNER','CUSTOMER')")
     public ResponseEntity<GetHotelAverageRatingResponseDTO> getAverageRatingForHotel(
             @PathVariable String hotelId) {
         return ResponseEntity

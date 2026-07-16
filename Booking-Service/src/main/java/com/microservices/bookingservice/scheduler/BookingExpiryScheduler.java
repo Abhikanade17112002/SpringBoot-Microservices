@@ -16,7 +16,7 @@ public class BookingExpiryScheduler {
         this.bookingService = bookingService;
     }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 600000)
     public void checkPaymentExpiry() {
         LOG.info("PAYMENT EXPIRY SCHEDULER STARTED");
         bookingService.handleBookingExpiry();

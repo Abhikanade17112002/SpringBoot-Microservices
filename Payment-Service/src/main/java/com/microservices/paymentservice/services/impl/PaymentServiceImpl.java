@@ -168,16 +168,19 @@ public class PaymentServiceImpl implements PaymentService {
     }
     @Override
     @Transactional
-    public PaymentResponseDTO retryPaymentByBookingId(String bookingId) {
+    public InternalPaymentResponseDTO retryPaymentByBookingId(String bookingId) {
         Payment reterivedpayment = paymentRepository
                 .findTopByBookingIdOrderByCreatedAtDesc(bookingId)
                 .orElse(null);
-        if( reterivedpayment == null){
-
-        }
         if( !reterivedpayment.getPaymentStatus().equals(PaymentStatus.FAILED)){
             throw new RuntimeException("Payment Status ==> " + reterivedpayment.getPaymentStatus());
         }
+        Payment payment = getPaymentWithPendingStatus(reterivedpayment);
+        PaymentProcessingResult paymentProcessResponse = paymentProcessor.processPayment(payment);
+        return getPaymentResponseDTO(payment,paymentProcessResponse);
+    }
+
+    private Payment getPaymentWithPendingStatus(Payment reterivedpayment) {
         Payment payment = new Payment();
         payment.setActive(true);
         payment.setAmount(reterivedpayment.getAmount());
@@ -186,11 +189,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setCustomerId(reterivedpayment.getCustomerId());
         payment.setPaymentStatus(PaymentStatus.PENDING);
         payment.setTransactionReference("TNX000" + (int)( Math.random() * 999999999));
-        PaymentProcessingResult paymentProcessResponse = paymentProcessor.processPayment(payment);
-        payment.setPaymentStatus(paymentProcessResponse.getPaymentStatus());
-        payment.setPaymentGatewayReference(paymentProcessResponse.getGatewayReference());
-        payment.setMessage(paymentProcessResponse.getMessage());
-        return modelMapper.map(  paymentRepository.save(payment)  ,PaymentResponseDTO.class);
+        return payment;
     }
     @Override
     public InternalPaymentResponseDTO  refundPaymentWithBookingId(String bookingId) {

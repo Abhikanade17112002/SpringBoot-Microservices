@@ -92,8 +92,7 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiErrorResponseDTO>
-    handleValidationException(
+    public ResponseEntity<ApiErrorResponseDTO> handleValidationException(
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
 

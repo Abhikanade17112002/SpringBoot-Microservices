@@ -86,13 +86,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public UserSignInResponseDTO signInUser(UserSignInRequestDTO userSignInRequestDTO) {
 
-        if( ! userRepository.existsByEmailId(userSignInRequestDTO.getEmailId()) ){
+        if( !userRepository.existsByEmailId(userSignInRequestDTO.getEmailId()) ){
             throw new EntityNotFoundException("User With Email Id " + userSignInRequestDTO.getEmailId() + " Does Not Exists");
         }
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userSignInRequestDTO.getEmailId(),userSignInRequestDTO.getPassword()) ;
         Authentication authentication = authenticationManager.authenticate(token);
         User authenticatedUser = (User)authentication.getPrincipal() ;
-        System.out.println(authenticatedUser);
         String jwtToken = "Bearer " + jwtUtility.generateToken(authenticatedUser);
         UserSignInResponseDTO responseDTO = new UserSignInResponseDTO(jwtToken,"Bearer",authenticatedUser.getRole().name(), authenticatedUser.getUserId()) ;
         return responseDTO;

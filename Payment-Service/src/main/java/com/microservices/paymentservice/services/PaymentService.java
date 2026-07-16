@@ -23,7 +23,7 @@ public interface PaymentService {
     Page<PaymentResponseDTO> getAllCustomerPayments(int pageno, int pagesize, String sortby, Boolean ascending);
     Page<PaymentResponseDTO> getAllPaymentsByStatus(PaymentStatus paymentStatus, int pageno, int pagesize, String sortby, Boolean ascending);
     Page<PaymentResponseDTO> getAllPaymentsByPaymentStatus(PaymentMethode paymentMethode, int pageno, int pagesize, String sortby, Boolean ascending);
-    PaymentResponseDTO retryPaymentByBookingId(String bookingId);
+    InternalPaymentResponseDTO retryPaymentByBookingId(String bookingId);
     InternalPaymentResponseDTO  refundPaymentWithBookingId(String bookingId);
     PaymentResponseDTO getPaymentByBookingIdForAdminOrCustomer(String bookingId);
     Page<PaymentResponseDTO> getPaymentsBetweenDates(LocalDateTime start, LocalDateTime end, int pageno, int size, String sortby, Boolean ascending);

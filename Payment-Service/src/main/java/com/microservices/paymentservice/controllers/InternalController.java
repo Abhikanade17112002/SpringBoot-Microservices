@@ -33,7 +33,7 @@ public class InternalController {
     }
 
     @PutMapping("/{bookingId}/retry")
-    public PaymentResponseDTO retryPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId ){
+    public InternalPaymentResponseDTO retryPaymentByBookingId(@PathVariable( name = "bookingId") String bookingId ){
         return paymentService.retryPaymentByBookingId(bookingId) ;
     }
 }
