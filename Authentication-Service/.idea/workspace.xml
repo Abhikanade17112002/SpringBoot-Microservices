@@ -6,23 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5f8b4170-bee1-4f9f-a019-c9411db6cfd3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/scheduler/BookingExpiryScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Booking-Service/src/main/java/com/microservices/bookingservice/scheduler/BookingExpiryScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/InternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/controllers/InternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Payment-Service/src/main/java/com/microservices/paymentservice/services/impl/PaymentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/controllers/RatingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/controllers/RatingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/services/services/impl/RatingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rating-Service/src/main/java/com/microsercives/ratingservice/services/services/impl/RatingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Service-Registry/src/main/java/com/service_registry/ServiceRegistryApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Service-Registry/src/main/java/com/service_registry/ServiceRegistryApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/InternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/InternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/OwnerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/OwnerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/errorhandling/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/errorhandling/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/repositories/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/AuthenticationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/AuthenticationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/CustomerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/HotelOwnerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/HotelOwnerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/User-Service/src/main/java/com/microsercives/userservice/services/impl/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,11 +201,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.BookingServiceApplication" />
-        <item itemvalue="Spring Boot.HotelServiceApplication" />
         <item itemvalue="Spring Boot.PaymentServiceApplication" />
-        <item itemvalue="Spring Boot.RatingServiceApplication" />
+        <item itemvalue="Spring Boot.HotelServiceApplication" />
         <item itemvalue="Spring Boot.UserServiceApplication" />
+        <item itemvalue="Spring Boot.BookingServiceApplication" />
+        <item itemvalue="Spring Boot.RatingServiceApplication" />
       </list>
     </recent_temporary>
   </component>
