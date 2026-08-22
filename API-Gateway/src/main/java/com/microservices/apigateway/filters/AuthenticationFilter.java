@@ -23,7 +23,13 @@ public class AuthenticationFilter implements GlobalFilter , Ordered {
             List.of(
                     "/api/v1/auth/onboardcustomer",
                     "/api/v1/auth/onboardowner",
-                    "/api/v1/auth/usersignin"
+                    "/api/v1/auth/usersignin",
+                    "/api/v1/auth/ownersignin",
+                    "/api/v1/auth/verifyemail",
+                    "/api/v1/auth/forgotpassword",
+                    "/api/v1/auth/resetpassword",
+                    "/api/v1/auth/refresh-token",
+                    "/api/v1/notifications/health"
             );
 
     public AuthenticationFilter(JWTUtility jwtUtility) {

@@ -1,0 +1,19 @@
+jwt:
+  secret-key: "ThisIsMySuperSecretKeyForJWTAuthentication123456789"
+  expiration: 300000
+
+server:
+    port: 8087
+    servlet:
+        context-path: "/api/v1"
+
+spring:
+  application:
+    name: NOTIFICATION-SERVICE
+  profiles:
+      active: dev
+  config:
+      import: optional:configserver:http://localhost:8084
+
+
+

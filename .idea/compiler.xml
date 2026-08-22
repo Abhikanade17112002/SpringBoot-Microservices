@@ -9,6 +9,7 @@
         <module name="rating-service" />
         <module name="API-Gateway" />
         <module name="Config-Server" />
+        <module name="Api-Gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,6 +21,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="API-Gateway" options="-parameters" />
+      <module name="Api-Gateway" options="-parameters" />
       <module name="Authentication-Service" options="-parameters" />
       <module name="Config-Server" options="-parameters" />
       <module name="UserService" options="-parameters" />

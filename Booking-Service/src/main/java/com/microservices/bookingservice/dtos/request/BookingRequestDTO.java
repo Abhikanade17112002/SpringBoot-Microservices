@@ -1,10 +1,7 @@
 package com.microservices.bookingservice.dtos.request;
 
 import com.microservices.bookingservice.enums.PaymentMethode;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,17 +21,21 @@ public class BookingRequestDTO {
     private boolean active;
     @NotNull(message = "Payment Methode Cannot Be Null")
     private PaymentMethode paymentMethod;
+    @NotBlank
+    @Email(message = "Email Should Be Valid")
+    private String customerEmailId;
 
     public BookingRequestDTO() {
     }
 
-    public BookingRequestDTO(String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal totalPrice, boolean active, PaymentMethode paymentMethod) {
+    public BookingRequestDTO(String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal totalPrice, boolean active, PaymentMethode paymentMethod, String customerEmailId) {
         this.hotelId = hotelId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.totalPrice = totalPrice;
         this.active = active;
         this.paymentMethod = paymentMethod;
+        this.customerEmailId = customerEmailId;
     }
 
     public  String getHotelId() {
@@ -85,6 +86,14 @@ public class BookingRequestDTO {
         this.paymentMethod = paymentMethod;
     }
 
+    public String getCustomerEmailId() {
+        return customerEmailId;
+    }
+
+    public void setCustomerEmailId(String customerEmailId) {
+        this.customerEmailId = customerEmailId;
+    }
+
     @Override
     public String toString() {
         return "BookingRequestDTO{" +
@@ -94,6 +103,7 @@ public class BookingRequestDTO {
                 ", checkOutDate=" + checkOutDate +
                 ", checkInDate=" + checkInDate +
                 ", hotelId='" + hotelId + '\'' +
+                ", customerEmailId='" + customerEmailId + '\'' +
                 '}';
     }
 }

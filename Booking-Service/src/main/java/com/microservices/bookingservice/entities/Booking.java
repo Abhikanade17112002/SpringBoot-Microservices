@@ -25,6 +25,7 @@ public class Booking {
     private String bookingId;
     @Column( nullable = false)
     private String customerId;
+    private String customerEmailId;
     @Column(nullable = false)
     private String hotelId;
     @Column(nullable = false)
@@ -48,9 +49,10 @@ public class Booking {
     public Booking(){
     }
 
-    public Booking(String bookingId, String customerId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, BigDecimal totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active, Integer paymentAttemptCount, LocalDateTime paymentExpiryTime, PaymentMethode paymentMethod) {
+    public Booking(String bookingId,  String customerId, String customerEmailId, String hotelId, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus bookingStatus, BigDecimal totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, boolean active, Integer paymentAttemptCount, LocalDateTime paymentExpiryTime, PaymentMethode paymentMethod) {
         this.bookingId = bookingId;
         this.customerId = customerId;
+        this.customerEmailId = customerEmailId;
         this.hotelId = hotelId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
@@ -64,6 +66,9 @@ public class Booking {
         this.paymentMethod = paymentMethod;
     }
 
+    public String getCustomerEmailId() {return customerEmailId;}
+
+    public void setCustomerEmailId(String customerEmailId) {this.customerEmailId = customerEmailId;}
     public PaymentMethode getPaymentMethod() {
         return paymentMethod;
     }
@@ -184,6 +189,7 @@ public class Booking {
                 ", paymentAttemptCount=" + paymentAttemptCount +
                 ", paymentExpiryTime=" + paymentExpiryTime +
                 ", paymentMethod=" + paymentMethod +
+                ", customerEmailId='" + customerEmailId + '\'' +
                 '}';
     }
 }

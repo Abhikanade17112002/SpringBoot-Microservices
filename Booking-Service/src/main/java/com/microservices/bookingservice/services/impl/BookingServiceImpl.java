@@ -2,14 +2,17 @@ package com.microservices.bookingservice.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservices.bookingservice.clinets.notificationclients.NotificationClient;
 import com.microservices.bookingservice.clinets.paymentclients.InternalPaymentClient;
 import com.microservices.bookingservice.configurations.BookingPaymentProperties;
 import com.microservices.bookingservice.dtos.request.BookingRequestDTO;
 import com.microservices.bookingservice.dtos.request.CreatePaymentRequestDTO;
+import com.microservices.bookingservice.dtos.request.NotificationRequestDTO;
 import com.microservices.bookingservice.dtos.response.*;
 import com.microservices.bookingservice.entities.AuthenticatedUser;
 import com.microservices.bookingservice.entities.Booking;
 import com.microservices.bookingservice.enums.BookingStatus;
+import com.microservices.bookingservice.enums.NotificationType;
 import com.microservices.bookingservice.enums.PaymentStatus;
 import com.microservices.bookingservice.exception.exceptions.*;
 import com.microservices.bookingservice.repositories.BookingRepository;
@@ -46,8 +49,9 @@ public class BookingServiceImpl implements BookingService {
     private final InternalPaymentClient paymentClient ;
     private final ObjectMapper objectMapper;
     private final PaymentService paymentService;
+    private final NotificationClient notificationClient;
 
-    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService, BookingPaymentProperties paymentProperties, InternalPaymentClient paymentClient, ObjectMapper objectMapper, ObjectMapper objectMapper1, PaymentService paymentService) {
+    public BookingServiceImpl(ModelMapper modelMapper, BookingRepository bookingRepository, BookingValidationService validationService, BookingPaymentProperties paymentProperties, InternalPaymentClient paymentClient, ObjectMapper objectMapper, ObjectMapper objectMapper1, PaymentService paymentService, NotificationClient notificationClient) {
         this.modelMapper = modelMapper;
         this.bookingRepository = bookingRepository;
         this.validationService = validationService;
@@ -55,6 +59,7 @@ public class BookingServiceImpl implements BookingService {
         this.paymentClient = paymentClient;
         this.objectMapper = objectMapper1;
         this.paymentService = paymentService;
+        this.notificationClient = notificationClient;
     }
 
     @Override
@@ -112,11 +117,11 @@ public class BookingServiceImpl implements BookingService {
         logger.info("Time Left ==> {}", timeLeft);
         if(  timeLeft <= 0 ){
             logger.info("Time Left ==> {}", timeLeft);
-            return getCancelledBookingResponseDTO(reterivedBooking,"Booking cancelled because the payment window has expired.");
+            return getCancelledBookingResponseDTO(reterivedBooking,"Booking cancelled because the payment window has expired.","TIMEOUT");
         }
         if(attemptsLeft <= 0){
             logger.info("Attempts Left ==> {}", attemptsLeft);
-            return getCancelledBookingResponseDTO(reterivedBooking,"Booking cancelled because the maximum payment retry attempts have been exhausted.");
+            return getCancelledBookingResponseDTO(reterivedBooking,"Booking cancelled because the maximum payment retry attempts have been exhausted.","MAX_ATTEMPTS_EXHAUSTED");
         }
         int attemptCount = reterivedBooking.getPaymentAttemptCount() + 1 ;
         logger.info("Attempt Count ==> {}", attemptCount);
@@ -144,13 +149,17 @@ public class BookingServiceImpl implements BookingService {
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.REFUNDED)){
             reterivedBooking.setActive(false);
             bookingRepository.save(reterivedBooking);
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_ALREADY_REFUNDED));
             throw new PaymentAlreadyRefundedException("Payment Already Refunded");
         }
         if (reterivedBooking.getBookingStatus() != BookingStatus.CONFIRMED){
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_ALREADY_CONFIRMED_NOT_ELIGIBLE_FOR_REFUND));
             throw new RuntimeException("Booking With Id ==> " +   reterivedBooking.getBookingId() + " Not Allowed to Refund In Non Confirmed Status" );
+
         }
         try {
             InternalPaymentResponseDTO paymentResponse  =  paymentService.processBookingRefundWithId(bookingId);
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_REFUND_SUCCESS));
             return getBookingRefundByResponseDTO(reterivedBooking, paymentResponse);
         } catch (Exception exception) {
             throw exception;
@@ -178,6 +187,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
+    // ADD DECOUPLED EVENT PUBLISHING FOR BOOKING EXPIRY
     public void handleBookingExpiry() {
         List<Booking> expiredBookings = bookingRepository.findByBookingStatusAndPaymentExpiryTimeBefore(BookingStatus.PENDING, LocalDateTime.now());
         logger.info(" handleBookingExpiry STARTED");
@@ -237,10 +247,12 @@ public class BookingServiceImpl implements BookingService {
 
         if( !reterivedBooking.getBookingStatus().equals(BookingStatus.CONFIRMED)){
             logger.info("Booking with Id ==> {} Is Not In Confirmed Status . Current Status {} ", bookingId,reterivedBooking.getBookingStatus());
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_CANCELLATION_NOT_ELIGIBLE_AS_BOOKING_NOT_CONFIRMED));
             return modelMapper.map(reterivedBooking, BookingResponseDTO.class);
         }
         try {
             InternalPaymentResponseDTO paymentResponse  =  paymentService.processBookingRefundWithId(bookingId);
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_CANCELLATION));
             return getBookingResponseDTO(reterivedBooking, paymentResponse);
         } catch (Exception exception) {
             throw exception;
@@ -253,6 +265,7 @@ public class BookingServiceImpl implements BookingService {
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.PENDING) ){
             reterivedBooking.setBookingStatus(BookingStatus.CONFIRMED);
             reterivedBooking = bookingRepository.save(reterivedBooking);
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_CONFIRMATION));
         }
         return modelMapper.map(reterivedBooking, BookingResponseDTO.class);
     }
@@ -267,6 +280,7 @@ public class BookingServiceImpl implements BookingService {
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.CONFIRMED) ){
             reterivedBooking.setBookingStatus(BookingStatus.CHECKED_IN);
             reterivedBooking = bookingRepository.save(reterivedBooking);
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_CHECKED_IN));
         }
         return modelMapper.map(reterivedBooking, BookingResponseDTO.class);
     }
@@ -283,6 +297,7 @@ public class BookingServiceImpl implements BookingService {
         if( reterivedBooking.getBookingStatus().equals(BookingStatus.CHECKED_IN) ){
             reterivedBooking.setBookingStatus(BookingStatus.CHECKED_OUT);
             reterivedBooking = bookingRepository.save(reterivedBooking);
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_CHECKED_OUT));
         }
         return modelMapper.map(reterivedBooking, BookingResponseDTO.class);
     }
@@ -340,6 +355,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     private Booking getSavedInitialBookingWithPendingStatus(BookingRequestDTO bookingRequestDTO,String customerId){
         Booking newBooking = new Booking();
+        newBooking.setCustomerEmailId(bookingRequestDTO.getCustomerEmailId());
         newBooking.setBookingStatus(BookingStatus.PENDING);
         newBooking.setActive(true);
         newBooking.setPaymentMethod(bookingRequestDTO.getPaymentMethod());
@@ -367,6 +383,7 @@ public class BookingServiceImpl implements BookingService {
             initialPendingSavedBooking.setBookingStatus(BookingStatus.CONFIRMED);
             response = modelMapper.map(bookingRepository.save(initialPendingSavedBooking), BookingResponseDTO.class);
             response.setMessage(paymentResult.getMessage());
+            notificationClient.sendNotification(getNotificationRequestDTO(initialPendingSavedBooking, NotificationType.BOOKING_CONFIRMATION));
             return  response;
         }
         else{
@@ -374,6 +391,7 @@ public class BookingServiceImpl implements BookingService {
             response = modelMapper.map(initialPendingSavedBooking, BookingResponseDTO.class);
             response.setMessage(retryMessage);
             response.setRetryAllowed(true);
+            notificationClient.sendNotification(getNotificationRequestDTO(initialPendingSavedBooking, NotificationType.BOOKING_IN_PENDING_STATE_DUE_TO_PAYMENT_FAILURE_RETRY_ALLOWED));
             return  response;
         }
     }
@@ -384,6 +402,7 @@ public class BookingServiceImpl implements BookingService {
             reterivedBooking.setPaymentAttemptCount(attemptCount);
             response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingResponseDTO.class);
             response.setMessage(paymentResult.getMessage());
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_CONFIRMATION));
             return  response;
         }
         else{
@@ -391,11 +410,12 @@ public class BookingServiceImpl implements BookingService {
             reterivedBooking.setPaymentAttemptCount(attemptCount);
             response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingResponseDTO.class);
             response.setMessage(retryMessage);
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.PAYMENT_FAILURE_IN_RETRY_ATTEMPT));
             response.setRetryAllowed(true);
             return  response;
         }
     }
-    private BookingResponseDTO getCancelledBookingResponseDTO(Booking reterivedBooking,String message) {
+    private BookingResponseDTO getCancelledBookingResponseDTO(Booking reterivedBooking,String message, String reason) {
         reterivedBooking.setBookingStatus(BookingStatus.CANCELLED);
         reterivedBooking.setActive(false);
         Booking updatedBooking = bookingRepository.save(reterivedBooking);
@@ -403,6 +423,11 @@ public class BookingServiceImpl implements BookingService {
         BookingResponseDTO response = modelMapper.map(updatedBooking, BookingResponseDTO.class);
         response.setMessage(message);
         response.setRetryAllowed(false);
+        if ("MAX_ATTEMPTS_EXHAUSTED".equals(reason)) {
+            notificationClient.sendNotification(getNotificationRequestDTO(updatedBooking, NotificationType.BOOKING_CANCELLATION_DUE_TO_MAX_ATTEMPTS_FOR_PAYMENT_EXHAUSTED));
+        } else if ("TIMEOUT".equals(reason)) {
+            notificationClient.sendNotification(getNotificationRequestDTO(updatedBooking, NotificationType.BOOKING_CANCELLATION_DUE_PAYMENT_WINDOW_EXPIRED));
+        }
         return  response;
     }
 
@@ -410,6 +435,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setBookingStatus(BookingStatus.FAILED);
         booking.setActive(false);
         bookingRepository.save(booking);
+        notificationClient.sendNotification(getNotificationRequestDTO(booking, NotificationType.BOOKING_FAILED_DUE_TO_PAYMENT_SERVICE_FAILURE));
         return ;
     }
 
@@ -434,6 +460,7 @@ public class BookingServiceImpl implements BookingService {
             reterivedBooking.setBookingStatus(BookingStatus.CANCELLED);
             response = modelMapper.map(bookingRepository.save(reterivedBooking), BookingResponseDTO.class);
             response.setMessage(paymentResponse.getMessage());
+            notificationClient.sendNotification(getNotificationRequestDTO(reterivedBooking, NotificationType.BOOKING_REFUND_SUCCESS));
             return  response;
         }
         else {
@@ -441,5 +468,14 @@ public class BookingServiceImpl implements BookingService {
             response.setMessage(paymentResponse.getMessage());
             return  response;
         }
+    }
+
+    private NotificationRequestDTO getNotificationRequestDTO(Booking booking, NotificationType notificationType) {
+        NotificationRequestDTO request = new NotificationRequestDTO();
+        request.setBookingId(booking.getBookingId());
+        request.setUserId(booking.getCustomerId());
+        request.setRecipientEmailId(booking.getCustomerEmailId());
+        request.setNotificationType(notificationType);
+        return request;
     }
 }
