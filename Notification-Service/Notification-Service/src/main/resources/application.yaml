@@ -16,4 +16,10 @@ spring:
       import: optional:configserver:http://localhost:8084
 
 
+aws:
+  region: ap-south-1
+  ses:
+    from-email-address: "abhishek.kanade.dev@gmail.com"
+    to-addresses: "abhishek.kanade.dev@gmail.com"
 
+    ## from-email: ${AWS_SES_FROM_EMAIL}

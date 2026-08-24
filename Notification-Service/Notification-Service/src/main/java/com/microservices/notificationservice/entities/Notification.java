@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table( name =  "notifications" ,
         indexes = {
-                @Index(name = "idx_user_id", columnList = "userId"),
+                @Index(name = "idx_customer_id", columnList = "customerId"),
                 @Index(name = "idx_booking_id", columnList = "bookingId"),
                 @Index(name = "idx_recipient_email", columnList = "recipientEmailId"),
                 @Index(name = "idx_notification_type", columnList = "notificationType"),

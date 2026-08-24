@@ -1,6 +1,9 @@
 package com.microservices.notificationservice.processors;
 
+import com.microservices.notificationservice.dtos.SendEmailResponseDTO;
+import software.amazon.awssdk.awscore.exception.AwsServiceException;
+
 public interface EmailProcessor {
-    String sendEmail(String recipientEmailId, String emailSubject, String messageBody);
+    SendEmailResponseDTO sendEmail(String recipientEmailId, String emailSubject, String messageBody);
 }
 

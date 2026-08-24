@@ -1,5 +1,6 @@
 package com.microservices.notificationservice.processors.impl;
 
+import com.microservices.notificationservice.dtos.SendEmailResponseDTO;
 import com.microservices.notificationservice.processors.EmailProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component("smtp")
-@Primary
+
 public class SMTP implements EmailProcessor {
     private final JavaMailSender mailSender;
     private static final Logger logger = LoggerFactory.getLogger(SMTP.class);
@@ -18,7 +19,7 @@ public class SMTP implements EmailProcessor {
         this.mailSender = mailSender;
     }
     @Override
-    public String sendEmail(String recipientEmailId, String emailSubject, String messageBody) {
+    public SendEmailResponseDTO sendEmail(String recipientEmailId, String emailSubject, String messageBody) {
         logger.info("========== SMTP EMAIL ==========");
         logger.info("TO       : {}", recipientEmailId);
         logger.info("SUBJECT  : {}", emailSubject);
@@ -33,6 +34,6 @@ public class SMTP implements EmailProcessor {
 
         mailSender.send(mailMessage);
 
-        return "true";
+        return new SendEmailResponseDTO();
     }
 }

@@ -2,6 +2,7 @@ package com.microservices.notificationservice.services.impl;
 
 import com.microservices.notificationservice.dtos.NotificationRequestDTO;
 import com.microservices.notificationservice.dtos.NotificationResponseDTO;
+import com.microservices.notificationservice.dtos.SendEmailResponseDTO;
 import com.microservices.notificationservice.entities.AuthenticatedUser;
 import com.microservices.notificationservice.entities.Notification;
 import com.microservices.notificationservice.enums.NotificationStatus;
@@ -22,6 +23,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.awscore.exception.AwsServiceException;
+import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.services.sesv2.model.TooManyRequestsException;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -45,17 +49,17 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationResponseDTO sendNotification(NotificationRequestDTO notificationRequestDTO) {
         logger.info("Sending notification to recipient: {}", notificationRequestDTO.getRecipientEmailId());
         Notification notificationWithPendingStatus = getNotificationEntityWithPendingStatus(notificationRequestDTO);
-        try {
-            emailProcessor.sendEmail(notificationWithPendingStatus.getRecipientEmailId(), notificationWithPendingStatus.getSubject(), notificationWithPendingStatus.getMessage());
-            notificationWithPendingStatus.setNotificationStatus(NotificationStatus.SENT);
-            Notification savedNotification = notificationRepository.save(notificationWithPendingStatus);
-            return getNotificationResponseDTO(savedNotification);
-        }
-        catch (Exception exception) {
-            logger.info("Error occurred while sending notification: {}", exception.getMessage());
-            saveFailedNotification(notificationWithPendingStatus);
-            throw exception;
-        }
+
+            SendEmailResponseDTO response = emailProcessor.sendEmail(notificationWithPendingStatus.getRecipientEmailId(), notificationWithPendingStatus.getSubject(), notificationWithPendingStatus.getMessage());
+
+            if(  response.getEmailSentSuccessfully() ){
+                notificationWithPendingStatus.setNotificationStatus(NotificationStatus.SENT);
+                Notification savedNotification = notificationRepository.save(notificationWithPendingStatus);
+                return getNotificationResponseDTO(savedNotification);
+            }
+            else {
+                return getNotificationResponseDTO(saveFailedNotification(notificationWithPendingStatus));
+            }
     }
 
     @Override
