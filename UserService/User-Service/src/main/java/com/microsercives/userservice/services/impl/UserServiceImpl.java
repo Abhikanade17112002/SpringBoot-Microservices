@@ -1,6 +1,6 @@
 package com.microsercives.userservice.services.impl;
 
-import com.microsercives.userservice.dtos.UserResponseDTO;
+import com.microsercives.userservice.dtos.response.UserResponseDTO;
 import com.microsercives.userservice.dtos.request.DeleteUserAccountRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserPasswordRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserProfileRequestDTO;
@@ -9,7 +9,9 @@ import com.microsercives.userservice.enums.Role;
 import com.microsercives.userservice.repositories.CustomerRepository;
 import com.microsercives.userservice.repositories.HotelOwnerRepository;
 import com.microsercives.userservice.repositories.UserRepository;
+import com.microsercives.userservice.services.FileStorageService;
 import com.microsercives.userservice.services.UserService;
+import com.microsercives.userservice.utility.ImageValidationUtility;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -21,8 +23,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -34,14 +38,18 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOG = (Logger) LoggerFactory.getLogger(UserServiceImpl.class);
     private  final  HotelOwnerRepository hotelOwnerRepository ;
     private final CustomerRepository customerRepository ;
+    private final ImageValidationUtility imageValidationUtility ;
+    private final FileStorageService awsS3FileStorageService;
 
     public UserServiceImpl(UserRepository userRepository,
-                           ModelMapper modelMapper, PasswordEncoder bCryptPasswordEncoder, HotelOwnerRepository hotelOwnerRepository, CustomerRepository customerRepository) {
+                           ModelMapper modelMapper, PasswordEncoder bCryptPasswordEncoder, HotelOwnerRepository hotelOwnerRepository, CustomerRepository customerRepository, ImageValidationUtility imageValidationUtility, FileStorageService awsS3FileStorageService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.hotelOwnerRepository = hotelOwnerRepository;
         this.customerRepository = customerRepository;
+        this.imageValidationUtility = imageValidationUtility;
+        this.awsS3FileStorageService = awsS3FileStorageService;
     }
 
     @Override
@@ -153,5 +161,85 @@ public class UserServiceImpl implements UserService {
                 hotelOwnerRepository.deleteById(retrivedUser.getUserId());
         }
         return true ;
+    }
+
+    public UserResponseDTO uploadProfileImage(MultipartFile file) {
+
+        LOG.info("Uploading Profile Image {}",file.toString());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User authenticatedUser = (User) authentication.getPrincipal();
+
+        String userId = authenticatedUser.getUserId();
+
+        ImageValidationUtility.validate(file);
+        LOG.info("File Passed The Validation");
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User with Id ==> " + userId + " Not Found"));
+
+        String oldImageKey = user.getUserProfileImageObjectKey();
+        LOG.info("Old Image Key ==> {}", oldImageKey);
+        String extension = getExtension(file);
+        LOG.info("Extension ==> {}", extension);
+        String objectKey = "users/" + userId + "/" + UUID.randomUUID() + extension;
+        LOG.info("Object Key ==> {}", objectKey);
+        awsS3FileStorageService.upload(file, objectKey);
+
+        user.setUserProfileImageObjectKey(objectKey);
+
+        User savedUser = userRepository.save(user);
+
+        // Delete old image only after the new image was successfully
+        // uploaded and the database was successfully updated.
+        if (oldImageKey != null && !oldImageKey.isBlank()) {
+            awsS3FileStorageService.delete(oldImageKey);
+        }
+
+        return modelMapper.map(savedUser, UserResponseDTO.class);
+    }
+
+    public String getProfileImageUrl() {
+
+        User authenticatedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = userRepository.findById(authenticatedUser.getUserId()).orElseThrow(() -> new EntityNotFoundException("User with Id ==> " + authenticatedUser.getUserId() + " Not Found"));
+
+        if (user.getUserProfileImageObjectKey() == null) {return "default-user-profile/user.png";}
+
+        return awsS3FileStorageService.generatePresignedUrl(user.getUserProfileImageObjectKey());
+    }
+
+    @Override
+    public void deleteProfileImage() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User authenticatedUser = (User) authentication.getPrincipal();
+
+        String userId = authenticatedUser.getUserId();
+
+        String imageKey = authenticatedUser.getUserProfileImageObjectKey();
+
+        if (imageKey == null || imageKey.isBlank()) {
+            return;
+        }
+
+        awsS3FileStorageService.delete(imageKey);
+
+        authenticatedUser.setUserProfileImageObjectKey("default-user-profile/user.png");
+
+        userRepository.save(authenticatedUser);
+    }
+
+    private String getExtension(MultipartFile file) {
+
+        String contentType = file.getContentType();
+
+        return switch (contentType) {
+            case "image/jpeg" -> ".jpg";
+            case "image/png" -> ".png";
+            case "image/webp" -> ".webp";
+            default -> throw new IllegalArgumentException(
+                    "Unsupported image type"
+            );
+        };
     }
 }

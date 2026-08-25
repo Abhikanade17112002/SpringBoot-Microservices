@@ -1,4 +1,4 @@
-package com.microsercives.userservice.dtos;
+package com.microsercives.userservice.dtos.request;
 
 import java.time.LocalDate;
 

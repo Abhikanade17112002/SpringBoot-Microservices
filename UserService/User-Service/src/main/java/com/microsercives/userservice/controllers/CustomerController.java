@@ -1,9 +1,7 @@
 package com.microsercives.userservice.controllers;
 
 
-import com.microsercives.userservice.dtos.UserResponseDTO;
 import com.microsercives.userservice.dtos.response.CustomerResponseDTO;
-import com.microsercives.userservice.repositories.CustomerRepository;
 import com.microsercives.userservice.services.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController()
 @RequestMapping("/customers")

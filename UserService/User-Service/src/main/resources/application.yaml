@@ -6,12 +6,16 @@ logging:
     io.github.resilience4j: DEBUG
     org.springframework.cloud.circuitbreaker: DEBUG
 spring:
-  application:
-    name: USER-SERVICE
-  profiles:
-    active: dev
-  config:
-    import: optional:configserver:http://localhost:8084
+    servlet:
+      multipart:
+        max-file-size: 5MB
+        max-request-size: 5MB
+    application:
+      name: USER-SERVICE
+    profiles:
+      active: dev
+    config:
+      import: optional:configserver:http://localhost:8084
 
 management:
   health:
@@ -24,3 +28,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+aws:
+  region: ap-south-1
+  s3:
+    bucket-name: "spring-boot-microservice-application"

@@ -1,4 +1,4 @@
-package com.microsercives.userservice.dtos;
+package com.microsercives.userservice.dtos.response;
 
 import com.microsercives.userservice.enums.Role;
 import java.time.LocalDate;
@@ -12,8 +12,9 @@ public class UserResponseDTO {
     private String userName;
     private String emailId;
     private Role role;
+    private String userProfileImageObjectKey;
 
-    public UserResponseDTO(String userId, String firstName, String lastName, LocalDate dateOfBirth, String userName, String emailId, Role role) {
+    public UserResponseDTO(String userId, String firstName, String lastName, LocalDate dateOfBirth, String userName, String emailId, Role role, String userProfileImageObjectKey) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -21,7 +22,9 @@ public class UserResponseDTO {
         this.userName = userName;
         this.emailId = emailId;
         this.role = role;
+        this.userProfileImageObjectKey = userProfileImageObjectKey;
     }
+
 
     public UserResponseDTO() {
     }
@@ -82,6 +85,14 @@ public class UserResponseDTO {
         this.role = role;
     }
 
+    public String getUserProfileImageObjectKey() {
+        return userProfileImageObjectKey;
+    }
+
+    public void setUserProfileImageObjectKey(String userProfileImageObjectKey) {
+        this.userProfileImageObjectKey = userProfileImageObjectKey;
+    }
+
     @Override
     public String toString() {
         return "UserResponseDTO{" +
@@ -92,6 +103,7 @@ public class UserResponseDTO {
                 ", userName='" + userName + '\'' +
                 ", emailId='" + emailId + '\'' +
                 ", role=" + role +
+                ", userProfileImageObjectKey='" + userProfileImageObjectKey + '\'' +
                 '}';
     }
 }

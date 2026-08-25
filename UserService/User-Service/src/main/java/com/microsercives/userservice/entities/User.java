@@ -30,12 +30,14 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+    @Column()
+    private String userProfileImageObjectKey ;
 
 
     public User() {
     }
 
-    public User(String userId, String firstName, String lastName, LocalDate dateOfBirth, String userName, String emailId, String password, Role role) {
+    public User(String userId, String firstName, String lastName, LocalDate dateOfBirth, String userName, String emailId, String password, Role role, String userProfileImageObjectKey) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,6 +46,15 @@ public class User implements UserDetails {
         this.emailId = emailId;
         this.password = password;
         this.role = role;
+        this.userProfileImageObjectKey = userProfileImageObjectKey;
+    }
+
+    public String getUserProfileImageObjectKey() {
+        return userProfileImageObjectKey;
+    }
+
+    public void setUserProfileImageObjectKey(String userProfileImageObjectKey) {
+        this.userProfileImageObjectKey = userProfileImageObjectKey;
     }
 
     @Override
@@ -132,6 +143,7 @@ public class User implements UserDetails {
                 ", emailId='" + emailId + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
+                ", userProfileImageObjectKey='" + userProfileImageObjectKey + '\'' +
                 '}';
     }
 }

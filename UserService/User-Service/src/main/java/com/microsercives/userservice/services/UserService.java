@@ -1,11 +1,10 @@
 package com.microsercives.userservice.services;
-import com.microsercives.userservice.dtos.CreateUserRequestDTO;
-import com.microsercives.userservice.dtos.UserResponseDTO;
+import com.microsercives.userservice.dtos.response.UserResponseDTO;
 import com.microsercives.userservice.dtos.request.DeleteUserAccountRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserPasswordRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserProfileRequestDTO;
-import com.microsercives.userservice.entities.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,4 +25,10 @@ public interface UserService extends UserDetailsService {
     UserResponseDTO getRegisteredUserById(String userId);
 
     Boolean deleteRegisteredUserById(String userId);
+
+    public UserResponseDTO uploadProfileImage(MultipartFile file) ;
+
+    public String getProfileImageUrl();
+
+    void deleteProfileImage();
 }

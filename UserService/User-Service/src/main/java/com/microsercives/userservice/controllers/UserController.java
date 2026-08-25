@@ -1,18 +1,18 @@
 package com.microsercives.userservice.controllers;
-import com.microsercives.userservice.dtos.UserResponseDTO;
+import com.microsercives.userservice.dtos.response.UserResponseDTO;
 import com.microsercives.userservice.dtos.request.DeleteUserAccountRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserPasswordRequestDTO;
 import com.microsercives.userservice.dtos.request.UpdateUserProfileRequestDTO;
 import com.microsercives.userservice.services.UserService;
-import jakarta.ws.rs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 
@@ -25,6 +25,24 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @PutMapping(value = "/me/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserResponseDTO> uploadProfileImage(@RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok(userService.uploadProfileImage(file));
+    }
+
+    @GetMapping("/me/profile-image")
+    public ResponseEntity<String> getProfileImage() {
+        return ResponseEntity.ok(userService.getProfileImageUrl());
+    }
+
+    @DeleteMapping("/me/profile-image")
+    public ResponseEntity<Void> deleteProfileImage() {
+
+        userService.deleteProfileImage();
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/my-profile")
