@@ -1,6 +1,12 @@
 package com.microsercives.hotelservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(
         name = "hotels",
@@ -18,6 +24,10 @@ import jakarta.persistence.*;
                         columnList = "ownerId"
                 )
         }
+)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "hotelId"
 )
 public class Hotel {
 
@@ -40,16 +50,28 @@ public class Hotel {
     @Column(nullable = false)
     private boolean active = true;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.EAGER, mappedBy = "hotelId" )
+    private List<HotelImage> hotelImages = new ArrayList<>();
+
     public Hotel() {
     }
 
-    public Hotel(String hotelId, String hotelName, String location, String description, String ownerId, boolean active) {
+    public Hotel(String hotelId, String hotelName, String location, String description, String ownerId, boolean active, List<HotelImage> hotelImages) {
         this.hotelId = hotelId;
         this.hotelName = hotelName;
         this.location = location;
         this.description = description;
         this.ownerId = ownerId;
         this.active = active;
+        this.hotelImages = hotelImages;
+    }
+
+    public List<HotelImage> getHotelImages() {
+        return hotelImages;
+    }
+
+    public void setHotelImages(List<HotelImage> hotelImages) {
+        this.hotelImages = hotelImages;
     }
 
     public String getHotelId() {
@@ -109,8 +131,7 @@ public class Hotel {
                 ", description='" + description + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", active=" + active +
+                ", hotelImages=" + hotelImages +
                 '}';
     }
-    // Getters Setters
-
 }

@@ -7,6 +7,7 @@ import com.microsercives.hotelservice.dtos.response.HotelValidationResponseDTO;
 import com.microsercives.hotelservice.dtos.response.ListOfHotelOwnerHotelIdsListResponseDTO;
 import com.microsercives.hotelservice.entities.Hotel;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,4 +34,12 @@ public interface HotelService {
     HotelValidationResponseDTO validateHotel(String hotelId);
 
     ListOfHotelOwnerHotelIdsListResponseDTO getOwnerHotelsIdList(String ownerId);
+
+    HotelResponseDTO addHotelImage(MultipartFile image,String hotelId);
+
+    HotelResponseDTO getHotelImages(String hotelId);
+
+    HotelResponseDTO deleteHotelImageWithId(String hotelId, String imageId);
+
+    HotelResponseDTO setHotelImageWithIdAsPrimary(String hotelId, String imageId);
 }

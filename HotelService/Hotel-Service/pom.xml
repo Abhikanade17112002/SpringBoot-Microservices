@@ -23,11 +23,31 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
+		<aws.sdk.version>2.54.1</aws.sdk.version>
 	</properties>
 
 	<!-- Spring Cloud Dependency Management -->
 	<dependencyManagement>
 		<dependencies>
+
+			<!-- AWS SDK v2 BOM -->
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>${aws.sdk.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Spring Cloud BOM -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -41,6 +61,12 @@
 	</dependencyManagement>
 
 	<dependencies>
+
+
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+		</dependency>
 		<!-- ModelMapper -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>

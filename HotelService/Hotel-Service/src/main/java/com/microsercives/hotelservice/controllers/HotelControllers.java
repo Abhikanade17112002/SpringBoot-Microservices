@@ -7,9 +7,11 @@ import com.microsercives.hotelservice.services.HotelService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/hotels")
@@ -88,6 +90,37 @@ public class HotelControllers {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(hotelService.findHotelsByOwnerId(ownerId,page,size,sortby,ascending));
+    }
+
+    @PostMapping(value = "/{hotelId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<HotelResponseDTO> addHotelImage(@RequestPart("image") MultipartFile image,@PathVariable(name = "hotelId") String hotelId){
+      return ResponseEntity
+              .status(HttpStatus.OK)
+              .body(hotelService.addHotelImage(image,hotelId));
+    }
+
+    @GetMapping(value = "/{hotelId}/images")
+    public ResponseEntity<HotelResponseDTO> getHotelImages(@PathVariable(name = "hotelId") String hotelId){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.getHotelImages(hotelId));
+    }
+
+    @DeleteMapping(value = "/{hotelId}/{imageId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<HotelResponseDTO> deleteHotelImageWithId(@PathVariable(name = "hotelId") String hotelId , @PathVariable(name = "imageId") String imageId){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.deleteHotelImageWithId(hotelId,imageId));
+    }
+
+    @PutMapping(value = "/{hotelId}/{imageId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
+    public ResponseEntity<HotelResponseDTO> setHotelImageWithIdAsPrimary(@PathVariable(name = "hotelId") String hotelId , @PathVariable(name = "imageId") String imageId){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(hotelService.setHotelImageWithIdAsPrimary(hotelId,imageId));
     }
 
 }
