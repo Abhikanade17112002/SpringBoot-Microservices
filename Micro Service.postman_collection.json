@@ -1,0 +1,3866 @@
+{
+  "info": {
+    "_postman_id": "6ac1e154-c2b7-4631-9d94-29ec56c02c22",
+    "name": "Micro Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53246313",
+    "_collection_link": "https://go.postman.co/collection/53246313-6ac1e154-c2b7-4631-9d94-29ec56c02c22?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Hotel Service",
+      "item": [
+        {
+          "name": "Add New Hotel",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "// {\r\n//     \"hotelName\": \"Hotel Royal Palace\",\r\n//     \"location\": \"Sangamner\",\r\n//     \"description\": \"A premium hotel offering spacious rooms, multi-cuisine dining, and modern amenities.\",\r\n//     \"ownerId\": \"087d2d30-4327-49e5-bc70-558e48599434\"\r\n//   }\r\n\r\n\r\n// {\r\n//     \"hotelName\": \"Green Valley Resort\",\r\n//     \"location\": \"Pune\",\r\n//     \"description\": \"A serene resort surrounded by lush greenery with luxurious rooms and family-friendly facilities.\",\r\n//     \"ownerId\": \"5fb3d71a-3cb9-4278-a428-4c1bc4a725c2\"\r\n//   }\r\n\r\n// {\r\n//     \"hotelName\": \"Sunrise Residency\",\r\n//     \"location\": \"Mumbai\",\r\n//     \"description\": \"Modern accommodation with elegant interiors and easy access to major attractions.\",\r\n//     \"ownerId\": \"7a220350-bdb0-4de7-822d-d2be8aaad2bf\"\r\n//   }\r\n\r\n// {\r\n//     \"hotelName\": \"Lake View Inn\",\r\n//     \"location\": \"Nashik\",\r\n//     \"description\": \"Comfortable rooms with scenic views and personalized hospitality.\",\r\n//     \"ownerId\": \"aea251e8-88e1-488b-8fc2-5c5471ef9d4c\"\r\n//   }\r\n\r\n\r\n// {\r\n//     \"hotelName\": \"The Grand Heritage\",\r\n//     \"location\": \"Aurangabad\",\r\n//     \"description\": \"A blend of traditional charm and modern comfort with premium suites.\",\r\n//     \"ownerId\": \"b053cac6-9ea2-4b6d-a65e-88c0fe196792\"\r\n//   }\r\n\r\n\r\n\r\n\r\n// {\r\n//     \"hotelName\": \"Hilltop Retreat\",\r\n//     \"location\": \"Mahabaleshwar\",\r\n//     \"description\": \"A peaceful retreat with breathtaking hill views and cozy cottages.\",\r\n//     \"ownerId\": \"e459f463-4740-4fd3-a466-ec6eebc81586\"\r\n//   }\r\n// {\r\n//     \"hotelName\": \"Ocean Breeze Hotel\",\r\n//     \"location\": \"Goa\",\r\n//     \"description\": \"Beachside luxury with stylish rooms and poolside amenities.\",\r\n//     \"ownerId\": \"087d2d30-4327-49e5-bc70-558e48599434\"\r\n//   }\r\n\r\n\r\n// {\r\n//     \"hotelName\": \"City Comfort Suites\",\r\n//     \"location\": \"Bengaluru\",\r\n//     \"description\": \"Perfect for business travelers with premium facilities and fast Wi-Fi.\",\r\n//     \"ownerId\": \"5fb3d71a-3cb9-4278-a428-4c1bc4a725c2\"\r\n//   }\r\n\r\n{\r\n    \"hotelName\": \"Golden Leaf Residency\",\r\n    \"location\": \"Hyderabad\",\r\n    \"description\": \"Elegant rooms and exceptional hospitality in the city center.\",\r\n    \"ownerId\": \"7a220350-bdb0-4de7-822d-d2be8aaad2bf\"\r\n  }\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Registered Hotels",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Abhishek\",\r\n  \"lastName\": \"Kanade\",\r\n  \"emailId\": \"abhishek.kanade@example.com\",\r\n  \"dateOfBirth\": \"2002-08-15\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get A Hotel By Id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Abhishek\",\r\n  \"lastName\": \"Kanade\",\r\n  \"emailId\": \"abhishek.kanade@example.com\",\r\n  \"dateOfBirth\": \"2002-08-15\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels",
+                "{{hotelId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Hotel By Id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"hotelName\" : \"Updated Hotel Name\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels",
+                "{{hotelId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Hotel By Id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"hotelName\" : \"Updated Hotel Name\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels",
+                "{{hotelId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Hotels By Name Containing",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"hotelName\" : \"Updated Hotel Name\" \r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels/search/by-name?hotelname=dd",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels",
+                "search",
+                "by-name"
+              ],
+              "query": [
+                {
+                  "key": "hotelname",
+                  "value": "dd"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Hotels By Location Containing",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels/search/by-location?location=france",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels",
+                "search",
+                "by-location"
+              ],
+              "query": [
+                {
+                  "key": "location",
+                  "value": "france"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Hotels By Owner Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/hotels/search/by-owner/{{ownerId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "hotels",
+                "search",
+                "by-owner",
+                "{{ownerId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Service",
+      "item": [
+        {
+          "name": "Customer Resuests",
+          "item": [
+            {
+              "name": "Get All Registered Customers With Sorting And Pagination",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/customers?page=0&size=2&sortby=user.lastName",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "customers"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sortby",
+                      "value": "user.lastName"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Customer By Id",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/customers/{{customerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "customers",
+                    "{{customerId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "De Activate Customer By Id",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/customers/{{customerId}}/deactivate",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "customers",
+                    "{{customerId}}",
+                    "deactivate"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Activate Customer By Id Copy",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/customers/{{customerId}}/activate",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "customers",
+                    "{{customerId}}",
+                    "activate"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Customer By Id",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/customers/{{customerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "customers",
+                    "{{customerId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Authentication Service",
+          "item": [
+            {
+              "name": "On Board Customer",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "//   {\r\n//     \"firstName\": \"Aarav\",\r\n//     \"lastName\": \"Sharma\",\r\n//     \"dateOfBirth\": \"1994-03-15\",\r\n//     \"emailId\": \"aarav.sharma@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Priya\",\r\n//     \"lastName\": \"Patil\",\r\n//     \"dateOfBirth\": \"1996-07-22\",\r\n//     \"emailId\": \"priya.patil@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n\r\n// {\r\n//     \"firstName\": \"Rohan\",\r\n//     \"lastName\": \"Deshmukh\",\r\n//     \"dateOfBirth\": \"1993-11-09\",\r\n//     \"emailId\": \"rohan.deshmukh@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n//  {\r\n//     \"firstName\": \"Sneha\",\r\n//     \"lastName\": \"Kulkarni\",\r\n//     \"dateOfBirth\": \"1997-05-18\",\r\n//     \"emailId\": \"sneha.kulkarni@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Aditya\",\r\n//     \"lastName\": \"Joshi\",\r\n//     \"dateOfBirth\": \"1995-09-12\",\r\n//     \"emailId\": \"aditya.joshi@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n{\r\n    \"firstName\": \"Abhishek\",\r\n    \"lastName\": \"Kanade\",\r\n    \"dateOfBirth\": \"2002-11-17\",\r\n    \"emailId\": \"abhishek.kanade@gmail.com\",\r\n    \"password\": \"Pass@123\"\r\n}\r\n\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/auth/onboardcustomer",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "onboardcustomer"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "On Board Owner",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "//  {\r\n//     \"firstName\": \"Pooja\",\r\n//     \"lastName\": \"Jadhav\",\r\n//     \"dateOfBirth\": \"1998-01-27\",\r\n//     \"emailId\": \"pooja.jadhav@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n// {\r\n//     \"firstName\": \"Rahul\",\r\n//     \"lastName\": \"Pawar\",\r\n//     \"dateOfBirth\": \"1992-06-03\",\r\n//     \"emailId\": \"rahul.pawar@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n// {\r\n//     \"firstName\": \"Neha\",\r\n//     \"lastName\": \"Chavan\",\r\n//     \"dateOfBirth\": \"1996-10-14\",\r\n//     \"emailId\": \"neha.chavan@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n// {\r\n//     \"firstName\": \"Karan\",\r\n//     \"lastName\": \"Yadav\",\r\n//     \"dateOfBirth\": \"1994-12-30\",\r\n//     \"emailId\": \"karan.yadav@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n// {\r\n//     \"firstName\": \"Meera\",\r\n//     \"lastName\": \"Nair\",\r\n//     \"dateOfBirth\": \"1995-04-08\",\r\n//     \"emailId\": \"meera.nair@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n{\r\n    \"firstName\": \"Vikram\",\r\n    \"lastName\": \"Reddy\",\r\n    \"dateOfBirth\": \"1993-08-25\",\r\n    \"emailId\": \"vikram.reddy@gmail.com\",\r\n    \"password\": \"Pass@123\"\r\n  }",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/auth/onboardowner",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "onboardowner"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Sign In User",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.collectionVariables.set(\r",
+                      "    \"jwtToken\",\r",
+                      "    response.accessToken\r",
+                      ");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "// {    \"emailId\": \"abhishek.kanade@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n    \r\n// }\r\n{\r\n    \"emailId\": \"aditya.joshi@gmail.com\",\r\n    \"password\": \"Pass@123\"\r\n}\r\n\r\n//   {\r\n//     \"firstName\": \"Aarav\",\r\n//     \"lastName\": \"Sharma\",\r\n//     \"dateOfBirth\": \"1994-03-15\",\r\n    // \"emailId\": \"aarav.sharma@gmail.com\",\r\n    // \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Priya\",\r\n//     \"lastName\": \"Patil\",\r\n//     \"dateOfBirth\": \"1996-07-22\",\r\n//     \"emailId\": \"priya.patil@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n\r\n// {\r\n//     \"firstName\": \"Rohan\",\r\n//     \"lastName\": \"Deshmukh\",\r\n//     \"dateOfBirth\": \"1993-11-09\",\r\n//     \"emailId\": \"rohan.deshmukh@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n//  {\r\n//     \"firstName\": \"Sneha\",\r\n//     \"lastName\": \"Kulkarni\",\r\n//     \"dateOfBirth\": \"1997-05-18\",\r\n//     \"emailId\": \"sneha.kulkarni@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Aditya\",\r\n//     \"lastName\": \"Joshi\",\r\n//     \"dateOfBirth\": \"1995-09-12\",\r\n//     \"emailId\": \"aditya.joshi@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/auth/usersignin",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "usersignin"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "User Requests",
+          "item": [
+            {
+              "name": "Get Logged In User Profile",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\": \"Abhishek\",\r\n  \"lastName\": \"Kanade\",\r\n  \"emailId\": \"abhishek.kanade@example.com\",\r\n  \"dateOfBirth\": \"2002-08-15\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users/me",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Logged In User Profile",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n     \"userId\": \"621a8f39-d598-4583-b330-10e01488f5d5\",\r\n        \"firstName\": \"Rutvij\",\r\n        \"lastName\": \"Mahale\",\r\n        \"dateOfBirth\": \"1995-08-15\",\r\n        \"emailId\": \"johndoe@example.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users/me",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Logged In User Password",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n     \"userId\": \"621a8f39-d598-4583-b330-10e01488f5d5\",\r\n     \"oldPassword\": \"SecurePassword123!\",\r\n     \"newPassword\" : \"Pass@123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users/me/change-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "me",
+                    "change-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User Account",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n     \"userId\": \"f98d7b09-ad42-4850-a82e-3c045813b9d8\",\r\n     \"password\": \"SecurePassword123!\"\r\n\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users/me/deleteaccount",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "me",
+                    "deleteaccount"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Admin User Requests",
+          "item": [
+            {
+              "name": "Get All Registered Users",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n     \"userId\": \"621a8f39-d598-4583-b330-10e01488f5d5\",\r\n        \"firstName\": \"Rutvij\",\r\n        \"lastName\": \"Mahale\",\r\n        \"dateOfBirth\": \"1995-08-15\",\r\n        \"emailId\": \"johndoe@example.com\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get User By Id",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User Account By Id",
+              "request": {
+                "method": "DELETE",
+                "header": []
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Hotel Owners Requests",
+          "item": [
+            {
+              "name": "Get All Registered Owners With Sorting And Pagination",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/owners?page=0&size=5&sortby=user.firstName",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "owners"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "5"
+                    },
+                    {
+                      "key": "sortby",
+                      "value": "user.firstName"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Owner By Id",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "owners",
+                    "{{ownerId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "De Activate Owner By Id",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}/deactivate",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "owners",
+                    "{{ownerId}}",
+                    "deactivate"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Activate Owner By Id Copy",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}/activate",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "owners",
+                    "{{ownerId}}",
+                    "activate"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Owner By Id",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "owners",
+                    "{{ownerId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rating Service",
+      "item": [
+        {
+          "name": "Add New Rating",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"hotelId\": \"ca71e6d1-61da-43d3-959e-4682ceaa8578\",\r\n    \"rating\": 2,\r\n    \"feedback\": \"Pleasant stay with comfortable rooms and excellent housekeeping. Would definitely visit again.\"\r\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/ratings",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "ratings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Ratings",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"userId\": \"f421a80c-b989-46d1-b60c-7be6d5c40aaf\",\r\n    \"hotelId\": \"f05dfa8c-4e4d-41d3-a88b-5f772d734e11\",\r\n    \"rating\": 3,\r\n    \"feedBack\": \"Rooms were good but service response time was slightly slow.\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/ratings",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "ratings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ratings By User Id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"userId\": \"f421a80c-b989-46d1-b60c-7be6d5c40aaf\",\r\n    \"hotelId\": \"f05dfa8c-4e4d-41d3-a88b-5f772d734e11\",\r\n    \"rating\": 3,\r\n    \"feedBack\": \"Rooms were good but service response time was slightly slow.\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8085/api/v1/ratings/users/{{userId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8085",
+              "path": [
+                "api",
+                "v1",
+                "ratings",
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Customer Active Status",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/internal/customers/{{customerId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "customers",
+                "{{customerId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Hotel Active Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/internal/hotels/{{hotelId}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "hotels",
+                "{{hotelId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Average Hotel ratings",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{jwtToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8085/api/v1/ratings/{{hotelId}}/average",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8085",
+              "path": [
+                "api",
+                "v1",
+                "ratings",
+                "{{hotelId}}",
+                "average"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "API Gateway",
+      "item": [
+        {
+          "name": "User Service",
+          "item": [
+            {
+              "name": "Authentication Service",
+              "item": [
+                {
+                  "name": "On Board Customer",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "  {\r\n    \"firstName\": \"Test_First_Name\",\r\n    \"lastName\": \"Test_Last_Name\",\r\n    \"dateOfBirth\": \"1991-11-05\",\r\n    \"emailId\": \"abhishek.kanade.dev@gmail.com\",\r\n    \"password\": \"Pass@123\"\r\n  }\r\n\r\n//     {\r\n//     \"firstName\": \"Aarav\",\r\n//     \"lastName\": \"Sharma\",\r\n//     \"dateOfBirth\": \"1994-03-15\",\r\n//     \"emailId\": \"aarav.sharma@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Priya\",\r\n//     \"lastName\": \"Patil\",\r\n//     \"dateOfBirth\": \"1996-07-22\",\r\n//     \"emailId\": \"priya.patil@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n\r\n// {\r\n//     \"firstName\": \"Rohan\",\r\n//     \"lastName\": \"Deshmukh\",\r\n//     \"dateOfBirth\": \"1993-11-09\",\r\n//     \"emailId\": \"rohan.deshmukh@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n//  {\r\n//     \"firstName\": \"Sneha\",\r\n//     \"lastName\": \"Kulkarni\",\r\n//     \"dateOfBirth\": \"1997-05-18\",\r\n//     \"emailId\": \"sneha.kulkarni@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Aditya\",\r\n//     \"lastName\": \"Joshi\",\r\n//     \"dateOfBirth\": \"1995-09-12\",\r\n//     \"emailId\": \"aditya.joshi@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Abhishek\",\r\n//     \"lastName\": \"Kanade\",\r\n//     \"dateOfBirth\": \"2002-11-17\",\r\n//     \"emailId\": \"abhishek.kanade@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n// }\r\n\r\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/auth/onboardcustomer",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "auth",
+                        "onboardcustomer"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "On Board Owner",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": " {\r\n    \"firstName\": \"Rohit\",\r\n    \"lastName\": \"Sharma\",\r\n    \"dateOfBirth\": \"1989-04-17\",\r\n    \"emailId\": \"rohit.sharma@gmail.com\",\r\n    \"password\": \"Pass@123\"\r\n  }\r\n// {\r\n//     \"firstName\": \"Rahul\",\r\n//     \"lastName\": \"Pawar\",\r\n//     \"dateOfBirth\": \"1992-06-03\",\r\n//     \"emailId\": \"rahul.pawar@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n// {\r\n//     \"firstName\": \"Neha\",\r\n//     \"lastName\": \"Chavan\",\r\n//     \"dateOfBirth\": \"1996-10-14\",\r\n//     \"emailId\": \"neha.chavan@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n// {\r\n//     \"firstName\": \"Karan\",\r\n//     \"lastName\": \"Yadav\",\r\n//     \"dateOfBirth\": \"1994-12-30\",\r\n//     \"emailId\": \"karan.yadav@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n// {\r\n//     \"firstName\": \"Meera\",\r\n//     \"lastName\": \"Nair\",\r\n//     \"dateOfBirth\": \"1995-04-08\",\r\n//     \"emailId\": \"meera.nair@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }\r\n\r\n// {\r\n//     \"firstName\": \"Vikram\",\r\n//     \"lastName\": \"Reddy\",\r\n//     \"dateOfBirth\": \"1993-08-25\",\r\n//     \"emailId\": \"vikram.reddy@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n//   }",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/auth/onboardowner",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "auth",
+                        "onboardowner"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Sign In User",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "let response = pm.response.json();\r\n\r\npm.collectionVariables.set(\r\n    \"jwtToken\",\r\n    response.accessToken\r\n);"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "",
+                        "disabled": true
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    //     \"emailId\": \"govind.sharma@gmail.com\",\r\n    // \"password\": \"Pass@123\"\r\n// \"emailId\": \"a.b@gmail.com\",\r\n// \"password\": \"Pass@123\"\r\n// \"emailId\": \"sneha.kulkarni@gmail.com\",\r\n//     \"password\": \"Pass@123\"\r\n    // \"emailId\": \"james.harrington@example.com\",\r\n    // \"password\": \"Pass@123\"\r\n    //     \"emailId\": \"c.c@g.com\",\r\n    // \"password\": \"Pass@123\"\r\n    //     \"emailId\": \"a.a@g.com\",\r\n    // \"password\": \"Pass@123\"\r\n\r\n    \"emailId\": \"abhishek.kanade@gmail.com\",\r\n    \"password\": \"Pass@123\"\r\n    //     \"emailId\": \"abhishek.kanade.dev@gmail.com\",\r\n    // \"password\": \"Pass@123\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/auth/usersignin",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "auth",
+                        "usersignin"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "User Requests",
+              "item": [
+                {
+                  "name": "Get Logged In User Profile",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"firstName\": \"Abhishek\",\r\n  \"lastName\": \"Kanade\",\r\n  \"emailId\": \"abhishek.kanade@example.com\",\r\n  \"dateOfBirth\": \"2002-08-15\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/me/{{userId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "me",
+                        "{{userId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update Logged In User Profile",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n     \"userId\": \"7a9da098-15ab-4599-83bb-03bf30529e22\",\r\n        \"firstName\": \"Rutvij\",\r\n        \"lastName\": \"Mahale\",\r\n        \"dateOfBirth\": \"1995-08-15\",\r\n        \"emailId\": \"rutvij@example.com\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/me/{{userId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "me",
+                        "{{userId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update Logged In User Password",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n     \"userId\": \"13a6d22e-e370-4220-accb-3a9717188325\",\r\n     \"oldPassword\": \"Pass@123\",\r\n     \"newPassword\" : \"Pass@123\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/me/{{userId}}/change-password",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "me",
+                        "{{userId}}",
+                        "change-password"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete User Account",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n     \"userId\": \"7a9da098-15ab-4599-83bb-03bf30529e22\",\r\n     \"password\": \"Pass@123\"\r\n\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/me/{{userId}}/deleteaccount",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "me",
+                        "{{userId}}",
+                        "deleteaccount"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update User Profile Image",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "file",
+                          "type": "file",
+                          "src": [
+                            "/C:/Users/Abhishek.Kanade/Downloads/amit-lahav-rxN2MRdFJVg-unsplash.jpg"
+                          ]
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/me/profile-image",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "me",
+                        "profile-image"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get User Profile Signed URL",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/me/profile-image",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "me",
+                        "profile-image"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete User Profile Image And Sets Tu Public Default Image",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/me/profile-image",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "me",
+                        "profile-image"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Admin User Requests",
+              "item": [
+                {
+                  "name": "Get All Registered Users",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n     \"userId\": \"621a8f39-d598-4583-b330-10e01488f5d5\",\r\n        \"firstName\": \"Rutvij\",\r\n        \"lastName\": \"Mahale\",\r\n        \"dateOfBirth\": \"1995-08-15\",\r\n        \"emailId\": \"johndoe@example.com\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        ""
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get User By Id",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n     \"userId\": \"621a8f39-d598-4583-b330-10e01488f5d5\",\r\n        \"firstName\": \"Rutvij\",\r\n        \"lastName\": \"Mahale\",\r\n        \"dateOfBirth\": \"1995-08-15\",\r\n        \"emailId\": \"johndoe@example.com\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/{{userId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "{{userId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete User Account By Id",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n     \"userId\": \"621a8f39-d598-4583-b330-10e01488f5d5\",\r\n        \"firstName\": \"Rutvij\",\r\n        \"lastName\": \"Mahale\",\r\n        \"dateOfBirth\": \"1995-08-15\",\r\n        \"emailId\": \"johndoe@example.com\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/users/{{userId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "{{userId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Customer Resuests",
+              "item": [
+                {
+                  "name": "Get All Registered Customers With Sorting And Pagination",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/customers?page=0&size=2&sortby=user.lastName",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "customers"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "0"
+                        },
+                        {
+                          "key": "size",
+                          "value": "2"
+                        },
+                        {
+                          "key": "sortby",
+                          "value": "user.lastName"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get Customer By Id",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/customers/{{customerId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "customers",
+                        "{{customerId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "De Activate Customer By Id",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/customers/{{customerId}}/deactivate",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "customers",
+                        "{{customerId}}",
+                        "deactivate"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Activate Customer By Id",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/customers/{{customerId}}/activate",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "customers",
+                        "{{customerId}}",
+                        "activate"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete Customer By Id",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/customers/{{customerId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "customers",
+                        "{{customerId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Hotel Owners Requests",
+              "item": [
+                {
+                  "name": "Get All Registered Owners With Sorting And Pagination",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/owners?page=0&size=5&sortby=user.firstName",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "owners"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "0"
+                        },
+                        {
+                          "key": "size",
+                          "value": "5"
+                        },
+                        {
+                          "key": "sortby",
+                          "value": "user.firstName"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get Owner By Id",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "owners",
+                        "{{ownerId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "De Activate Owner By Id",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}/deactivate",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "owners",
+                        "{{ownerId}}",
+                        "deactivate"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Activate Owner By Id",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}/activate",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "owners",
+                        "{{ownerId}}",
+                        "activate"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete Owner By Id",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{jwtToken}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "http://localhost:8080/api/v1/owners/{{ownerId}}",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v1",
+                        "owners",
+                        "{{ownerId}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hotel Service",
+          "item": [
+            {
+              "name": "Add New Hotel",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelName\": \"Hotel Prasad\",\r\n  \"location\": \"New Delhi\",\r\n  \"description\": \"A chic and intimate boutique hotel in the heart of Paris, offering elegantly designed suites, a fine-dining bistro, and curated city experiences.\",\r\n  \"ownerId\": \"84951e7f-84b2-482b-89c2-5acdfbf80ad9\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Registered Hotels",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\": \"Abhishek\",\r\n  \"lastName\": \"Kanade\",\r\n  \"emailId\": \"abhishek.kanade@example.com\",\r\n  \"dateOfBirth\": \"2002-08-15\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get A Hotel By Id",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\": \"Abhishek\",\r\n  \"lastName\": \"Kanade\",\r\n  \"emailId\": \"abhishek.kanade@example.com\",\r\n  \"dateOfBirth\": \"2002-08-15\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "{{hotelId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Hotel By Id",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"hotelName\" : \"Updated Hotel Name\" \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "{{hotelId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Hotel By Id",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"hotelName\" : \"Updated Hotel Name\" \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "{{hotelId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Hotels By Name Containing",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"hotelName\" : \"Updated Hotel Name\" \r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/search/by-name?hotelname=dd",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "search",
+                    "by-name"
+                  ],
+                  "query": [
+                    {
+                      "key": "hotelname",
+                      "value": "dd"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Hotels By Location Containing",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/search/by-location?location=france",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "search",
+                    "by-location"
+                  ],
+                  "query": [
+                    {
+                      "key": "location",
+                      "value": "france"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Hotels By Owner Id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/search/by-owner/{{ownerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "search",
+                    "by-owner",
+                    "{{ownerId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Hotel Images With Hotel Id For Owner And Admin",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/Abhishek.Kanade/Downloads/user.png"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}/image",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "{{hotelId}}",
+                    "image"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Hotel Image With Hotel Id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/Abhishek.Kanade/Downloads/user.png"
+                      ],
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}/images",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "{{hotelId}}",
+                    "images"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Hotel Image With ID",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}/{{imageId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "{{hotelId}}",
+                    "{{imageId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Set Hotel Image With Id As Primary",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/hotels/{{hotelId}}/{{imageId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "hotels",
+                    "{{hotelId}}",
+                    "{{imageId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rating Service",
+          "item": [
+            {
+              "name": "Add New Rating",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"hotelId\": \"ee16d7ff-07d3-4ac0-ad67-a6e1fd0e2352\",\r\n    \"rating\": 1,\r\n    \"feedback\": \"Pleasant stay with comfortable rooms and excellent housekeeping. Would definitely visit again.\"\r\n  }",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Ratings",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"userId\": \"f421a80c-b989-46d1-b60c-7be6d5c40aaf\",\r\n    \"hotelId\": \"f05dfa8c-4e4d-41d3-a88b-5f772d734e11\",\r\n    \"rating\": 3,\r\n    \"feedBack\": \"Rooms were good but service response time was slightly slow.\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Ratings By User Id",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"userId\": \"f421a80c-b989-46d1-b60c-7be6d5c40aaf\",\r\n    \"hotelId\": \"f05dfa8c-4e4d-41d3-a88b-5f772d734e11\",\r\n    \"rating\": 3,\r\n    \"feedBack\": \"Rooms were good but service response time was slightly slow.\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings/customers/{{customerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings",
+                    "customers",
+                    "{{customerId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Validate Customer Active Status",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"emailId\": \"billydoe@example.com\",\r\n    \"password\": \"SecurePassword123!\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/internal/customers/{{customerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "internal",
+                    "customers",
+                    "{{customerId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Validate Hotel Active Status",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/internal/hotels/{{hotelId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "internal",
+                    "hotels",
+                    "{{hotelId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Average Hotel ratings",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings/{{hotelId}}/average",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings",
+                    "{{hotelId}}",
+                    "average"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Rating By Id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings/{{ratingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings",
+                    "{{ratingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Rating By Id",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"rating\": 1,\n    \"feedback\"  : \"Updated Feedback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings/{{ratingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings",
+                    "{{ratingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Rating By Id",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"rating\": 1,\n    \"feedback\"  : \"Updated Feedback\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings/{{ratingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings",
+                    "{{ratingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Ratings By Hotel Id",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"userId\": \"f421a80c-b989-46d1-b60c-7be6d5c40aaf\",\r\n    \"hotelId\": \"f05dfa8c-4e4d-41d3-a88b-5f772d734e11\",\r\n    \"rating\": 3,\r\n    \"feedBack\": \"Rooms were good but service response time was slightly slow.\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/ratings/hotels/{{hotelId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "ratings",
+                    "hotels",
+                    "{{hotelId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Booking Service",
+          "item": [
+            {
+              "name": "Create Hotel Booking",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n            \"checkInDate\": \"2029-11-09\",\r\n            \"checkOutDate\": \"2029-11-10\",\r\n  \"totalPrice\": 200,\r\n  \"active\": true  ,\r\n  \"paymentMethod\":\"CARD\",\r\n  \"customerEmailId\": \"abhishek.kanade.dev@gmail.com\"\r\n}\r\n// 100000",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All The Booking For ADMIN",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/admins",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "admins"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Booking By Loged In Customer",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/customers",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "customers"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Bookings For Hotel Owner Includes All The Hotels Owned By Owner Bookings",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/owners",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "owners"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Booking By Id",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/{{bookingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "{{bookingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cancle Booking By Id",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/canclebooking/{{bokingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "canclebooking",
+                    "{{bokingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Confirm Booking",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/confirmbooking/{{bookingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "confirmbooking",
+                    "{{bookingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Check In Customer",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/checkin/{{bookingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "checkin",
+                    "{{bookingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Check Out Customer",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/checkout/{{bookingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "checkout",
+                    "{{bookingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Bookings By Customer Id For Admin",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/customers/{{customerId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "customers",
+                    "{{customerId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Bookings By Hotel Id For Admins And Hotel Owners",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/hotels/{{hotelId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "hotels",
+                    "{{hotelId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Bookings By Hotel Id And Booking Status For Admins And Owners",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/hotels/{{hotelId}}/status?status=PENDING",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "hotels",
+                    "{{hotelId}}",
+                    "status"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "PENDING"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Bookings By Hotel Id And Check In Date Between For Admins And Owners",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/hotels/{{hotelId}}/between?startdate=2026-08-25&enddate=2026-08-29",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "hotels",
+                    "{{hotelId}}",
+                    "between"
+                  ],
+                  "query": [
+                    {
+                      "key": "startdate",
+                      "value": "2026-08-25"
+                    },
+                    {
+                      "key": "enddate",
+                      "value": "2026-08-29"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Soft Delete Booking ( Toggle Active Status ) For Admins",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{    \"emailId\": \"abhishek.kanade@gmail.com\",\r\n    \"password\": \"Pass@123\"\r\n    \r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/softdelete/{{bookingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "softdelete",
+                    "{{bookingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Retry Booking Payment",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/{{bookingId}}/retry",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "{{bookingId}}",
+                    "retry"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment By Booking If For ADMIN And CUSTOMER",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/{{bookingId}}/payment",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "{{bookingId}}",
+                    "payment"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refund Booking With Id For ADMIN And CUSTOMER",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"85392f3b-1689-49f0-a4a7-c24f69df33e3\",\r\n            \"checkInDate\": \"2026-08-15\",\r\n            \"checkOutDate\": \"2026-08-16\",\r\n  \"totalPrice\": 7000.0,\r\n  \"active\": true ,\r\n  \"paymentMethod\":\"CARD\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/{{bookingId}}/refund",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "{{bookingId}}",
+                    "refund"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Find Booking By Booking Status",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/bookings/status/{{status}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "bookings",
+                    "status",
+                    "{{status}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Payment Service",
+          "item": [
+            {
+              "name": "Get All Payments For ADMIN Paginated",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment By Id For ADMIN AND CUSTOMER",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/{{paymentId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "{{paymentId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Payments For Customer Paginated",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"hotelId\": \"8dce927b-89f6-420c-8155-a6f3f859c464\",\r\n  \"checkInDate\": \"2026-07-10\",\r\n  \"checkOutDate\": \"2026-07-15\",\r\n  \"totalPrice\": 12500.0,\r\n  \"active\": true\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/my-payments",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "my-payments"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payments By Status For ADMIN Paginated",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/status/{{status}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "status",
+                    "{{status}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Payments By payment Methode For ADMIN",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/paymentmethode/{{paymentMethode}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "paymentmethode",
+                    "{{paymentMethode}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment By Booking Id For ADMIN And CUSTOMER",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/bookings/{{bookingId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "bookings",
+                    "{{bookingId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payments For Date Range For ADMIN",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/date-range?start=2026-07-12T00:00:00&end=2026-07-12T23:59:59",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "date-range"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2026-07-12T00:00:00"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2026-07-12T23:59:59"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment By TransactionId For ADMIN",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/transaction/{{transactionId}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "transaction",
+                    "{{transactionId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Transaction By Gate Way Refrence Id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{jwtToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/payments/gateway/{{gatewayreference}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments",
+                    "gateway",
+                    "{{gatewayreference}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Notification Service",
+          "item": [
+            {
+              "name": "Health Check",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/notifications/health",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v1",
+                    "notifications",
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "New Request",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": ""
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Notification Service",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8087/api/v1/notifications/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8087",
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": \"087d2d30-4327-49e5-bc70-558e48599434\",\r\n  \"bookingId\": \"BK-2026-00001\",\r\n  \"recipientEmailId\": \"aarav.sharma@gmail.com\",\r\n  \"notificationType\": \"BOOKING_CONFIRMATION\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8087/api/v1/internal/notifications/send",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8087",
+              "path": [
+                "api",
+                "v1",
+                "internal",
+                "notifications",
+                "send"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwtToken",
+      "value": ""
+    }
+  ]
+}
